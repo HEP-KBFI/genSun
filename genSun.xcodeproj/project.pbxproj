@@ -1,0 +1,1903 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A72AD9FF16A8ACD200749EF8 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A72AD9ED16A8ABCD00749EF8 /* genSun.cc */; };
+		A7500F5B16A98D7500279454 /* libpythia8.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500EF916A9863500279454 /* libpythia8.a */; };
+		A7500F5C16A98D7500279454 /* liblhapdfdummy.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500EFA16A9863500279454 /* liblhapdfdummy.a */; };
+		A7500F5D16A98D7500279454 /* libCint.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E5016A977C600279454 /* libCint.so */; };
+		A7500F5E16A98D7500279454 /* libCore.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E5316A977C600279454 /* libCore.so */; };
+		A7500F5F16A98D7500279454 /* libGraf.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E6316A977C600279454 /* libGraf.so */; };
+		A7500F6016A98D7500279454 /* libGraf3d.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E6416A977C600279454 /* libGraf3d.so */; };
+		A7500F6116A98D7500279454 /* libGui.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E6516A977C600279454 /* libGui.so */; };
+		A7500F6216A98D7500279454 /* libHist.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E6C16A977C600279454 /* libHist.so */; };
+		A7500F6316A98D7500279454 /* libMathCore.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E7316A977C600279454 /* libMathCore.so */; };
+		A7500F6416A98D7500279454 /* libMatrix.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E7416A977C600279454 /* libMatrix.so */; };
+		A7500F6516A98D7500279454 /* libNet.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E7C16A977C700279454 /* libNet.so */; };
+		A7500F6616A98D7500279454 /* libPhysics.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E7F16A977C700279454 /* libPhysics.so */; };
+		A7500F6716A98D7500279454 /* libRint.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E8B16A977C700279454 /* libRint.so */; };
+		A7500F6816A98D7500279454 /* libRIO.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E8C16A977C700279454 /* libRIO.so */; };
+		A7500F6916A98D7500279454 /* libThread.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E9816A977C700279454 /* libThread.so */; };
+		A7500F6A16A98D7500279454 /* libTree.so in Frameworks */ = {isa = PBXBuildFile; fileRef = A7500E9A16A977C700279454 /* libTree.so */; };
+		A7500F6B16A98D7500279454 /* libpthread.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A72ADCAF16A8B2C000749EF8 /* libpthread.dylib */; };
+		A7500F6C16A98D7500279454 /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A72ADCAD16A8B2B100749EF8 /* libm.dylib */; };
+		A7500F6D16A98D7500279454 /* libdl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A72ADCAB16A8B27900749EF8 /* libdl.dylib */; };
+		A7500F6E16A98D8100279454 /* libpythia8.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500EF916A9863500279454 /* libpythia8.a */; };
+		A7500F6F16A98D8100279454 /* liblhapdfdummy.a in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500EFA16A9863500279454 /* liblhapdfdummy.a */; };
+		A7500F7016A98D8100279454 /* libCint.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E5016A977C600279454 /* libCint.so */; };
+		A7500F7116A98D8100279454 /* libCore.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E5316A977C600279454 /* libCore.so */; };
+		A7500F7216A98D8100279454 /* libGraf.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E6316A977C600279454 /* libGraf.so */; };
+		A7500F7316A98D8100279454 /* libGraf3d.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E6416A977C600279454 /* libGraf3d.so */; };
+		A7500F7416A98D8100279454 /* libGui.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E6516A977C600279454 /* libGui.so */; };
+		A7500F7516A98D8100279454 /* libHist.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E6C16A977C600279454 /* libHist.so */; };
+		A7500F7616A98D8100279454 /* libMathCore.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E7316A977C600279454 /* libMathCore.so */; };
+		A7500F7716A98D8100279454 /* libMatrix.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E7416A977C600279454 /* libMatrix.so */; };
+		A7500F7816A98D8100279454 /* libNet.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E7C16A977C700279454 /* libNet.so */; };
+		A7500F7916A98D8100279454 /* libPhysics.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E7F16A977C700279454 /* libPhysics.so */; };
+		A7500F7A16A98D8100279454 /* libRint.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E8B16A977C700279454 /* libRint.so */; };
+		A7500F7B16A98D8100279454 /* libRIO.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E8C16A977C700279454 /* libRIO.so */; };
+		A7500F7C16A98D8100279454 /* libThread.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E9816A977C700279454 /* libThread.so */; };
+		A7500F7D16A98D8100279454 /* libTree.so in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500E9A16A977C700279454 /* libTree.so */; };
+		A7500F7E16A98D8100279454 /* libpthread.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A72ADCAF16A8B2C000749EF8 /* libpthread.dylib */; };
+		A7500F7F16A98D8100279454 /* libm.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A72ADCAD16A8B2B100749EF8 /* libm.dylib */; };
+		A7500F8016A98D8100279454 /* libdl.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = A72ADCAB16A8B27900749EF8 /* libdl.dylib */; };
+		A7500F8116A98D9B00279454 /* gammaPlusX.card in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500F5A16A98C9600279454 /* gammaPlusX.card */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A72AD9F216A8AC6B00749EF8 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				A7500F8116A98D9B00279454 /* gammaPlusX.card in CopyFiles */,
+				A7500F6E16A98D8100279454 /* libpythia8.a in CopyFiles */,
+				A7500F6F16A98D8100279454 /* liblhapdfdummy.a in CopyFiles */,
+				A7500F7016A98D8100279454 /* libCint.so in CopyFiles */,
+				A7500F7116A98D8100279454 /* libCore.so in CopyFiles */,
+				A7500F7216A98D8100279454 /* libGraf.so in CopyFiles */,
+				A7500F7316A98D8100279454 /* libGraf3d.so in CopyFiles */,
+				A7500F7416A98D8100279454 /* libGui.so in CopyFiles */,
+				A7500F7516A98D8100279454 /* libHist.so in CopyFiles */,
+				A7500F7616A98D8100279454 /* libMathCore.so in CopyFiles */,
+				A7500F7716A98D8100279454 /* libMatrix.so in CopyFiles */,
+				A7500F7816A98D8100279454 /* libNet.so in CopyFiles */,
+				A7500F7916A98D8100279454 /* libPhysics.so in CopyFiles */,
+				A7500F7A16A98D8100279454 /* libRint.so in CopyFiles */,
+				A7500F7B16A98D8100279454 /* libRIO.so in CopyFiles */,
+				A7500F7C16A98D8100279454 /* libThread.so in CopyFiles */,
+				A7500F7D16A98D8100279454 /* libTree.so in CopyFiles */,
+				A7500F7E16A98D8100279454 /* libpthread.dylib in CopyFiles */,
+				A7500F7F16A98D8100279454 /* libm.dylib in CopyFiles */,
+				A7500F8016A98D8100279454 /* libdl.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		A72AD9ED16A8ABCD00749EF8 /* genSun.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genSun.cc; sourceTree = SOURCE_ROOT; };
+		A72AD9EF16A8AC0200749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A72AD9F416A8AC6B00749EF8 /* genSun */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genSun; sourceTree = BUILT_PRODUCTS_DIR; };
+		A72ADA0116A8AEB500749EF8 /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		A72ADA0216A8AEB500749EF8 /* CODINGSTYLE */ = {isa = PBXFileReference; lastKnownFileType = text; path = CODINGSTYLE; sourceTree = "<group>"; };
+		A72ADA0316A8AEB500749EF8 /* config.mk */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.mk; sourceTree = "<group>"; };
+		A72ADA0416A8AEB500749EF8 /* config.mk.bak */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.mk.bak; sourceTree = "<group>"; };
+		A72ADA0516A8AEB500749EF8 /* configure */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
+		A72ADA0616A8AEB500749EF8 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		A72ADA0916A8AEB500749EF8 /* energyLossBDecay.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = energyLossBDecay.exe; sourceTree = "<group>"; };
+		A72ADA0A16A8AEB500749EF8 /* genSun.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = genSun.exe; sourceTree = "<group>"; };
+		A72ADA0B16A8AEB500749EF8 /* main01.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = main01.exe; sourceTree = "<group>"; };
+		A72ADA0C16A8AEB500749EF8 /* main17.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = main17.exe; sourceTree = "<group>"; };
+		A72ADA0D16A8AEB500749EF8 /* cmssm.spc */ = {isa = PBXFileReference; lastKnownFileType = text; path = cmssm.spc; sourceTree = "<group>"; };
+		A72ADA0E16A8AEB500749EF8 /* configure */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = configure; sourceTree = "<group>"; };
+		A72ADA0F16A8AEB500749EF8 /* energyLossBDecay.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = energyLossBDecay.cc; sourceTree = "<group>"; };
+		A72ADA1016A8AEB500749EF8 /* energyLossBDecay.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = energyLossBDecay.exe; sourceTree = "<group>"; };
+		A72ADA1116A8AEB500749EF8 /* gammaPlusX.card */ = {isa = PBXFileReference; lastKnownFileType = text; path = gammaPlusX.card; sourceTree = "<group>"; };
+		A72ADA1216A8AEB500749EF8 /* genSun.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genSun.cc; sourceTree = "<group>"; };
+		A72ADA1316A8AEB500749EF8 /* genSun.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = genSun.exe; sourceTree = "<group>"; };
+		A72ADA1416A8AEB500749EF8 /* LHAupAlpgen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LHAupAlpgen.h; sourceTree = "<group>"; };
+		A72ADA1516A8AEB500749EF8 /* main01.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main01.cc; sourceTree = "<group>"; };
+		A72ADA1616A8AEB500749EF8 /* main01.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = main01.exe; sourceTree = "<group>"; };
+		A72ADA1716A8AEB500749EF8 /* main02.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main02.cc; sourceTree = "<group>"; };
+		A72ADA1816A8AEB500749EF8 /* main03.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main03.cc; sourceTree = "<group>"; };
+		A72ADA1916A8AEB500749EF8 /* main03.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main03.cmnd; sourceTree = "<group>"; };
+		A72ADA1A16A8AEB500749EF8 /* main04.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main04.cc; sourceTree = "<group>"; };
+		A72ADA1B16A8AEB500749EF8 /* main04.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main04.cmnd; sourceTree = "<group>"; };
+		A72ADA1C16A8AEB500749EF8 /* main05.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main05.cc; sourceTree = "<group>"; };
+		A72ADA1D16A8AEB500749EF8 /* main06.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main06.cc; sourceTree = "<group>"; };
+		A72ADA1E16A8AEB500749EF8 /* main07.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main07.cc; sourceTree = "<group>"; };
+		A72ADA1F16A8AEB500749EF8 /* main07.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main07.cmnd; sourceTree = "<group>"; };
+		A72ADA2016A8AEB500749EF8 /* main08.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main08.cc; sourceTree = "<group>"; };
+		A72ADA2116A8AEB500749EF8 /* main08.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main08.cmnd; sourceTree = "<group>"; };
+		A72ADA2216A8AEB500749EF8 /* main09.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main09.cc; sourceTree = "<group>"; };
+		A72ADA2316A8AEB500749EF8 /* main10.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main10.cc; sourceTree = "<group>"; };
+		A72ADA2416A8AEB500749EF8 /* main11.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main11.cc; sourceTree = "<group>"; };
+		A72ADA2516A8AEB500749EF8 /* main12.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main12.cc; sourceTree = "<group>"; };
+		A72ADA2616A8AEB500749EF8 /* main13.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main13.cc; sourceTree = "<group>"; };
+		A72ADA2716A8AEB500749EF8 /* main13.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main13.cmnd; sourceTree = "<group>"; };
+		A72ADA2816A8AEB500749EF8 /* main14.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main14.cc; sourceTree = "<group>"; };
+		A72ADA2916A8AEB500749EF8 /* main15.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main15.cc; sourceTree = "<group>"; };
+		A72ADA2A16A8AEB500749EF8 /* main16.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main16.cc; sourceTree = "<group>"; };
+		A72ADA2B16A8AEB500749EF8 /* main16.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main16.cmnd; sourceTree = "<group>"; };
+		A72ADA2C16A8AEB500749EF8 /* main17.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main17.cc; sourceTree = "<group>"; };
+		A72ADA2D16A8AEB500749EF8 /* main17.exe */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = main17.exe; sourceTree = "<group>"; };
+		A72ADA2E16A8AEB500749EF8 /* main18.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main18.cc; sourceTree = "<group>"; };
+		A72ADA2F16A8AEB500749EF8 /* main19.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main19.cc; sourceTree = "<group>"; };
+		A72ADA3016A8AEB500749EF8 /* main20.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main20.cc; sourceTree = "<group>"; };
+		A72ADA3116A8AEB500749EF8 /* main21.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main21.cc; sourceTree = "<group>"; };
+		A72ADA3216A8AEB500749EF8 /* main22.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main22.cc; sourceTree = "<group>"; };
+		A72ADA3316A8AEB500749EF8 /* main23.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main23.cc; sourceTree = "<group>"; };
+		A72ADA3416A8AEB500749EF8 /* main24.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main24.cc; sourceTree = "<group>"; };
+		A72ADA3516A8AEB500749EF8 /* main24.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main24.cmnd; sourceTree = "<group>"; };
+		A72ADA3616A8AEB500749EF8 /* main25.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main25.cc; sourceTree = "<group>"; };
+		A72ADA3716A8AEB500749EF8 /* main25.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = main25.lhe; sourceTree = "<group>"; };
+		A72ADA3816A8AEB500749EF8 /* main26.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main26.cc; sourceTree = "<group>"; };
+		A72ADA3916A8AEB500749EF8 /* main27.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main27.cc; sourceTree = "<group>"; };
+		A72ADA3A16A8AEB500749EF8 /* main28.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main28.cc; sourceTree = "<group>"; };
+		A72ADA3B16A8AEB500749EF8 /* main31.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main31.cc; sourceTree = "<group>"; };
+		A72ADA3C16A8AEB500749EF8 /* main31.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main31.cmnd; sourceTree = "<group>"; };
+		A72ADA3D16A8AEB500749EF8 /* main32.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main32.cc; sourceTree = "<group>"; };
+		A72ADA3E16A8AEB500749EF8 /* main32.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main32.cmnd; sourceTree = "<group>"; };
+		A72ADA3F16A8AEB500749EF8 /* main32.unw */ = {isa = PBXFileReference; lastKnownFileType = text; path = main32.unw; sourceTree = "<group>"; };
+		A72ADA4016A8AEB500749EF8 /* main32_unw.par */ = {isa = PBXFileReference; lastKnownFileType = text; path = main32_unw.par; sourceTree = "<group>"; };
+		A72ADA4116A8AEB500749EF8 /* main41.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main41.cc; sourceTree = "<group>"; };
+		A72ADA4216A8AEB500749EF8 /* main42.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main42.cc; sourceTree = "<group>"; };
+		A72ADA4316A8AEB500749EF8 /* main42.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main42.cmnd; sourceTree = "<group>"; };
+		A72ADA4416A8AEB500749EF8 /* main51.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main51.cc; sourceTree = "<group>"; };
+		A72ADA4516A8AEB500749EF8 /* main52.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main52.cc; sourceTree = "<group>"; };
+		A72ADA4616A8AEB500749EF8 /* main53.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main53.cc; sourceTree = "<group>"; };
+		A72ADA4716A8AEB500749EF8 /* main53.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main53.cmnd; sourceTree = "<group>"; };
+		A72ADA4816A8AEB500749EF8 /* main61.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main61.cc; sourceTree = "<group>"; };
+		A72ADA4916A8AEB500749EF8 /* main61.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main61.cmnd; sourceTree = "<group>"; };
+		A72ADA4A16A8AEB500749EF8 /* main62.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main62.cc; sourceTree = "<group>"; };
+		A72ADA4B16A8AEB500749EF8 /* main62.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main62.cmnd; sourceTree = "<group>"; };
+		A72ADA4C16A8AEB500749EF8 /* main71.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main71.cc; sourceTree = "<group>"; };
+		A72ADA4D16A8AEB500749EF8 /* main72.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main72.cc; sourceTree = "<group>"; };
+		A72ADA4E16A8AEB500749EF8 /* main81.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main81.cc; sourceTree = "<group>"; };
+		A72ADA4F16A8AEB500749EF8 /* main81.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main81.cmnd; sourceTree = "<group>"; };
+		A72ADA5016A8AEB500749EF8 /* main82.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main82.cc; sourceTree = "<group>"; };
+		A72ADA5116A8AEB500749EF8 /* main82.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main82.cmnd; sourceTree = "<group>"; };
+		A72ADA5216A8AEB500749EF8 /* main83.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main83.cc; sourceTree = "<group>"; };
+		A72ADA5316A8AEB500749EF8 /* main84.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main84.cc; sourceTree = "<group>"; };
+		A72ADA5416A8AEB500749EF8 /* main84.cmnd */ = {isa = PBXFileReference; lastKnownFileType = text; path = main84.cmnd; sourceTree = "<group>"; };
+		A72ADA5516A8AEB500749EF8 /* main91.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main91.cc; sourceTree = "<group>"; };
+		A72ADA5616A8AEB500749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A72ADA5716A8AEB500749EF8 /* MLMhooks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MLMhooks.h; sourceTree = "<group>"; };
+		A72ADA5816A8AEB500749EF8 /* output.root */ = {isa = PBXFileReference; lastKnownFileType = file; path = output.root; sourceTree = "<group>"; };
+		A72ADA5A16A8AEB500749EF8 /* out01 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out01; sourceTree = "<group>"; };
+		A72ADA5B16A8AEB500749EF8 /* out02 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out02; sourceTree = "<group>"; };
+		A72ADA5C16A8AEB500749EF8 /* out03 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out03; sourceTree = "<group>"; };
+		A72ADA5D16A8AEB500749EF8 /* out04 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out04; sourceTree = "<group>"; };
+		A72ADA5E16A8AEB500749EF8 /* out05 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out05; sourceTree = "<group>"; };
+		A72ADA5F16A8AEB500749EF8 /* out06 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out06; sourceTree = "<group>"; };
+		A72ADA6016A8AEB500749EF8 /* out07 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out07; sourceTree = "<group>"; };
+		A72ADA6116A8AEB500749EF8 /* out08 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out08; sourceTree = "<group>"; };
+		A72ADA6216A8AEB500749EF8 /* out09 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out09; sourceTree = "<group>"; };
+		A72ADA6316A8AEB500749EF8 /* out10 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out10; sourceTree = "<group>"; };
+		A72ADA6416A8AEB500749EF8 /* out11 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out11; sourceTree = "<group>"; };
+		A72ADA6516A8AEB500749EF8 /* out12 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out12; sourceTree = "<group>"; };
+		A72ADA6616A8AEB500749EF8 /* out13 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out13; sourceTree = "<group>"; };
+		A72ADA6716A8AEB500749EF8 /* out14 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out14; sourceTree = "<group>"; };
+		A72ADA6816A8AEB500749EF8 /* out15 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out15; sourceTree = "<group>"; };
+		A72ADA6916A8AEB500749EF8 /* out16 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out16; sourceTree = "<group>"; };
+		A72ADA6A16A8AEB500749EF8 /* out17 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out17; sourceTree = "<group>"; };
+		A72ADA6B16A8AEB500749EF8 /* out18 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out18; sourceTree = "<group>"; };
+		A72ADA6C16A8AEB500749EF8 /* out19 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out19; sourceTree = "<group>"; };
+		A72ADA6D16A8AEB500749EF8 /* out20 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out20; sourceTree = "<group>"; };
+		A72ADA6E16A8AEB500749EF8 /* out21 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out21; sourceTree = "<group>"; };
+		A72ADA6F16A8AEB500749EF8 /* out22 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out22; sourceTree = "<group>"; };
+		A72ADA7016A8AEB500749EF8 /* out23 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out23; sourceTree = "<group>"; };
+		A72ADA7116A8AEB500749EF8 /* out24 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out24; sourceTree = "<group>"; };
+		A72ADA7216A8AEB500749EF8 /* out25 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out25; sourceTree = "<group>"; };
+		A72ADA7316A8AEB500749EF8 /* out26 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out26; sourceTree = "<group>"; };
+		A72ADA7416A8AEB500749EF8 /* out27 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out27; sourceTree = "<group>"; };
+		A72ADA7516A8AEB500749EF8 /* out28 */ = {isa = PBXFileReference; lastKnownFileType = text; path = out28; sourceTree = "<group>"; };
+		A72ADA7616A8AEB500749EF8 /* photoninproton.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = photoninproton.lhe; sourceTree = "<group>"; };
+		A72ADA7716A8AEB500749EF8 /* powheg-dijets.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "powheg-dijets.lhe"; sourceTree = "<group>"; };
+		A72ADA7816A8AEB500749EF8 /* powheg-hvq.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "powheg-hvq.lhe"; sourceTree = "<group>"; };
+		A72ADA7916A8AEB500749EF8 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		A72ADA7A16A8AEB500749EF8 /* runmains */ = {isa = PBXFileReference; lastKnownFileType = text; path = runmains; sourceTree = "<group>"; };
+		A72ADA7B16A8AEB500749EF8 /* snowmass2.spc */ = {isa = PBXFileReference; lastKnownFileType = text; path = snowmass2.spc; sourceTree = "<group>"; };
+		A72ADA7C16A8AEB500749EF8 /* softsusy.spc */ = {isa = PBXFileReference; lastKnownFileType = text; path = softsusy.spc; sourceTree = "<group>"; };
+		A72ADA7D16A8AEB500749EF8 /* sps1aNarrowStopGluino.spc */ = {isa = PBXFileReference; lastKnownFileType = text; path = sps1aNarrowStopGluino.spc; sourceTree = "<group>"; };
+		A72ADA7E16A8AEB500749EF8 /* sps1aNarrowStopGluinoRPV.spc */ = {isa = PBXFileReference; lastKnownFileType = text; path = sps1aNarrowStopGluinoRPV.spc; sourceTree = "<group>"; };
+		A72ADA7F16A8AEB500749EF8 /* sps1aWithDecays.spc */ = {isa = PBXFileReference; lastKnownFileType = text; path = sps1aWithDecays.spc; sourceTree = "<group>"; };
+		A72ADA8016A8AEB500749EF8 /* ttbar.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = ttbar.lhe; sourceTree = "<group>"; };
+		A72ADA8116A8AEB500749EF8 /* ttbar2.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = ttbar2.lhe; sourceTree = "<group>"; };
+		A72ADA8216A8AEB500749EF8 /* w+_production_lhc_0.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "w+_production_lhc_0.lhe"; sourceTree = "<group>"; };
+		A72ADA8316A8AEB500749EF8 /* w+_production_lhc_1.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "w+_production_lhc_1.lhe"; sourceTree = "<group>"; };
+		A72ADA8416A8AEB500749EF8 /* w+_production_lhc_2.lhe */ = {isa = PBXFileReference; lastKnownFileType = text; path = "w+_production_lhc_2.lhe"; sourceTree = "<group>"; };
+		A72ADA8516A8AEB500749EF8 /* GUIDELINES */ = {isa = PBXFileReference; lastKnownFileType = text; path = GUIDELINES; sourceTree = "<group>"; };
+		A72ADA8716A8AEB500749EF8 /* HepMCInterface.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HepMCInterface.cc; sourceTree = "<group>"; };
+		A72ADA8916A8AEB500749EF8 /* AdvancedUsage.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = AdvancedUsage.html; sourceTree = "<group>"; };
+		A72ADA8A16A8AEB500749EF8 /* AlpgenAndMLM.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = AlpgenAndMLM.html; sourceTree = "<group>"; };
+		A72ADA8B16A8AEB500749EF8 /* ASecondHardProcess.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ASecondHardProcess.html; sourceTree = "<group>"; };
+		A72ADA8C16A8AEB500749EF8 /* BeamParameters.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BeamParameters.html; sourceTree = "<group>"; };
+		A72ADA8D16A8AEB500749EF8 /* BeamRemnants.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BeamRemnants.html; sourceTree = "<group>"; };
+		A72ADA8E16A8AEB500749EF8 /* BeamShape.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BeamShape.html; sourceTree = "<group>"; };
+		A72ADA8F16A8AEB500749EF8 /* Bibliography.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Bibliography.html; sourceTree = "<group>"; };
+		A72ADA9016A8AEB500749EF8 /* BoseEinsteinEffects.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = BoseEinsteinEffects.html; sourceTree = "<group>"; };
+		A72ADA9116A8AEB500749EF8 /* CompositenessProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = CompositenessProcesses.html; sourceTree = "<group>"; };
+		A72ADA9216A8AEB500749EF8 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		A72ADA9316A8AEB500749EF8 /* CouplingsAndScales.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = CouplingsAndScales.html; sourceTree = "<group>"; };
+		A72ADA9416A8AEB500749EF8 /* Diffraction.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Diffraction.html; sourceTree = "<group>"; };
+		A72ADA9516A8AEB500749EF8 /* ElectroweakProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ElectroweakProcesses.html; sourceTree = "<group>"; };
+		A72ADA9616A8AEB500749EF8 /* ErrorChecks.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ErrorChecks.html; sourceTree = "<group>"; };
+		A72ADA9716A8AEB500749EF8 /* EventAnalysis.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = EventAnalysis.html; sourceTree = "<group>"; };
+		A72ADA9816A8AEB500749EF8 /* EventInformation.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = EventInformation.html; sourceTree = "<group>"; };
+		A72ADA9916A8AEB500749EF8 /* EventRecord.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = EventRecord.html; sourceTree = "<group>"; };
+		A72ADA9A16A8AEB500749EF8 /* EventStatistics.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = EventStatistics.html; sourceTree = "<group>"; };
+		A72ADA9B16A8AEB500749EF8 /* ExternalDecays.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ExternalDecays.html; sourceTree = "<group>"; };
+		A72ADA9C16A8AEB500749EF8 /* ExtraDimensionalProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ExtraDimensionalProcesses.html; sourceTree = "<group>"; };
+		A72ADA9D16A8AEB500749EF8 /* FlavourSelection.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = FlavourSelection.html; sourceTree = "<group>"; };
+		A72ADA9E16A8AEB500749EF8 /* FourthGenerationProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = FourthGenerationProcesses.html; sourceTree = "<group>"; };
+		A72ADA9F16A8AEB500749EF8 /* FourVectors.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = FourVectors.html; sourceTree = "<group>"; };
+		A72ADAA016A8AEB500749EF8 /* Fragmentation.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Fragmentation.html; sourceTree = "<group>"; };
+		A72ADAA116A8AEB500749EF8 /* Frontpage.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Frontpage.html; sourceTree = "<group>"; };
+		A72ADAA216A8AEB500749EF8 /* Glossary.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Glossary.html; sourceTree = "<group>"; };
+		A72ADAA316A8AEB500749EF8 /* GUIDELINES */ = {isa = PBXFileReference; lastKnownFileType = text; path = GUIDELINES; sourceTree = "<group>"; };
+		A72ADAA416A8AEB500749EF8 /* HadronLevelStandalone.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = HadronLevelStandalone.html; sourceTree = "<group>"; };
+		A72ADAA516A8AEB500749EF8 /* HadronScattering.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = HadronScattering.html; sourceTree = "<group>"; };
+		A72ADAA616A8AEB500749EF8 /* HepMCInterface.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = HepMCInterface.html; sourceTree = "<group>"; };
+		A72ADAA716A8AEB500749EF8 /* HiddenValleyProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = HiddenValleyProcesses.html; sourceTree = "<group>"; };
+		A72ADAA816A8AEB500749EF8 /* HiggsProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = HiggsProcesses.html; sourceTree = "<group>"; };
+		A72ADAA916A8AEB500749EF8 /* Histograms.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Histograms.html; sourceTree = "<group>"; };
+		A72ADAAA16A8AEB500749EF8 /* ImplementNewShowers.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ImplementNewShowers.html; sourceTree = "<group>"; };
+		A72ADAAB16A8AEB500749EF8 /* Index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Index.html; sourceTree = "<group>"; };
+		A72ADAAC16A8AEB500749EF8 /* JetFinders.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = JetFinders.html; sourceTree = "<group>"; };
+		A72ADAAD16A8AEB500749EF8 /* LeftRightSymmetryProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = LeftRightSymmetryProcesses.html; sourceTree = "<group>"; };
+		A72ADAAE16A8AEB500749EF8 /* LeptoquarkProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = LeptoquarkProcesses.html; sourceTree = "<group>"; };
+		A72ADAAF16A8AEB500749EF8 /* LesHouchesAccord.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = LesHouchesAccord.html; sourceTree = "<group>"; };
+		A72ADAB016A8AEB500749EF8 /* MadGraph5Processes.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = MadGraph5Processes.html; sourceTree = "<group>"; };
+		A72ADAB116A8AEB500749EF8 /* MainProgramSettings.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = MainProgramSettings.html; sourceTree = "<group>"; };
+		A72ADAB216A8AEB500749EF8 /* MasterSwitches.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = MasterSwitches.html; sourceTree = "<group>"; };
+		A72ADAB316A8AEB500749EF8 /* MatrixElementMerging.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = MatrixElementMerging.html; sourceTree = "<group>"; };
+		A72ADAB416A8AEB500749EF8 /* MultipartonInteractions.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = MultipartonInteractions.html; sourceTree = "<group>"; };
+		A72ADAB516A8AEB500749EF8 /* NewGaugeBosonProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = NewGaugeBosonProcesses.html; sourceTree = "<group>"; };
+		A72ADAB616A8AEB500749EF8 /* OniaProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = OniaProcesses.html; sourceTree = "<group>"; };
+		A72ADAB716A8AEB500749EF8 /* ParticleData.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ParticleData.html; sourceTree = "<group>"; };
+		A72ADAB816A8AEB500749EF8 /* ParticleDataScheme.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ParticleDataScheme.html; sourceTree = "<group>"; };
+		A72ADAB916A8AEB500749EF8 /* ParticleDecays.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ParticleDecays.html; sourceTree = "<group>"; };
+		A72ADABA16A8AEB500749EF8 /* ParticleProperties.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ParticleProperties.html; sourceTree = "<group>"; };
+		A72ADABB16A8AEB500749EF8 /* PartonDistributions.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = PartonDistributions.html; sourceTree = "<group>"; };
+		A72ADABC16A8AEB500749EF8 /* PDFSelection.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = PDFSelection.html; sourceTree = "<group>"; };
+		A72ADABD16A8AEB500749EF8 /* PhaseSpaceCuts.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = PhaseSpaceCuts.html; sourceTree = "<group>"; };
+		A72ADABE16A8AEB500749EF8 /* ProcessSelection.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ProcessSelection.html; sourceTree = "<group>"; };
+		A72ADABF16A8AEB500749EF8 /* ProgramClasses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ProgramClasses.html; sourceTree = "<group>"; };
+		A72ADAC016A8AEB500749EF8 /* ProgramFiles.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ProgramFiles.html; sourceTree = "<group>"; };
+		A72ADAC116A8AEB500749EF8 /* ProgramFlow.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ProgramFlow.html; sourceTree = "<group>"; };
+		A72ADAC216A8AEB500749EF8 /* ProgramMethods.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ProgramMethods.html; sourceTree = "<group>"; };
+		A72ADAC316A8AEB500749EF8 /* pythia.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = pythia.css; sourceTree = "<group>"; };
+		A72ADAC416A8AEB500749EF8 /* pythia32.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pythia32.gif; sourceTree = "<group>"; };
+		A72ADAC516A8AEB500749EF8 /* pythia8100.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pythia8100.pdf; sourceTree = "<group>"; };
+		A72ADAC616A8AEB500749EF8 /* pythia99.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pythia99.gif; sourceTree = "<group>"; };
+		A72ADAC716A8AEB500749EF8 /* QCDProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = QCDProcesses.html; sourceTree = "<group>"; };
+		A72ADAC816A8AEB500749EF8 /* RandomNumbers.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = RandomNumbers.html; sourceTree = "<group>"; };
+		A72ADAC916A8AEB500749EF8 /* RandomNumberSeed.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = RandomNumberSeed.html; sourceTree = "<group>"; };
+		A72ADACA16A8AEB500749EF8 /* ResonanceDecays.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ResonanceDecays.html; sourceTree = "<group>"; };
+		A72ADACB16A8AEB500749EF8 /* RHadrons.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = RHadrons.html; sourceTree = "<group>"; };
+		A72ADACC16A8AEB500749EF8 /* RIVETusage.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = RIVETusage.html; sourceTree = "<group>"; };
+		A72ADACD16A8AEB500749EF8 /* ROOTusage.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ROOTusage.html; sourceTree = "<group>"; };
+		A72ADACE16A8AEB500749EF8 /* SampleMainPrograms.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SampleMainPrograms.html; sourceTree = "<group>"; };
+		A72ADACF16A8AEB500749EF8 /* SaveSettings.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SaveSettings.html; sourceTree = "<group>"; };
+		A72ADAD016A8AEB500749EF8 /* SemiInternalProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SemiInternalProcesses.html; sourceTree = "<group>"; };
+		A72ADAD116A8AEB500749EF8 /* SemiInternalResonances.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SemiInternalResonances.html; sourceTree = "<group>"; };
+		A72ADAD216A8AEB500749EF8 /* SettingsScheme.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SettingsScheme.html; sourceTree = "<group>"; };
+		A72ADAD316A8AEB500749EF8 /* SpacelikeShowers.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SpacelikeShowers.html; sourceTree = "<group>"; };
+		A72ADAD416A8AEB500749EF8 /* StandardModelParameters.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = StandardModelParameters.html; sourceTree = "<group>"; };
+		A72ADAD516A8AEB500749EF8 /* SUSYLesHouchesAccord.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SUSYLesHouchesAccord.html; sourceTree = "<group>"; };
+		A72ADAD616A8AEB500749EF8 /* SUSYProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = SUSYProcesses.html; sourceTree = "<group>"; };
+		A72ADAD716A8AEB500749EF8 /* TimelikeShowers.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = TimelikeShowers.html; sourceTree = "<group>"; };
+		A72ADAD816A8AEB500749EF8 /* TopProcesses.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = TopProcesses.html; sourceTree = "<group>"; };
+		A72ADAD916A8AEB500749EF8 /* TotalCrossSections.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = TotalCrossSections.html; sourceTree = "<group>"; };
+		A72ADADA16A8AEB500749EF8 /* Tunes.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Tunes.html; sourceTree = "<group>"; };
+		A72ADADB16A8AEB500749EF8 /* UpdateHistory.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = UpdateHistory.html; sourceTree = "<group>"; };
+		A72ADADC16A8AEB500749EF8 /* UserHooks.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = UserHooks.html; sourceTree = "<group>"; };
+		A72ADADD16A8AEB500749EF8 /* Version.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Version.html; sourceTree = "<group>"; };
+		A72ADADE16A8AEB500749EF8 /* Welcome.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = Welcome.html; sourceTree = "<group>"; };
+		A72ADADF16A8AEB500749EF8 /* worksheet.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = worksheet.pdf; sourceTree = "<group>"; };
+		A72ADAE116A8AEB500749EF8 /* Analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analysis.h; sourceTree = "<group>"; };
+		A72ADAE216A8AEB500749EF8 /* Basics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Basics.h; sourceTree = "<group>"; };
+		A72ADAE316A8AEB500749EF8 /* BeamParticle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeamParticle.h; sourceTree = "<group>"; };
+		A72ADAE416A8AEB500749EF8 /* BeamRemnants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeamRemnants.h; sourceTree = "<group>"; };
+		A72ADAE516A8AEB500749EF8 /* BeamShape.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BeamShape.h; sourceTree = "<group>"; };
+		A72ADAE616A8AEB500749EF8 /* BoseEinstein.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BoseEinstein.h; sourceTree = "<group>"; };
+		A72ADAE716A8AEB500749EF8 /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
+		A72ADAE816A8AEB500749EF8 /* FastJet3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FastJet3.h; sourceTree = "<group>"; };
+		A72ADAE916A8AEB500749EF8 /* FragmentationFlavZpT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FragmentationFlavZpT.h; sourceTree = "<group>"; };
+		A72ADAEA16A8AEB500749EF8 /* FragmentationSystems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FragmentationSystems.h; sourceTree = "<group>"; };
+		A72ADAEB16A8AEB500749EF8 /* HadronLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HadronLevel.h; sourceTree = "<group>"; };
+		A72ADAEC16A8AEB500749EF8 /* HadronScatter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HadronScatter.h; sourceTree = "<group>"; };
+		A72ADAED16A8AEB500749EF8 /* HelicityBasics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelicityBasics.h; sourceTree = "<group>"; };
+		A72ADAEE16A8AEB500749EF8 /* HelicityMatrixElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelicityMatrixElements.h; sourceTree = "<group>"; };
+		A72ADAEF16A8AEB500749EF8 /* HepMCInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HepMCInterface.h; sourceTree = "<group>"; };
+		A72ADAF016A8AEB500749EF8 /* HiddenValleyFragmentation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HiddenValleyFragmentation.h; sourceTree = "<group>"; };
+		A72ADAF116A8AEB500749EF8 /* History.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = History.h; sourceTree = "<group>"; };
+		A72ADAF216A8AEB500749EF8 /* Info.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Info.h; sourceTree = "<group>"; };
+		A72ADAF316A8AEB500749EF8 /* LesHouches.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LesHouches.h; sourceTree = "<group>"; };
+		A72ADAF416A8AEB500749EF8 /* LHAFortran.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LHAFortran.h; sourceTree = "<group>"; };
+		A72ADAF516A8AEB500749EF8 /* LHAPDFInterface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LHAPDFInterface.h; sourceTree = "<group>"; };
+		A72ADAF616A8AEB500749EF8 /* MergingHooks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MergingHooks.h; sourceTree = "<group>"; };
+		A72ADAF716A8AEB500749EF8 /* MiniStringFragmentation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MiniStringFragmentation.h; sourceTree = "<group>"; };
+		A72ADAF816A8AEB500749EF8 /* MultipartonInteractions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultipartonInteractions.h; sourceTree = "<group>"; };
+		A72ADAF916A8AEB500749EF8 /* ParticleData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticleData.h; sourceTree = "<group>"; };
+		A72ADAFA16A8AEB500749EF8 /* ParticleDecays.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticleDecays.h; sourceTree = "<group>"; };
+		A72ADAFB16A8AEB500749EF8 /* PartonDistributions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartonDistributions.h; sourceTree = "<group>"; };
+		A72ADAFC16A8AEB500749EF8 /* PartonLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartonLevel.h; sourceTree = "<group>"; };
+		A72ADAFD16A8AEB500749EF8 /* PartonSystems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PartonSystems.h; sourceTree = "<group>"; };
+		A72ADAFE16A8AEB500749EF8 /* PhaseSpace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhaseSpace.h; sourceTree = "<group>"; };
+		A72ADAFF16A8AEB500749EF8 /* ProcessContainer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProcessContainer.h; sourceTree = "<group>"; };
+		A72ADB0016A8AEB500749EF8 /* ProcessLevel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProcessLevel.h; sourceTree = "<group>"; };
+		A72ADB0116A8AEB500749EF8 /* Pythia.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Pythia.h; sourceTree = "<group>"; };
+		A72ADB0216A8AEB500749EF8 /* PythiaComplex.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PythiaComplex.h; sourceTree = "<group>"; };
+		A72ADB0316A8AEB500749EF8 /* PythiaStdlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PythiaStdlib.h; sourceTree = "<group>"; };
+		A72ADB0416A8AEB500749EF8 /* ResonanceDecays.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResonanceDecays.h; sourceTree = "<group>"; };
+		A72ADB0516A8AEB500749EF8 /* ResonanceWidths.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ResonanceWidths.h; sourceTree = "<group>"; };
+		A72ADB0616A8AEB500749EF8 /* RHadrons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RHadrons.h; sourceTree = "<group>"; };
+		A72ADB0716A8AEB500749EF8 /* Settings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		A72ADB0816A8AEB500749EF8 /* SigmaCompositeness.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaCompositeness.h; sourceTree = "<group>"; };
+		A72ADB0916A8AEB500749EF8 /* SigmaEW.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaEW.h; sourceTree = "<group>"; };
+		A72ADB0A16A8AEB500749EF8 /* SigmaExtraDim.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaExtraDim.h; sourceTree = "<group>"; };
+		A72ADB0B16A8AEB500749EF8 /* SigmaGeneric.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaGeneric.h; sourceTree = "<group>"; };
+		A72ADB0C16A8AEB500749EF8 /* SigmaHiggs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaHiggs.h; sourceTree = "<group>"; };
+		A72ADB0D16A8AEB500749EF8 /* SigmaLeftRightSym.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaLeftRightSym.h; sourceTree = "<group>"; };
+		A72ADB0E16A8AEB500749EF8 /* SigmaLeptoquark.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaLeptoquark.h; sourceTree = "<group>"; };
+		A72ADB0F16A8AEB500749EF8 /* SigmaNewGaugeBosons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaNewGaugeBosons.h; sourceTree = "<group>"; };
+		A72ADB1016A8AEB500749EF8 /* SigmaOnia.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaOnia.h; sourceTree = "<group>"; };
+		A72ADB1116A8AEB500749EF8 /* SigmaProcess.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaProcess.h; sourceTree = "<group>"; };
+		A72ADB1216A8AEB500749EF8 /* SigmaQCD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaQCD.h; sourceTree = "<group>"; };
+		A72ADB1316A8AEB500749EF8 /* SigmaSUSY.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaSUSY.h; sourceTree = "<group>"; };
+		A72ADB1416A8AEB500749EF8 /* SigmaTotal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SigmaTotal.h; sourceTree = "<group>"; };
+		A72ADB1516A8AEB500749EF8 /* SpaceShower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpaceShower.h; sourceTree = "<group>"; };
+		A72ADB1616A8AEB500749EF8 /* StandardModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StandardModel.h; sourceTree = "<group>"; };
+		A72ADB1716A8AEB500749EF8 /* StringFragmentation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StringFragmentation.h; sourceTree = "<group>"; };
+		A72ADB1816A8AEB500749EF8 /* SusyCouplings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SusyCouplings.h; sourceTree = "<group>"; };
+		A72ADB1916A8AEB500749EF8 /* SusyLesHouches.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SusyLesHouches.h; sourceTree = "<group>"; };
+		A72ADB1A16A8AEB500749EF8 /* SusyResonanceWidths.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SusyResonanceWidths.h; sourceTree = "<group>"; };
+		A72ADB1B16A8AEB500749EF8 /* TauDecays.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TauDecays.h; sourceTree = "<group>"; };
+		A72ADB1C16A8AEB500749EF8 /* TimeShower.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeShower.h; sourceTree = "<group>"; };
+		A72ADB1D16A8AEB500749EF8 /* UserHooks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserHooks.h; sourceTree = "<group>"; };
+		A72ADB1F16A8AEB500749EF8 /* LHAPDFDummy.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LHAPDFDummy.cc; sourceTree = "<group>"; };
+		A72ADB2216A8AEB500749EF8 /* liblhapdfdummy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = liblhapdfdummy.a; sourceTree = "<group>"; };
+		A72ADB2316A8AEB500749EF8 /* libpythia8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpythia8.a; sourceTree = "<group>"; };
+		A72ADB2416A8AEB500749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A72ADB2516A8AEB500749EF8 /* Makefile.msc */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.msc; sourceTree = "<group>"; };
+		A72ADB2716A8AEB500749EF8 /* AdvancedUsage.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = AdvancedUsage.php; sourceTree = "<group>"; };
+		A72ADB2816A8AEB500749EF8 /* AlpgenAndMLM.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = AlpgenAndMLM.php; sourceTree = "<group>"; };
+		A72ADB2916A8AEB500749EF8 /* ASecondHardProcess.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ASecondHardProcess.php; sourceTree = "<group>"; };
+		A72ADB2A16A8AEB500749EF8 /* BeamParameters.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = BeamParameters.php; sourceTree = "<group>"; };
+		A72ADB2B16A8AEB500749EF8 /* BeamRemnants.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = BeamRemnants.php; sourceTree = "<group>"; };
+		A72ADB2C16A8AEB500749EF8 /* BeamShape.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = BeamShape.php; sourceTree = "<group>"; };
+		A72ADB2D16A8AEB500749EF8 /* Bibliography.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Bibliography.php; sourceTree = "<group>"; };
+		A72ADB2E16A8AEB500749EF8 /* BoseEinsteinEffects.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = BoseEinsteinEffects.php; sourceTree = "<group>"; };
+		A72ADB2F16A8AEB500749EF8 /* CompositenessProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = CompositenessProcesses.php; sourceTree = "<group>"; };
+		A72ADB3016A8AEB500749EF8 /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		A72ADB3116A8AEB500749EF8 /* CouplingsAndScales.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = CouplingsAndScales.php; sourceTree = "<group>"; };
+		A72ADB3216A8AEB500749EF8 /* Diffraction.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Diffraction.php; sourceTree = "<group>"; };
+		A72ADB3316A8AEB500749EF8 /* ElectroweakProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ElectroweakProcesses.php; sourceTree = "<group>"; };
+		A72ADB3416A8AEB500749EF8 /* ErrorChecks.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ErrorChecks.php; sourceTree = "<group>"; };
+		A72ADB3516A8AEB500749EF8 /* EventAnalysis.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = EventAnalysis.php; sourceTree = "<group>"; };
+		A72ADB3616A8AEB500749EF8 /* EventInformation.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = EventInformation.php; sourceTree = "<group>"; };
+		A72ADB3716A8AEB500749EF8 /* EventRecord.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = EventRecord.php; sourceTree = "<group>"; };
+		A72ADB3816A8AEB500749EF8 /* EventStatistics.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = EventStatistics.php; sourceTree = "<group>"; };
+		A72ADB3916A8AEB500749EF8 /* ExternalDecays.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ExternalDecays.php; sourceTree = "<group>"; };
+		A72ADB3A16A8AEB500749EF8 /* ExtraDimensionalProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ExtraDimensionalProcesses.php; sourceTree = "<group>"; };
+		A72ADB3C16A8AEB500749EF8 /* FlavourSelection.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = FlavourSelection.php; sourceTree = "<group>"; };
+		A72ADB3D16A8AEB500749EF8 /* FourthGenerationProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = FourthGenerationProcesses.php; sourceTree = "<group>"; };
+		A72ADB3E16A8AEB500749EF8 /* FourVectors.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = FourVectors.php; sourceTree = "<group>"; };
+		A72ADB3F16A8AEB500749EF8 /* Fragmentation.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Fragmentation.php; sourceTree = "<group>"; };
+		A72ADB4016A8AEB500749EF8 /* Frontpage.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Frontpage.php; sourceTree = "<group>"; };
+		A72ADB4116A8AEB500749EF8 /* Glossary.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Glossary.php; sourceTree = "<group>"; };
+		A72ADB4216A8AEB500749EF8 /* GUIDELINES */ = {isa = PBXFileReference; lastKnownFileType = text; path = GUIDELINES; sourceTree = "<group>"; };
+		A72ADB4316A8AEB500749EF8 /* HadronLevelStandalone.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = HadronLevelStandalone.php; sourceTree = "<group>"; };
+		A72ADB4416A8AEB500749EF8 /* HadronScattering.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = HadronScattering.php; sourceTree = "<group>"; };
+		A72ADB4516A8AEB500749EF8 /* HepMCInterface.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = HepMCInterface.php; sourceTree = "<group>"; };
+		A72ADB4616A8AEB500749EF8 /* HiddenValleyProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = HiddenValleyProcesses.php; sourceTree = "<group>"; };
+		A72ADB4716A8AEB500749EF8 /* HiggsProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = HiggsProcesses.php; sourceTree = "<group>"; };
+		A72ADB4816A8AEB500749EF8 /* Histograms.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Histograms.php; sourceTree = "<group>"; };
+		A72ADB4916A8AEB500749EF8 /* ImplementNewShowers.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ImplementNewShowers.php; sourceTree = "<group>"; };
+		A72ADB4A16A8AEB500749EF8 /* Index.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Index.php; sourceTree = "<group>"; };
+		A72ADB4B16A8AEB500749EF8 /* JetFinders.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = JetFinders.php; sourceTree = "<group>"; };
+		A72ADB4C16A8AEB500749EF8 /* LeftRightSymmetryProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = LeftRightSymmetryProcesses.php; sourceTree = "<group>"; };
+		A72ADB4D16A8AEB500749EF8 /* LeptoquarkProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = LeptoquarkProcesses.php; sourceTree = "<group>"; };
+		A72ADB4E16A8AEB500749EF8 /* LesHouchesAccord.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = LesHouchesAccord.php; sourceTree = "<group>"; };
+		A72ADB4F16A8AEB500749EF8 /* MadGraph5Processes.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = MadGraph5Processes.php; sourceTree = "<group>"; };
+		A72ADB5016A8AEB500749EF8 /* MainProgramSettings.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = MainProgramSettings.php; sourceTree = "<group>"; };
+		A72ADB5116A8AEB500749EF8 /* MasterSwitches.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = MasterSwitches.php; sourceTree = "<group>"; };
+		A72ADB5216A8AEB500749EF8 /* MatrixElementMerging.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = MatrixElementMerging.php; sourceTree = "<group>"; };
+		A72ADB5316A8AEB500749EF8 /* MultipartonInteractions.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = MultipartonInteractions.php; sourceTree = "<group>"; };
+		A72ADB5416A8AEB500749EF8 /* NewGaugeBosonProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = NewGaugeBosonProcesses.php; sourceTree = "<group>"; };
+		A72ADB5516A8AEB500749EF8 /* OniaProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = OniaProcesses.php; sourceTree = "<group>"; };
+		A72ADB5616A8AEB500749EF8 /* ParticleData.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ParticleData.php; sourceTree = "<group>"; };
+		A72ADB5716A8AEB500749EF8 /* ParticleDataScheme.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ParticleDataScheme.php; sourceTree = "<group>"; };
+		A72ADB5816A8AEB500749EF8 /* ParticleDecays.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ParticleDecays.php; sourceTree = "<group>"; };
+		A72ADB5916A8AEB500749EF8 /* ParticleProperties.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ParticleProperties.php; sourceTree = "<group>"; };
+		A72ADB5A16A8AEB500749EF8 /* PartonDistributions.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = PartonDistributions.php; sourceTree = "<group>"; };
+		A72ADB5B16A8AEB500749EF8 /* PDFSelection.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = PDFSelection.php; sourceTree = "<group>"; };
+		A72ADB5C16A8AEB500749EF8 /* PhaseSpaceCuts.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = PhaseSpaceCuts.php; sourceTree = "<group>"; };
+		A72ADB5D16A8AEB500749EF8 /* php.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = php.txt; sourceTree = "<group>"; };
+		A72ADB5E16A8AEB500749EF8 /* ProcessSelection.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ProcessSelection.php; sourceTree = "<group>"; };
+		A72ADB5F16A8AEB500749EF8 /* ProgramClasses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ProgramClasses.php; sourceTree = "<group>"; };
+		A72ADB6016A8AEB500749EF8 /* ProgramFiles.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ProgramFiles.php; sourceTree = "<group>"; };
+		A72ADB6116A8AEB500749EF8 /* ProgramFlow.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ProgramFlow.php; sourceTree = "<group>"; };
+		A72ADB6216A8AEB500749EF8 /* ProgramMethods.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ProgramMethods.php; sourceTree = "<group>"; };
+		A72ADB6316A8AEB500749EF8 /* pythia.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; path = pythia.css; sourceTree = "<group>"; };
+		A72ADB6416A8AEB500749EF8 /* pythia32.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pythia32.gif; sourceTree = "<group>"; };
+		A72ADB6516A8AEB500749EF8 /* pythia8100.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = pythia8100.pdf; sourceTree = "<group>"; };
+		A72ADB6616A8AEB500749EF8 /* pythia99.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = pythia99.gif; sourceTree = "<group>"; };
+		A72ADB6716A8AEB500749EF8 /* QCDProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = QCDProcesses.php; sourceTree = "<group>"; };
+		A72ADB6816A8AEB500749EF8 /* RandomNumbers.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = RandomNumbers.php; sourceTree = "<group>"; };
+		A72ADB6916A8AEB500749EF8 /* RandomNumberSeed.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = RandomNumberSeed.php; sourceTree = "<group>"; };
+		A72ADB6A16A8AEB500749EF8 /* ResonanceDecays.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ResonanceDecays.php; sourceTree = "<group>"; };
+		A72ADB6B16A8AEB500749EF8 /* RHadrons.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = RHadrons.php; sourceTree = "<group>"; };
+		A72ADB6C16A8AEB500749EF8 /* RIVETusage.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = RIVETusage.php; sourceTree = "<group>"; };
+		A72ADB6D16A8AEB500749EF8 /* ROOTusage.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = ROOTusage.php; sourceTree = "<group>"; };
+		A72ADB6E16A8AEB500749EF8 /* SampleMainPrograms.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SampleMainPrograms.php; sourceTree = "<group>"; };
+		A72ADB6F16A8AEB500749EF8 /* SaveSettings.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SaveSettings.php; sourceTree = "<group>"; };
+		A72ADB7016A8AEB500749EF8 /* SemiInternalProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SemiInternalProcesses.php; sourceTree = "<group>"; };
+		A72ADB7116A8AEB500749EF8 /* SemiInternalResonances.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SemiInternalResonances.php; sourceTree = "<group>"; };
+		A72ADB7216A8AEB500749EF8 /* SettingsScheme.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SettingsScheme.php; sourceTree = "<group>"; };
+		A72ADB7316A8AEB500749EF8 /* SpacelikeShowers.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SpacelikeShowers.php; sourceTree = "<group>"; };
+		A72ADB7416A8AEB500749EF8 /* StandardModelParameters.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = StandardModelParameters.php; sourceTree = "<group>"; };
+		A72ADB7516A8AEB500749EF8 /* SUSYLesHouchesAccord.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SUSYLesHouchesAccord.php; sourceTree = "<group>"; };
+		A72ADB7616A8AEB500749EF8 /* SUSYProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = SUSYProcesses.php; sourceTree = "<group>"; };
+		A72ADB7716A8AEB500749EF8 /* TimelikeShowers.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = TimelikeShowers.php; sourceTree = "<group>"; };
+		A72ADB7816A8AEB500749EF8 /* TopProcesses.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = TopProcesses.php; sourceTree = "<group>"; };
+		A72ADB7916A8AEB500749EF8 /* TotalCrossSections.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = TotalCrossSections.php; sourceTree = "<group>"; };
+		A72ADB7A16A8AEB500749EF8 /* Tunes.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Tunes.php; sourceTree = "<group>"; };
+		A72ADB7B16A8AEB500749EF8 /* UpdateHistory.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = UpdateHistory.php; sourceTree = "<group>"; };
+		A72ADB7C16A8AEB500749EF8 /* UserHooks.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = UserHooks.php; sourceTree = "<group>"; };
+		A72ADB7D16A8AEB500749EF8 /* Version.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Version.php; sourceTree = "<group>"; };
+		A72ADB7E16A8AEB500749EF8 /* Welcome.php */ = {isa = PBXFileReference; lastKnownFileType = text.script.php; path = Welcome.php; sourceTree = "<group>"; };
+		A72ADB7F16A8AEB500749EF8 /* worksheet.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = worksheet.pdf; sourceTree = "<group>"; };
+		A72ADB8016A8AEB500749EF8 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		A72ADB8116A8AEB500749EF8 /* README.HepMC */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.HepMC; sourceTree = "<group>"; };
+		A72ADB8216A8AEB500749EF8 /* README.Win32 */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.Win32; sourceTree = "<group>"; };
+		A72ADB8416A8AEB500749EF8 /* hist.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hist.cc; sourceTree = "<group>"; };
+		A72ADB8516A8AEB500749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A72ADB8616A8AEB500749EF8 /* pythiaLinkdef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pythiaLinkdef.h; sourceTree = "<group>"; };
+		A72ADB8716A8AEB500749EF8 /* pythiaROOT.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pythiaROOT.h; sourceTree = "<group>"; };
+		A72ADB8816A8AEB500749EF8 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		A72ADB8916A8AEB500749EF8 /* tree.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tree.cc; sourceTree = "<group>"; };
+		A72ADB8B16A8AEB500749EF8 /* Analysis.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Analysis.cc; sourceTree = "<group>"; };
+		A72ADB8C16A8AEB500749EF8 /* Basics.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Basics.cc; sourceTree = "<group>"; };
+		A72ADB8D16A8AEB500749EF8 /* BeamParticle.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BeamParticle.cc; sourceTree = "<group>"; };
+		A72ADB8E16A8AEB500749EF8 /* BeamRemnants.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BeamRemnants.cc; sourceTree = "<group>"; };
+		A72ADB8F16A8AEB500749EF8 /* BeamShape.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BeamShape.cc; sourceTree = "<group>"; };
+		A72ADB9016A8AEB500749EF8 /* BoseEinstein.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BoseEinstein.cc; sourceTree = "<group>"; };
+		A72ADB9116A8AEB500749EF8 /* Event.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Event.cc; sourceTree = "<group>"; };
+		A72ADB9216A8AEB500749EF8 /* FragmentationFlavZpT.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FragmentationFlavZpT.cc; sourceTree = "<group>"; };
+		A72ADB9316A8AEB500749EF8 /* FragmentationSystems.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FragmentationSystems.cc; sourceTree = "<group>"; };
+		A72ADB9416A8AEB500749EF8 /* HadronLevel.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HadronLevel.cc; sourceTree = "<group>"; };
+		A72ADB9516A8AEB500749EF8 /* HadronScatter.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HadronScatter.cc; sourceTree = "<group>"; };
+		A72ADB9616A8AEB500749EF8 /* HelicityBasics.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelicityBasics.cc; sourceTree = "<group>"; };
+		A72ADB9716A8AEB500749EF8 /* HelicityMatrixElements.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HelicityMatrixElements.cc; sourceTree = "<group>"; };
+		A72ADB9816A8AEB500749EF8 /* HiddenValleyFragmentation.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HiddenValleyFragmentation.cc; sourceTree = "<group>"; };
+		A72ADB9916A8AEB500749EF8 /* History.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = History.cc; sourceTree = "<group>"; };
+		A72ADB9A16A8AEB500749EF8 /* Info.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Info.cc; sourceTree = "<group>"; };
+		A72ADB9B16A8AEB500749EF8 /* LesHouches.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = LesHouches.cc; sourceTree = "<group>"; };
+		A72ADB9C16A8AEB500749EF8 /* MergingHooks.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MergingHooks.cc; sourceTree = "<group>"; };
+		A72ADB9D16A8AEB500749EF8 /* MiniStringFragmentation.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MiniStringFragmentation.cc; sourceTree = "<group>"; };
+		A72ADB9E16A8AEB500749EF8 /* MultipartonInteractions.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MultipartonInteractions.cc; sourceTree = "<group>"; };
+		A72ADB9F16A8AEB500749EF8 /* ParticleData.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleData.cc; sourceTree = "<group>"; };
+		A72ADBA016A8AEB500749EF8 /* ParticleDecays.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleDecays.cc; sourceTree = "<group>"; };
+		A72ADBA116A8AEB500749EF8 /* PartonDistributions.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PartonDistributions.cc; sourceTree = "<group>"; };
+		A72ADBA216A8AEB500749EF8 /* PartonLevel.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PartonLevel.cc; sourceTree = "<group>"; };
+		A72ADBA316A8AEB500749EF8 /* PartonSystems.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PartonSystems.cc; sourceTree = "<group>"; };
+		A72ADBA416A8AEB500749EF8 /* PhaseSpace.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PhaseSpace.cc; sourceTree = "<group>"; };
+		A72ADBA516A8AEB500749EF8 /* ProcessContainer.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProcessContainer.cc; sourceTree = "<group>"; };
+		A72ADBA616A8AEB500749EF8 /* ProcessLevel.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ProcessLevel.cc; sourceTree = "<group>"; };
+		A72ADBA716A8AEB500749EF8 /* Pythia.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Pythia.cc; sourceTree = "<group>"; };
+		A72ADBA816A8AEB500749EF8 /* PythiaStdlib.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PythiaStdlib.cc; sourceTree = "<group>"; };
+		A72ADBA916A8AEB500749EF8 /* ResonanceDecays.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResonanceDecays.cc; sourceTree = "<group>"; };
+		A72ADBAA16A8AEB500749EF8 /* ResonanceWidths.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ResonanceWidths.cc; sourceTree = "<group>"; };
+		A72ADBAB16A8AEB500749EF8 /* RHadrons.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RHadrons.cc; sourceTree = "<group>"; };
+		A72ADBAC16A8AEB500749EF8 /* Settings.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Settings.cc; sourceTree = "<group>"; };
+		A72ADBAD16A8AEB500749EF8 /* SigmaCompositeness.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaCompositeness.cc; sourceTree = "<group>"; };
+		A72ADBAE16A8AEB500749EF8 /* SigmaEW.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaEW.cc; sourceTree = "<group>"; };
+		A72ADBAF16A8AEB500749EF8 /* SigmaExtraDim.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaExtraDim.cc; sourceTree = "<group>"; };
+		A72ADBB016A8AEB500749EF8 /* SigmaGeneric.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaGeneric.cc; sourceTree = "<group>"; };
+		A72ADBB116A8AEB500749EF8 /* SigmaHiggs.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaHiggs.cc; sourceTree = "<group>"; };
+		A72ADBB216A8AEB500749EF8 /* SigmaLeftRightSym.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaLeftRightSym.cc; sourceTree = "<group>"; };
+		A72ADBB316A8AEB500749EF8 /* SigmaLeptoquark.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaLeptoquark.cc; sourceTree = "<group>"; };
+		A72ADBB416A8AEB500749EF8 /* SigmaNewGaugeBosons.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaNewGaugeBosons.cc; sourceTree = "<group>"; };
+		A72ADBB516A8AEB500749EF8 /* SigmaOnia.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaOnia.cc; sourceTree = "<group>"; };
+		A72ADBB616A8AEB500749EF8 /* SigmaProcess.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaProcess.cc; sourceTree = "<group>"; };
+		A72ADBB716A8AEB500749EF8 /* SigmaQCD.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaQCD.cc; sourceTree = "<group>"; };
+		A72ADBB816A8AEB500749EF8 /* SigmaSUSY.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaSUSY.cc; sourceTree = "<group>"; };
+		A72ADBB916A8AEB500749EF8 /* SigmaTotal.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SigmaTotal.cc; sourceTree = "<group>"; };
+		A72ADBBA16A8AEB500749EF8 /* SpaceShower.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SpaceShower.cc; sourceTree = "<group>"; };
+		A72ADBBB16A8AEB500749EF8 /* StandardModel.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StandardModel.cc; sourceTree = "<group>"; };
+		A72ADBBC16A8AEB500749EF8 /* StringFragmentation.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StringFragmentation.cc; sourceTree = "<group>"; };
+		A72ADBBD16A8AEB500749EF8 /* SusyCouplings.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SusyCouplings.cc; sourceTree = "<group>"; };
+		A72ADBBE16A8AEB500749EF8 /* SusyLesHouches.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SusyLesHouches.cc; sourceTree = "<group>"; };
+		A72ADBBF16A8AEB500749EF8 /* SusyResonanceWidths.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SusyResonanceWidths.cc; sourceTree = "<group>"; };
+		A72ADBC016A8AEB500749EF8 /* TauDecays.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TauDecays.cc; sourceTree = "<group>"; };
+		A72ADBC116A8AEB500749EF8 /* TimeShower.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TimeShower.cc; sourceTree = "<group>"; };
+		A72ADBC216A8AEB500749EF8 /* UserHooks.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UserHooks.cc; sourceTree = "<group>"; };
+		A72ADBC516A8AEB500749EF8 /* Analysis.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = Analysis.d; sourceTree = "<group>"; };
+		A72ADBC616A8AEB500749EF8 /* Analysis.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Analysis.o; sourceTree = "<group>"; };
+		A72ADBC716A8AEB500749EF8 /* Basics.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = Basics.d; sourceTree = "<group>"; };
+		A72ADBC816A8AEB500749EF8 /* Basics.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Basics.o; sourceTree = "<group>"; };
+		A72ADBC916A8AEB500749EF8 /* BeamParticle.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = BeamParticle.d; sourceTree = "<group>"; };
+		A72ADBCA16A8AEB500749EF8 /* BeamParticle.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = BeamParticle.o; sourceTree = "<group>"; };
+		A72ADBCB16A8AEB500749EF8 /* BeamRemnants.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = BeamRemnants.d; sourceTree = "<group>"; };
+		A72ADBCC16A8AEB500749EF8 /* BeamRemnants.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = BeamRemnants.o; sourceTree = "<group>"; };
+		A72ADBCD16A8AEB500749EF8 /* BeamShape.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = BeamShape.d; sourceTree = "<group>"; };
+		A72ADBCE16A8AEB500749EF8 /* BeamShape.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = BeamShape.o; sourceTree = "<group>"; };
+		A72ADBCF16A8AEB500749EF8 /* BoseEinstein.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = BoseEinstein.d; sourceTree = "<group>"; };
+		A72ADBD016A8AEB500749EF8 /* BoseEinstein.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = BoseEinstein.o; sourceTree = "<group>"; };
+		A72ADBD116A8AEB500749EF8 /* Event.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = Event.d; sourceTree = "<group>"; };
+		A72ADBD216A8AEB500749EF8 /* Event.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Event.o; sourceTree = "<group>"; };
+		A72ADBD316A8AEB500749EF8 /* FragmentationFlavZpT.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = FragmentationFlavZpT.d; sourceTree = "<group>"; };
+		A72ADBD416A8AEB500749EF8 /* FragmentationFlavZpT.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = FragmentationFlavZpT.o; sourceTree = "<group>"; };
+		A72ADBD516A8AEB500749EF8 /* FragmentationSystems.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = FragmentationSystems.d; sourceTree = "<group>"; };
+		A72ADBD616A8AEB500749EF8 /* FragmentationSystems.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = FragmentationSystems.o; sourceTree = "<group>"; };
+		A72ADBD716A8AEB500749EF8 /* HadronLevel.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = HadronLevel.d; sourceTree = "<group>"; };
+		A72ADBD816A8AEB500749EF8 /* HadronLevel.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = HadronLevel.o; sourceTree = "<group>"; };
+		A72ADBD916A8AEB500749EF8 /* HadronScatter.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = HadronScatter.d; sourceTree = "<group>"; };
+		A72ADBDA16A8AEB500749EF8 /* HadronScatter.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = HadronScatter.o; sourceTree = "<group>"; };
+		A72ADBDB16A8AEB500749EF8 /* HelicityBasics.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = HelicityBasics.d; sourceTree = "<group>"; };
+		A72ADBDC16A8AEB500749EF8 /* HelicityBasics.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = HelicityBasics.o; sourceTree = "<group>"; };
+		A72ADBDD16A8AEB500749EF8 /* HelicityMatrixElements.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = HelicityMatrixElements.d; sourceTree = "<group>"; };
+		A72ADBDE16A8AEB500749EF8 /* HelicityMatrixElements.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = HelicityMatrixElements.o; sourceTree = "<group>"; };
+		A72ADBDF16A8AEB500749EF8 /* HiddenValleyFragmentation.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = HiddenValleyFragmentation.d; sourceTree = "<group>"; };
+		A72ADBE016A8AEB500749EF8 /* HiddenValleyFragmentation.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = HiddenValleyFragmentation.o; sourceTree = "<group>"; };
+		A72ADBE116A8AEB500749EF8 /* History.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = History.d; sourceTree = "<group>"; };
+		A72ADBE216A8AEB500749EF8 /* History.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = History.o; sourceTree = "<group>"; };
+		A72ADBE316A8AEB500749EF8 /* Info.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = Info.d; sourceTree = "<group>"; };
+		A72ADBE416A8AEB500749EF8 /* Info.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Info.o; sourceTree = "<group>"; };
+		A72ADBE516A8AEB500749EF8 /* LesHouches.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = LesHouches.d; sourceTree = "<group>"; };
+		A72ADBE616A8AEB500749EF8 /* LesHouches.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = LesHouches.o; sourceTree = "<group>"; };
+		A72ADBE716A8AEB500749EF8 /* LHAPDFDummy.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = LHAPDFDummy.o; sourceTree = "<group>"; };
+		A72ADBE816A8AEB500749EF8 /* MergingHooks.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = MergingHooks.d; sourceTree = "<group>"; };
+		A72ADBE916A8AEB500749EF8 /* MergingHooks.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = MergingHooks.o; sourceTree = "<group>"; };
+		A72ADBEA16A8AEB500749EF8 /* MiniStringFragmentation.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = MiniStringFragmentation.d; sourceTree = "<group>"; };
+		A72ADBEB16A8AEB500749EF8 /* MiniStringFragmentation.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = MiniStringFragmentation.o; sourceTree = "<group>"; };
+		A72ADBEC16A8AEB500749EF8 /* MultipartonInteractions.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = MultipartonInteractions.d; sourceTree = "<group>"; };
+		A72ADBED16A8AEB500749EF8 /* MultipartonInteractions.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = MultipartonInteractions.o; sourceTree = "<group>"; };
+		A72ADBEE16A8AEB500749EF8 /* ParticleData.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = ParticleData.d; sourceTree = "<group>"; };
+		A72ADBEF16A8AEB500749EF8 /* ParticleData.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ParticleData.o; sourceTree = "<group>"; };
+		A72ADBF016A8AEB500749EF8 /* ParticleDecays.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = ParticleDecays.d; sourceTree = "<group>"; };
+		A72ADBF116A8AEB500749EF8 /* ParticleDecays.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ParticleDecays.o; sourceTree = "<group>"; };
+		A72ADBF216A8AEB500749EF8 /* PartonDistributions.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = PartonDistributions.d; sourceTree = "<group>"; };
+		A72ADBF316A8AEB500749EF8 /* PartonDistributions.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = PartonDistributions.o; sourceTree = "<group>"; };
+		A72ADBF416A8AEB500749EF8 /* PartonLevel.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = PartonLevel.d; sourceTree = "<group>"; };
+		A72ADBF516A8AEB500749EF8 /* PartonLevel.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = PartonLevel.o; sourceTree = "<group>"; };
+		A72ADBF616A8AEB500749EF8 /* PartonSystems.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = PartonSystems.d; sourceTree = "<group>"; };
+		A72ADBF716A8AEB500749EF8 /* PartonSystems.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = PartonSystems.o; sourceTree = "<group>"; };
+		A72ADBF816A8AEB500749EF8 /* PhaseSpace.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = PhaseSpace.d; sourceTree = "<group>"; };
+		A72ADBF916A8AEB500749EF8 /* PhaseSpace.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = PhaseSpace.o; sourceTree = "<group>"; };
+		A72ADBFA16A8AEB500749EF8 /* ProcessContainer.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = ProcessContainer.d; sourceTree = "<group>"; };
+		A72ADBFB16A8AEB500749EF8 /* ProcessContainer.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ProcessContainer.o; sourceTree = "<group>"; };
+		A72ADBFC16A8AEB500749EF8 /* ProcessLevel.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = ProcessLevel.d; sourceTree = "<group>"; };
+		A72ADBFD16A8AEB500749EF8 /* ProcessLevel.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ProcessLevel.o; sourceTree = "<group>"; };
+		A72ADBFE16A8AEB500749EF8 /* Pythia.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = Pythia.d; sourceTree = "<group>"; };
+		A72ADBFF16A8AEB500749EF8 /* Pythia.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Pythia.o; sourceTree = "<group>"; };
+		A72ADC0016A8AEB500749EF8 /* PythiaStdlib.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = PythiaStdlib.d; sourceTree = "<group>"; };
+		A72ADC0116A8AEB500749EF8 /* PythiaStdlib.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = PythiaStdlib.o; sourceTree = "<group>"; };
+		A72ADC0216A8AEB500749EF8 /* ResonanceDecays.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = ResonanceDecays.d; sourceTree = "<group>"; };
+		A72ADC0316A8AEB500749EF8 /* ResonanceDecays.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ResonanceDecays.o; sourceTree = "<group>"; };
+		A72ADC0416A8AEB500749EF8 /* ResonanceWidths.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = ResonanceWidths.d; sourceTree = "<group>"; };
+		A72ADC0516A8AEB500749EF8 /* ResonanceWidths.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = ResonanceWidths.o; sourceTree = "<group>"; };
+		A72ADC0616A8AEB500749EF8 /* RHadrons.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = RHadrons.d; sourceTree = "<group>"; };
+		A72ADC0716A8AEB500749EF8 /* RHadrons.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = RHadrons.o; sourceTree = "<group>"; };
+		A72ADC0816A8AEB500749EF8 /* Settings.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = Settings.d; sourceTree = "<group>"; };
+		A72ADC0916A8AEB500749EF8 /* Settings.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = Settings.o; sourceTree = "<group>"; };
+		A72ADC0A16A8AEB500749EF8 /* SigmaCompositeness.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaCompositeness.d; sourceTree = "<group>"; };
+		A72ADC0B16A8AEB500749EF8 /* SigmaCompositeness.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaCompositeness.o; sourceTree = "<group>"; };
+		A72ADC0C16A8AEB500749EF8 /* SigmaEW.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaEW.d; sourceTree = "<group>"; };
+		A72ADC0D16A8AEB500749EF8 /* SigmaEW.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaEW.o; sourceTree = "<group>"; };
+		A72ADC0E16A8AEB500749EF8 /* SigmaExtraDim.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaExtraDim.d; sourceTree = "<group>"; };
+		A72ADC0F16A8AEB500749EF8 /* SigmaExtraDim.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaExtraDim.o; sourceTree = "<group>"; };
+		A72ADC1016A8AEB500749EF8 /* SigmaGeneric.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaGeneric.d; sourceTree = "<group>"; };
+		A72ADC1116A8AEB500749EF8 /* SigmaGeneric.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaGeneric.o; sourceTree = "<group>"; };
+		A72ADC1216A8AEB500749EF8 /* SigmaHiggs.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaHiggs.d; sourceTree = "<group>"; };
+		A72ADC1316A8AEB500749EF8 /* SigmaHiggs.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaHiggs.o; sourceTree = "<group>"; };
+		A72ADC1416A8AEB500749EF8 /* SigmaLeftRightSym.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaLeftRightSym.d; sourceTree = "<group>"; };
+		A72ADC1516A8AEB500749EF8 /* SigmaLeftRightSym.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaLeftRightSym.o; sourceTree = "<group>"; };
+		A72ADC1616A8AEB500749EF8 /* SigmaLeptoquark.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaLeptoquark.d; sourceTree = "<group>"; };
+		A72ADC1716A8AEB500749EF8 /* SigmaLeptoquark.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaLeptoquark.o; sourceTree = "<group>"; };
+		A72ADC1816A8AEB500749EF8 /* SigmaNewGaugeBosons.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaNewGaugeBosons.d; sourceTree = "<group>"; };
+		A72ADC1916A8AEB500749EF8 /* SigmaNewGaugeBosons.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaNewGaugeBosons.o; sourceTree = "<group>"; };
+		A72ADC1A16A8AEB500749EF8 /* SigmaOnia.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaOnia.d; sourceTree = "<group>"; };
+		A72ADC1B16A8AEB500749EF8 /* SigmaOnia.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaOnia.o; sourceTree = "<group>"; };
+		A72ADC1C16A8AEB500749EF8 /* SigmaProcess.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaProcess.d; sourceTree = "<group>"; };
+		A72ADC1D16A8AEB500749EF8 /* SigmaProcess.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaProcess.o; sourceTree = "<group>"; };
+		A72ADC1E16A8AEB500749EF8 /* SigmaQCD.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaQCD.d; sourceTree = "<group>"; };
+		A72ADC1F16A8AEB500749EF8 /* SigmaQCD.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaQCD.o; sourceTree = "<group>"; };
+		A72ADC2016A8AEB500749EF8 /* SigmaSUSY.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaSUSY.d; sourceTree = "<group>"; };
+		A72ADC2116A8AEB500749EF8 /* SigmaSUSY.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaSUSY.o; sourceTree = "<group>"; };
+		A72ADC2216A8AEB500749EF8 /* SigmaTotal.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SigmaTotal.d; sourceTree = "<group>"; };
+		A72ADC2316A8AEB500749EF8 /* SigmaTotal.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SigmaTotal.o; sourceTree = "<group>"; };
+		A72ADC2416A8AEB500749EF8 /* SpaceShower.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SpaceShower.d; sourceTree = "<group>"; };
+		A72ADC2516A8AEB500749EF8 /* SpaceShower.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SpaceShower.o; sourceTree = "<group>"; };
+		A72ADC2616A8AEB500749EF8 /* StandardModel.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = StandardModel.d; sourceTree = "<group>"; };
+		A72ADC2716A8AEB500749EF8 /* StandardModel.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = StandardModel.o; sourceTree = "<group>"; };
+		A72ADC2816A8AEB500749EF8 /* StringFragmentation.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = StringFragmentation.d; sourceTree = "<group>"; };
+		A72ADC2916A8AEB500749EF8 /* StringFragmentation.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = StringFragmentation.o; sourceTree = "<group>"; };
+		A72ADC2A16A8AEB500749EF8 /* SusyCouplings.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SusyCouplings.d; sourceTree = "<group>"; };
+		A72ADC2B16A8AEB500749EF8 /* SusyCouplings.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SusyCouplings.o; sourceTree = "<group>"; };
+		A72ADC2C16A8AEB500749EF8 /* SusyLesHouches.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SusyLesHouches.d; sourceTree = "<group>"; };
+		A72ADC2D16A8AEB500749EF8 /* SusyLesHouches.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SusyLesHouches.o; sourceTree = "<group>"; };
+		A72ADC2E16A8AEB500749EF8 /* SusyResonanceWidths.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = SusyResonanceWidths.d; sourceTree = "<group>"; };
+		A72ADC2F16A8AEB500749EF8 /* SusyResonanceWidths.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = SusyResonanceWidths.o; sourceTree = "<group>"; };
+		A72ADC3016A8AEB500749EF8 /* TauDecays.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = TauDecays.d; sourceTree = "<group>"; };
+		A72ADC3116A8AEB500749EF8 /* TauDecays.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = TauDecays.o; sourceTree = "<group>"; };
+		A72ADC3216A8AEB500749EF8 /* TimeShower.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = TimeShower.d; sourceTree = "<group>"; };
+		A72ADC3316A8AEB500749EF8 /* TimeShower.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = TimeShower.o; sourceTree = "<group>"; };
+		A72ADC3416A8AEB500749EF8 /* UserHooks.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = UserHooks.d; sourceTree = "<group>"; };
+		A72ADC3516A8AEB500749EF8 /* UserHooks.o */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.objfile"; path = UserHooks.o; sourceTree = "<group>"; };
+		A72ADC3616A8AEB500749EF8 /* worksheet.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = worksheet.pdf; sourceTree = "<group>"; };
+		A72ADC3816A8AEB500749EF8 /* AdvancedUsage.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AdvancedUsage.xml; sourceTree = "<group>"; };
+		A72ADC3916A8AEB500749EF8 /* AlpgenAndMLM.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AlpgenAndMLM.xml; sourceTree = "<group>"; };
+		A72ADC3A16A8AEB500749EF8 /* ASecondHardProcess.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ASecondHardProcess.xml; sourceTree = "<group>"; };
+		A72ADC3B16A8AEB500749EF8 /* BeamParameters.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BeamParameters.xml; sourceTree = "<group>"; };
+		A72ADC3C16A8AEB500749EF8 /* BeamRemnants.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BeamRemnants.xml; sourceTree = "<group>"; };
+		A72ADC3D16A8AEB500749EF8 /* BeamShape.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BeamShape.xml; sourceTree = "<group>"; };
+		A72ADC3E16A8AEB500749EF8 /* Bibliography.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Bibliography.xml; sourceTree = "<group>"; };
+		A72ADC3F16A8AEB500749EF8 /* BoseEinsteinEffects.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = BoseEinsteinEffects.xml; sourceTree = "<group>"; };
+		A72ADC4016A8AEB500749EF8 /* CompositenessProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CompositenessProcesses.xml; sourceTree = "<group>"; };
+		A72ADC4116A8AEB500749EF8 /* CouplingsAndScales.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = CouplingsAndScales.xml; sourceTree = "<group>"; };
+		A72ADC4216A8AEB500749EF8 /* ct09mc1.pds */ = {isa = PBXFileReference; lastKnownFileType = text; path = ct09mc1.pds; sourceTree = "<group>"; };
+		A72ADC4316A8AEB500749EF8 /* ct09mc2.pds */ = {isa = PBXFileReference; lastKnownFileType = text; path = ct09mc2.pds; sourceTree = "<group>"; };
+		A72ADC4416A8AEB500749EF8 /* ct09mcs.pds */ = {isa = PBXFileReference; lastKnownFileType = text; path = ct09mcs.pds; sourceTree = "<group>"; };
+		A72ADC4516A8AEB500749EF8 /* cteq6l.tbl */ = {isa = PBXFileReference; lastKnownFileType = text; path = cteq6l.tbl; sourceTree = "<group>"; };
+		A72ADC4616A8AEB500749EF8 /* cteq6l1.tbl */ = {isa = PBXFileReference; lastKnownFileType = text; path = cteq6l1.tbl; sourceTree = "<group>"; };
+		A72ADC4716A8AEB500749EF8 /* ctq66.00.pds */ = {isa = PBXFileReference; lastKnownFileType = text; path = ctq66.00.pds; sourceTree = "<group>"; };
+		A72ADC4816A8AEB500749EF8 /* Diffraction.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Diffraction.xml; sourceTree = "<group>"; };
+		A72ADC4916A8AEB500749EF8 /* ElectroweakProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ElectroweakProcesses.xml; sourceTree = "<group>"; };
+		A72ADC4A16A8AEB500749EF8 /* ErrorChecks.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ErrorChecks.xml; sourceTree = "<group>"; };
+		A72ADC4B16A8AEB500749EF8 /* EventAnalysis.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EventAnalysis.xml; sourceTree = "<group>"; };
+		A72ADC4C16A8AEB500749EF8 /* EventInformation.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EventInformation.xml; sourceTree = "<group>"; };
+		A72ADC4D16A8AEB500749EF8 /* EventRecord.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EventRecord.xml; sourceTree = "<group>"; };
+		A72ADC4E16A8AEB500749EF8 /* EventStatistics.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = EventStatistics.xml; sourceTree = "<group>"; };
+		A72ADC4F16A8AEB500749EF8 /* ExternalDecays.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ExternalDecays.xml; sourceTree = "<group>"; };
+		A72ADC5016A8AEB500749EF8 /* ExtraDimensionalProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ExtraDimensionalProcesses.xml; sourceTree = "<group>"; };
+		A72ADC5116A8AEB500749EF8 /* FlavourSelection.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FlavourSelection.xml; sourceTree = "<group>"; };
+		A72ADC5216A8AEB500749EF8 /* FourthGenerationProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FourthGenerationProcesses.xml; sourceTree = "<group>"; };
+		A72ADC5316A8AEB500749EF8 /* FourVectors.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FourVectors.xml; sourceTree = "<group>"; };
+		A72ADC5416A8AEB500749EF8 /* Fragmentation.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Fragmentation.xml; sourceTree = "<group>"; };
+		A72ADC5516A8AEB500749EF8 /* Frontpage.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Frontpage.xml; sourceTree = "<group>"; };
+		A72ADC5616A8AEB500749EF8 /* Glossary.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Glossary.xml; sourceTree = "<group>"; };
+		A72ADC5716A8AEB500749EF8 /* HadronLevelStandalone.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HadronLevelStandalone.xml; sourceTree = "<group>"; };
+		A72ADC5816A8AEB500749EF8 /* HadronScattering.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HadronScattering.xml; sourceTree = "<group>"; };
+		A72ADC5916A8AEB500749EF8 /* HepMCInterface.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HepMCInterface.xml; sourceTree = "<group>"; };
+		A72ADC5A16A8AEB500749EF8 /* HiddenValleyProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HiddenValleyProcesses.xml; sourceTree = "<group>"; };
+		A72ADC5B16A8AEB500749EF8 /* HiggsProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = HiggsProcesses.xml; sourceTree = "<group>"; };
+		A72ADC5C16A8AEB500749EF8 /* Histograms.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Histograms.xml; sourceTree = "<group>"; };
+		A72ADC5D16A8AEB500749EF8 /* ImplementNewShowers.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ImplementNewShowers.xml; sourceTree = "<group>"; };
+		A72ADC5E16A8AEB500749EF8 /* Index.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Index.xml; sourceTree = "<group>"; };
+		A72ADC5F16A8AEB500749EF8 /* JetFinders.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = JetFinders.xml; sourceTree = "<group>"; };
+		A72ADC6016A8AEB500749EF8 /* LeftRightSymmetryProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LeftRightSymmetryProcesses.xml; sourceTree = "<group>"; };
+		A72ADC6116A8AEB500749EF8 /* lejon2.eps */ = {isa = PBXFileReference; lastKnownFileType = text; path = lejon2.eps; sourceTree = "<group>"; };
+		A72ADC6216A8AEB500749EF8 /* LeptoquarkProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LeptoquarkProcesses.xml; sourceTree = "<group>"; };
+		A72ADC6316A8AEB500749EF8 /* LesHouchesAccord.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = LesHouchesAccord.xml; sourceTree = "<group>"; };
+		A72ADC6416A8AEB500749EF8 /* MadGraph5Processes.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MadGraph5Processes.xml; sourceTree = "<group>"; };
+		A72ADC6516A8AEB500749EF8 /* MainProgramSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MainProgramSettings.xml; sourceTree = "<group>"; };
+		A72ADC6616A8AEB500749EF8 /* MasterSwitches.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MasterSwitches.xml; sourceTree = "<group>"; };
+		A72ADC6716A8AEB500749EF8 /* MatrixElementMerging.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MatrixElementMerging.xml; sourceTree = "<group>"; };
+		A72ADC6816A8AEB500749EF8 /* mrstlostar.00.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = mrstlostar.00.dat; sourceTree = "<group>"; };
+		A72ADC6916A8AEB500749EF8 /* mrstlostarstar.00.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = mrstlostarstar.00.dat; sourceTree = "<group>"; };
+		A72ADC6A16A8AEB500749EF8 /* mstw2008lo.00.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = mstw2008lo.00.dat; sourceTree = "<group>"; };
+		A72ADC6B16A8AEB500749EF8 /* mstw2008nlo.00.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = mstw2008nlo.00.dat; sourceTree = "<group>"; };
+		A72ADC6C16A8AEB500749EF8 /* MultipartonInteractions.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MultipartonInteractions.xml; sourceTree = "<group>"; };
+		A72ADC6D16A8AEB500749EF8 /* NewGaugeBosonProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = NewGaugeBosonProcesses.xml; sourceTree = "<group>"; };
+		A72ADC6E16A8AEB500749EF8 /* OniaProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = OniaProcesses.xml; sourceTree = "<group>"; };
+		A72ADC6F16A8AEB500749EF8 /* ParticleData.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ParticleData.xml; sourceTree = "<group>"; };
+		A72ADC7016A8AEB500749EF8 /* ParticleDataScheme.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ParticleDataScheme.xml; sourceTree = "<group>"; };
+		A72ADC7116A8AEB500749EF8 /* ParticleDecays.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ParticleDecays.xml; sourceTree = "<group>"; };
+		A72ADC7216A8AEB500749EF8 /* ParticleProperties.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ParticleProperties.xml; sourceTree = "<group>"; };
+		A72ADC7316A8AEB500749EF8 /* PartonDistributions.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PartonDistributions.xml; sourceTree = "<group>"; };
+		A72ADC7416A8AEB500749EF8 /* PDFSelection.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PDFSelection.xml; sourceTree = "<group>"; };
+		A72ADC7516A8AEB500749EF8 /* PhaseSpaceCuts.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PhaseSpaceCuts.xml; sourceTree = "<group>"; };
+		A72ADC7616A8AEB500749EF8 /* piK-Estabrooks.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = "piK-Estabrooks.dat"; sourceTree = "<group>"; };
+		A72ADC7716A8AEB500749EF8 /* piN-SAID-WI08.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = "piN-SAID-WI08.dat"; sourceTree = "<group>"; };
+		A72ADC7816A8AEB500749EF8 /* pipi-Froggatt.dat */ = {isa = PBXFileReference; lastKnownFileType = text; path = "pipi-Froggatt.dat"; sourceTree = "<group>"; };
+		A72ADC7916A8AEB500749EF8 /* pomH1FitA.data */ = {isa = PBXFileReference; lastKnownFileType = text; path = pomH1FitA.data; sourceTree = "<group>"; };
+		A72ADC7A16A8AEB500749EF8 /* pomH1FitB.data */ = {isa = PBXFileReference; lastKnownFileType = text; path = pomH1FitB.data; sourceTree = "<group>"; };
+		A72ADC7B16A8AEB500749EF8 /* pomH1FitBlo.data */ = {isa = PBXFileReference; lastKnownFileType = text; path = pomH1FitBlo.data; sourceTree = "<group>"; };
+		A72ADC7C16A8AEB500749EF8 /* pomH1JetsCharm.data */ = {isa = PBXFileReference; lastKnownFileType = text; path = pomH1JetsCharm.data; sourceTree = "<group>"; };
+		A72ADC7D16A8AEB500749EF8 /* pomH1JetsGluon.data */ = {isa = PBXFileReference; lastKnownFileType = text; path = pomH1JetsGluon.data; sourceTree = "<group>"; };
+		A72ADC7E16A8AEB500749EF8 /* pomH1JetsSinglet.data */ = {isa = PBXFileReference; lastKnownFileType = text; path = pomH1JetsSinglet.data; sourceTree = "<group>"; };
+		A72ADC7F16A8AEB500749EF8 /* ProcessSelection.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ProcessSelection.xml; sourceTree = "<group>"; };
+		A72ADC8016A8AEB500749EF8 /* ProgramClasses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ProgramClasses.xml; sourceTree = "<group>"; };
+		A72ADC8116A8AEB500749EF8 /* ProgramFiles.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ProgramFiles.xml; sourceTree = "<group>"; };
+		A72ADC8216A8AEB500749EF8 /* ProgramFlow.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ProgramFlow.xml; sourceTree = "<group>"; };
+		A72ADC8316A8AEB500749EF8 /* ProgramMethods.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ProgramMethods.xml; sourceTree = "<group>"; };
+		A72ADC8416A8AEB500749EF8 /* pythia8100.tex */ = {isa = PBXFileReference; lastKnownFileType = text; path = pythia8100.tex; sourceTree = "<group>"; };
+		A72ADC8516A8AEB500749EF8 /* pythiapicture.eps */ = {isa = PBXFileReference; lastKnownFileType = text; path = pythiapicture.eps; sourceTree = "<group>"; };
+		A72ADC8616A8AEB500749EF8 /* QCDProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = QCDProcesses.xml; sourceTree = "<group>"; };
+		A72ADC8716A8AEB500749EF8 /* RandomNumbers.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RandomNumbers.xml; sourceTree = "<group>"; };
+		A72ADC8816A8AEB500749EF8 /* RandomNumberSeed.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RandomNumberSeed.xml; sourceTree = "<group>"; };
+		A72ADC8916A8AEB500749EF8 /* ResonanceDecays.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ResonanceDecays.xml; sourceTree = "<group>"; };
+		A72ADC8A16A8AEB500749EF8 /* RHadrons.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RHadrons.xml; sourceTree = "<group>"; };
+		A72ADC8B16A8AEB500749EF8 /* RIVETusage.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RIVETusage.xml; sourceTree = "<group>"; };
+		A72ADC8C16A8AEB500749EF8 /* ROOTusage.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = ROOTusage.xml; sourceTree = "<group>"; };
+		A72ADC8D16A8AEB500749EF8 /* SampleMainPrograms.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SampleMainPrograms.xml; sourceTree = "<group>"; };
+		A72ADC8E16A8AEB500749EF8 /* SaveSettings.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SaveSettings.xml; sourceTree = "<group>"; };
+		A72ADC8F16A8AEB500749EF8 /* SemiInternalProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SemiInternalProcesses.xml; sourceTree = "<group>"; };
+		A72ADC9016A8AEB500749EF8 /* SemiInternalResonances.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SemiInternalResonances.xml; sourceTree = "<group>"; };
+		A72ADC9116A8AEB500749EF8 /* SettingsScheme.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SettingsScheme.xml; sourceTree = "<group>"; };
+		A72ADC9216A8AEB500749EF8 /* SpacelikeShowers.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SpacelikeShowers.xml; sourceTree = "<group>"; };
+		A72ADC9316A8AEB500749EF8 /* StandardModelParameters.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = StandardModelParameters.xml; sourceTree = "<group>"; };
+		A72ADC9416A8AEB500749EF8 /* SUSYLesHouchesAccord.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SUSYLesHouchesAccord.xml; sourceTree = "<group>"; };
+		A72ADC9516A8AEB500749EF8 /* SUSYProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = SUSYProcesses.xml; sourceTree = "<group>"; };
+		A72ADC9616A8AEB500749EF8 /* TimelikeShowers.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TimelikeShowers.xml; sourceTree = "<group>"; };
+		A72ADC9716A8AEB500749EF8 /* TopProcesses.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TopProcesses.xml; sourceTree = "<group>"; };
+		A72ADC9816A8AEB500749EF8 /* TotalCrossSections.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = TotalCrossSections.xml; sourceTree = "<group>"; };
+		A72ADC9916A8AEB500749EF8 /* Tunes.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Tunes.xml; sourceTree = "<group>"; };
+		A72ADC9A16A8AEB500749EF8 /* UpdateHistory.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UpdateHistory.xml; sourceTree = "<group>"; };
+		A72ADC9B16A8AEB500749EF8 /* UserHooks.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = UserHooks.xml; sourceTree = "<group>"; };
+		A72ADC9C16A8AEB500749EF8 /* Version.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Version.xml; sourceTree = "<group>"; };
+		A72ADC9D16A8AEB500749EF8 /* Welcome.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Welcome.xml; sourceTree = "<group>"; };
+		A72ADC9E16A8AEB500749EF8 /* worksheet.tex */ = {isa = PBXFileReference; lastKnownFileType = text; path = worksheet.tex; sourceTree = "<group>"; };
+		A72ADCAB16A8B27900749EF8 /* libdl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libdl.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libdl.dylib; sourceTree = DEVELOPER_DIR; };
+		A72ADCAD16A8B2B100749EF8 /* libm.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libm.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libm.dylib; sourceTree = DEVELOPER_DIR; };
+		A72ADCAF16A8B2C000749EF8 /* libpthread.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpthread.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/usr/lib/libpthread.dylib; sourceTree = DEVELOPER_DIR; };
+		A7500E5016A977C600279454 /* libCint.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCint.so; path = /Applications/root/lib/libCint.so; sourceTree = "<absolute>"; };
+		A7500E5316A977C600279454 /* libCore.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libCore.so; path = /Applications/root/lib/libCore.so; sourceTree = "<absolute>"; };
+		A7500E6316A977C600279454 /* libGraf.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGraf.so; path = /Applications/root/lib/libGraf.so; sourceTree = "<absolute>"; };
+		A7500E6416A977C600279454 /* libGraf3d.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGraf3d.so; path = /Applications/root/lib/libGraf3d.so; sourceTree = "<absolute>"; };
+		A7500E6516A977C600279454 /* libGui.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGui.so; path = /Applications/root/lib/libGui.so; sourceTree = "<absolute>"; };
+		A7500E6C16A977C600279454 /* libHist.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libHist.so; path = /Applications/root/lib/libHist.so; sourceTree = "<absolute>"; };
+		A7500E7316A977C600279454 /* libMathCore.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMathCore.so; path = /Applications/root/lib/libMathCore.so; sourceTree = "<absolute>"; };
+		A7500E7416A977C600279454 /* libMatrix.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMatrix.so; path = /Applications/root/lib/libMatrix.so; sourceTree = "<absolute>"; };
+		A7500E7C16A977C700279454 /* libNet.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libNet.so; path = /Applications/root/lib/libNet.so; sourceTree = "<absolute>"; };
+		A7500E7F16A977C700279454 /* libPhysics.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libPhysics.so; path = /Applications/root/lib/libPhysics.so; sourceTree = "<absolute>"; };
+		A7500E8B16A977C700279454 /* libRint.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libRint.so; path = /Applications/root/lib/libRint.so; sourceTree = "<absolute>"; };
+		A7500E8C16A977C700279454 /* libRIO.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libRIO.so; path = /Applications/root/lib/libRIO.so; sourceTree = "<absolute>"; };
+		A7500E9816A977C700279454 /* libThread.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libThread.so; path = /Applications/root/lib/libThread.so; sourceTree = "<absolute>"; };
+		A7500E9A16A977C700279454 /* libTree.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libTree.so; path = /Applications/root/lib/libTree.so; sourceTree = "<absolute>"; };
+		A7500EF916A9863500279454 /* libpythia8.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpythia8.a; path = ../lib/archive/libpythia8.a; sourceTree = "<group>"; };
+		A7500EFA16A9863500279454 /* liblhapdfdummy.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblhapdfdummy.a; path = ../lib/archive/liblhapdfdummy.a; sourceTree = "<group>"; };
+		A7500F5A16A98C9600279454 /* gammaPlusX.card */ = {isa = PBXFileReference; lastKnownFileType = text; path = gammaPlusX.card; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A72AD9F116A8AC6B00749EF8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7500F5B16A98D7500279454 /* libpythia8.a in Frameworks */,
+				A7500F5C16A98D7500279454 /* liblhapdfdummy.a in Frameworks */,
+				A7500F5D16A98D7500279454 /* libCint.so in Frameworks */,
+				A7500F5E16A98D7500279454 /* libCore.so in Frameworks */,
+				A7500F5F16A98D7500279454 /* libGraf.so in Frameworks */,
+				A7500F6016A98D7500279454 /* libGraf3d.so in Frameworks */,
+				A7500F6116A98D7500279454 /* libGui.so in Frameworks */,
+				A7500F6216A98D7500279454 /* libHist.so in Frameworks */,
+				A7500F6316A98D7500279454 /* libMathCore.so in Frameworks */,
+				A7500F6416A98D7500279454 /* libMatrix.so in Frameworks */,
+				A7500F6516A98D7500279454 /* libNet.so in Frameworks */,
+				A7500F6616A98D7500279454 /* libPhysics.so in Frameworks */,
+				A7500F6716A98D7500279454 /* libRint.so in Frameworks */,
+				A7500F6816A98D7500279454 /* libRIO.so in Frameworks */,
+				A7500F6916A98D7500279454 /* libThread.so in Frameworks */,
+				A7500F6A16A98D7500279454 /* libTree.so in Frameworks */,
+				A7500F6B16A98D7500279454 /* libpthread.dylib in Frameworks */,
+				A7500F6C16A98D7500279454 /* libm.dylib in Frameworks */,
+				A7500F6D16A98D7500279454 /* libdl.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A72AD9E116A8AAF900749EF8 = {
+			isa = PBXGroup;
+			children = (
+				A7500F5916A98B4000279454 /* libraries */,
+				A72ADA0016A8AEB500749EF8 /* pythia8170 */,
+				A72AD9EF16A8AC0200749EF8 /* Makefile */,
+				A72AD9F716A8AC6B00749EF8 /* genSun */,
+				A72AD9F516A8AC6B00749EF8 /* Products */,
+				A7500F5A16A98C9600279454 /* gammaPlusX.card */,
+			);
+			sourceTree = "<group>";
+		};
+		A72AD9F516A8AC6B00749EF8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A72AD9F416A8AC6B00749EF8 /* genSun */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A72AD9F716A8AC6B00749EF8 /* genSun */ = {
+			isa = PBXGroup;
+			children = (
+				A72AD9ED16A8ABCD00749EF8 /* genSun.cc */,
+			);
+			path = genSun;
+			sourceTree = "<group>";
+		};
+		A72ADA0016A8AEB500749EF8 /* pythia8170 */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADA0116A8AEB500749EF8 /* AUTHORS */,
+				A72ADA0216A8AEB500749EF8 /* CODINGSTYLE */,
+				A72ADA0316A8AEB500749EF8 /* config.mk */,
+				A72ADA0416A8AEB500749EF8 /* config.mk.bak */,
+				A72ADA0516A8AEB500749EF8 /* configure */,
+				A72ADA0616A8AEB500749EF8 /* COPYING */,
+				A72ADA0716A8AEB500749EF8 /* examples */,
+				A72ADA8516A8AEB500749EF8 /* GUIDELINES */,
+				A72ADA8616A8AEB500749EF8 /* hepmcinterface */,
+				A72ADA8816A8AEB500749EF8 /* htmldoc */,
+				A72ADAE016A8AEB500749EF8 /* include */,
+				A72ADB1E16A8AEB500749EF8 /* lhapdfdummy */,
+				A72ADB2016A8AEB500749EF8 /* lib */,
+				A72ADB2416A8AEB500749EF8 /* Makefile */,
+				A72ADB2516A8AEB500749EF8 /* Makefile.msc */,
+				A72ADB2616A8AEB500749EF8 /* phpdoc */,
+				A72ADB8016A8AEB500749EF8 /* README */,
+				A72ADB8116A8AEB500749EF8 /* README.HepMC */,
+				A72ADB8216A8AEB500749EF8 /* README.Win32 */,
+				A72ADB8316A8AEB500749EF8 /* rootexamples */,
+				A72ADB8A16A8AEB500749EF8 /* src */,
+				A72ADBC316A8AEB500749EF8 /* tmp */,
+				A72ADC3616A8AEB500749EF8 /* worksheet.pdf */,
+				A72ADC3716A8AEB500749EF8 /* xmldoc */,
+			);
+			name = pythia8170;
+			path = ../pythia8170;
+			sourceTree = "<group>";
+		};
+		A72ADA0716A8AEB500749EF8 /* examples */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADA0816A8AEB500749EF8 /* bin */,
+				A72ADA0D16A8AEB500749EF8 /* cmssm.spc */,
+				A72ADA0E16A8AEB500749EF8 /* configure */,
+				A72ADA0F16A8AEB500749EF8 /* energyLossBDecay.cc */,
+				A72ADA1016A8AEB500749EF8 /* energyLossBDecay.exe */,
+				A72ADA1116A8AEB500749EF8 /* gammaPlusX.card */,
+				A72ADA1216A8AEB500749EF8 /* genSun.cc */,
+				A72ADA1316A8AEB500749EF8 /* genSun.exe */,
+				A72ADA1416A8AEB500749EF8 /* LHAupAlpgen.h */,
+				A72ADA1516A8AEB500749EF8 /* main01.cc */,
+				A72ADA1616A8AEB500749EF8 /* main01.exe */,
+				A72ADA1716A8AEB500749EF8 /* main02.cc */,
+				A72ADA1816A8AEB500749EF8 /* main03.cc */,
+				A72ADA1916A8AEB500749EF8 /* main03.cmnd */,
+				A72ADA1A16A8AEB500749EF8 /* main04.cc */,
+				A72ADA1B16A8AEB500749EF8 /* main04.cmnd */,
+				A72ADA1C16A8AEB500749EF8 /* main05.cc */,
+				A72ADA1D16A8AEB500749EF8 /* main06.cc */,
+				A72ADA1E16A8AEB500749EF8 /* main07.cc */,
+				A72ADA1F16A8AEB500749EF8 /* main07.cmnd */,
+				A72ADA2016A8AEB500749EF8 /* main08.cc */,
+				A72ADA2116A8AEB500749EF8 /* main08.cmnd */,
+				A72ADA2216A8AEB500749EF8 /* main09.cc */,
+				A72ADA2316A8AEB500749EF8 /* main10.cc */,
+				A72ADA2416A8AEB500749EF8 /* main11.cc */,
+				A72ADA2516A8AEB500749EF8 /* main12.cc */,
+				A72ADA2616A8AEB500749EF8 /* main13.cc */,
+				A72ADA2716A8AEB500749EF8 /* main13.cmnd */,
+				A72ADA2816A8AEB500749EF8 /* main14.cc */,
+				A72ADA2916A8AEB500749EF8 /* main15.cc */,
+				A72ADA2A16A8AEB500749EF8 /* main16.cc */,
+				A72ADA2B16A8AEB500749EF8 /* main16.cmnd */,
+				A72ADA2C16A8AEB500749EF8 /* main17.cc */,
+				A72ADA2D16A8AEB500749EF8 /* main17.exe */,
+				A72ADA2E16A8AEB500749EF8 /* main18.cc */,
+				A72ADA2F16A8AEB500749EF8 /* main19.cc */,
+				A72ADA3016A8AEB500749EF8 /* main20.cc */,
+				A72ADA3116A8AEB500749EF8 /* main21.cc */,
+				A72ADA3216A8AEB500749EF8 /* main22.cc */,
+				A72ADA3316A8AEB500749EF8 /* main23.cc */,
+				A72ADA3416A8AEB500749EF8 /* main24.cc */,
+				A72ADA3516A8AEB500749EF8 /* main24.cmnd */,
+				A72ADA3616A8AEB500749EF8 /* main25.cc */,
+				A72ADA3716A8AEB500749EF8 /* main25.lhe */,
+				A72ADA3816A8AEB500749EF8 /* main26.cc */,
+				A72ADA3916A8AEB500749EF8 /* main27.cc */,
+				A72ADA3A16A8AEB500749EF8 /* main28.cc */,
+				A72ADA3B16A8AEB500749EF8 /* main31.cc */,
+				A72ADA3C16A8AEB500749EF8 /* main31.cmnd */,
+				A72ADA3D16A8AEB500749EF8 /* main32.cc */,
+				A72ADA3E16A8AEB500749EF8 /* main32.cmnd */,
+				A72ADA3F16A8AEB500749EF8 /* main32.unw */,
+				A72ADA4016A8AEB500749EF8 /* main32_unw.par */,
+				A72ADA4116A8AEB500749EF8 /* main41.cc */,
+				A72ADA4216A8AEB500749EF8 /* main42.cc */,
+				A72ADA4316A8AEB500749EF8 /* main42.cmnd */,
+				A72ADA4416A8AEB500749EF8 /* main51.cc */,
+				A72ADA4516A8AEB500749EF8 /* main52.cc */,
+				A72ADA4616A8AEB500749EF8 /* main53.cc */,
+				A72ADA4716A8AEB500749EF8 /* main53.cmnd */,
+				A72ADA4816A8AEB500749EF8 /* main61.cc */,
+				A72ADA4916A8AEB500749EF8 /* main61.cmnd */,
+				A72ADA4A16A8AEB500749EF8 /* main62.cc */,
+				A72ADA4B16A8AEB500749EF8 /* main62.cmnd */,
+				A72ADA4C16A8AEB500749EF8 /* main71.cc */,
+				A72ADA4D16A8AEB500749EF8 /* main72.cc */,
+				A72ADA4E16A8AEB500749EF8 /* main81.cc */,
+				A72ADA4F16A8AEB500749EF8 /* main81.cmnd */,
+				A72ADA5016A8AEB500749EF8 /* main82.cc */,
+				A72ADA5116A8AEB500749EF8 /* main82.cmnd */,
+				A72ADA5216A8AEB500749EF8 /* main83.cc */,
+				A72ADA5316A8AEB500749EF8 /* main84.cc */,
+				A72ADA5416A8AEB500749EF8 /* main84.cmnd */,
+				A72ADA5516A8AEB500749EF8 /* main91.cc */,
+				A72ADA5616A8AEB500749EF8 /* Makefile */,
+				A72ADA5716A8AEB500749EF8 /* MLMhooks.h */,
+				A72ADA5816A8AEB500749EF8 /* output.root */,
+				A72ADA5916A8AEB500749EF8 /* outref */,
+				A72ADA7616A8AEB500749EF8 /* photoninproton.lhe */,
+				A72ADA7716A8AEB500749EF8 /* powheg-dijets.lhe */,
+				A72ADA7816A8AEB500749EF8 /* powheg-hvq.lhe */,
+				A72ADA7916A8AEB500749EF8 /* README */,
+				A72ADA7A16A8AEB500749EF8 /* runmains */,
+				A72ADA7B16A8AEB500749EF8 /* snowmass2.spc */,
+				A72ADA7C16A8AEB500749EF8 /* softsusy.spc */,
+				A72ADA7D16A8AEB500749EF8 /* sps1aNarrowStopGluino.spc */,
+				A72ADA7E16A8AEB500749EF8 /* sps1aNarrowStopGluinoRPV.spc */,
+				A72ADA7F16A8AEB500749EF8 /* sps1aWithDecays.spc */,
+				A72ADA8016A8AEB500749EF8 /* ttbar.lhe */,
+				A72ADA8116A8AEB500749EF8 /* ttbar2.lhe */,
+				A72ADA8216A8AEB500749EF8 /* w+_production_lhc_0.lhe */,
+				A72ADA8316A8AEB500749EF8 /* w+_production_lhc_1.lhe */,
+				A72ADA8416A8AEB500749EF8 /* w+_production_lhc_2.lhe */,
+			);
+			path = examples;
+			sourceTree = "<group>";
+		};
+		A72ADA0816A8AEB500749EF8 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADA0916A8AEB500749EF8 /* energyLossBDecay.exe */,
+				A72ADA0A16A8AEB500749EF8 /* genSun.exe */,
+				A72ADA0B16A8AEB500749EF8 /* main01.exe */,
+				A72ADA0C16A8AEB500749EF8 /* main17.exe */,
+			);
+			path = bin;
+			sourceTree = "<group>";
+		};
+		A72ADA5916A8AEB500749EF8 /* outref */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADA5A16A8AEB500749EF8 /* out01 */,
+				A72ADA5B16A8AEB500749EF8 /* out02 */,
+				A72ADA5C16A8AEB500749EF8 /* out03 */,
+				A72ADA5D16A8AEB500749EF8 /* out04 */,
+				A72ADA5E16A8AEB500749EF8 /* out05 */,
+				A72ADA5F16A8AEB500749EF8 /* out06 */,
+				A72ADA6016A8AEB500749EF8 /* out07 */,
+				A72ADA6116A8AEB500749EF8 /* out08 */,
+				A72ADA6216A8AEB500749EF8 /* out09 */,
+				A72ADA6316A8AEB500749EF8 /* out10 */,
+				A72ADA6416A8AEB500749EF8 /* out11 */,
+				A72ADA6516A8AEB500749EF8 /* out12 */,
+				A72ADA6616A8AEB500749EF8 /* out13 */,
+				A72ADA6716A8AEB500749EF8 /* out14 */,
+				A72ADA6816A8AEB500749EF8 /* out15 */,
+				A72ADA6916A8AEB500749EF8 /* out16 */,
+				A72ADA6A16A8AEB500749EF8 /* out17 */,
+				A72ADA6B16A8AEB500749EF8 /* out18 */,
+				A72ADA6C16A8AEB500749EF8 /* out19 */,
+				A72ADA6D16A8AEB500749EF8 /* out20 */,
+				A72ADA6E16A8AEB500749EF8 /* out21 */,
+				A72ADA6F16A8AEB500749EF8 /* out22 */,
+				A72ADA7016A8AEB500749EF8 /* out23 */,
+				A72ADA7116A8AEB500749EF8 /* out24 */,
+				A72ADA7216A8AEB500749EF8 /* out25 */,
+				A72ADA7316A8AEB500749EF8 /* out26 */,
+				A72ADA7416A8AEB500749EF8 /* out27 */,
+				A72ADA7516A8AEB500749EF8 /* out28 */,
+			);
+			path = outref;
+			sourceTree = "<group>";
+		};
+		A72ADA8616A8AEB500749EF8 /* hepmcinterface */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADA8716A8AEB500749EF8 /* HepMCInterface.cc */,
+			);
+			path = hepmcinterface;
+			sourceTree = "<group>";
+		};
+		A72ADA8816A8AEB500749EF8 /* htmldoc */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADA8916A8AEB500749EF8 /* AdvancedUsage.html */,
+				A72ADA8A16A8AEB500749EF8 /* AlpgenAndMLM.html */,
+				A72ADA8B16A8AEB500749EF8 /* ASecondHardProcess.html */,
+				A72ADA8C16A8AEB500749EF8 /* BeamParameters.html */,
+				A72ADA8D16A8AEB500749EF8 /* BeamRemnants.html */,
+				A72ADA8E16A8AEB500749EF8 /* BeamShape.html */,
+				A72ADA8F16A8AEB500749EF8 /* Bibliography.html */,
+				A72ADA9016A8AEB500749EF8 /* BoseEinsteinEffects.html */,
+				A72ADA9116A8AEB500749EF8 /* CompositenessProcesses.html */,
+				A72ADA9216A8AEB500749EF8 /* COPYING */,
+				A72ADA9316A8AEB500749EF8 /* CouplingsAndScales.html */,
+				A72ADA9416A8AEB500749EF8 /* Diffraction.html */,
+				A72ADA9516A8AEB500749EF8 /* ElectroweakProcesses.html */,
+				A72ADA9616A8AEB500749EF8 /* ErrorChecks.html */,
+				A72ADA9716A8AEB500749EF8 /* EventAnalysis.html */,
+				A72ADA9816A8AEB500749EF8 /* EventInformation.html */,
+				A72ADA9916A8AEB500749EF8 /* EventRecord.html */,
+				A72ADA9A16A8AEB500749EF8 /* EventStatistics.html */,
+				A72ADA9B16A8AEB500749EF8 /* ExternalDecays.html */,
+				A72ADA9C16A8AEB500749EF8 /* ExtraDimensionalProcesses.html */,
+				A72ADA9D16A8AEB500749EF8 /* FlavourSelection.html */,
+				A72ADA9E16A8AEB500749EF8 /* FourthGenerationProcesses.html */,
+				A72ADA9F16A8AEB500749EF8 /* FourVectors.html */,
+				A72ADAA016A8AEB500749EF8 /* Fragmentation.html */,
+				A72ADAA116A8AEB500749EF8 /* Frontpage.html */,
+				A72ADAA216A8AEB500749EF8 /* Glossary.html */,
+				A72ADAA316A8AEB500749EF8 /* GUIDELINES */,
+				A72ADAA416A8AEB500749EF8 /* HadronLevelStandalone.html */,
+				A72ADAA516A8AEB500749EF8 /* HadronScattering.html */,
+				A72ADAA616A8AEB500749EF8 /* HepMCInterface.html */,
+				A72ADAA716A8AEB500749EF8 /* HiddenValleyProcesses.html */,
+				A72ADAA816A8AEB500749EF8 /* HiggsProcesses.html */,
+				A72ADAA916A8AEB500749EF8 /* Histograms.html */,
+				A72ADAAA16A8AEB500749EF8 /* ImplementNewShowers.html */,
+				A72ADAAB16A8AEB500749EF8 /* Index.html */,
+				A72ADAAC16A8AEB500749EF8 /* JetFinders.html */,
+				A72ADAAD16A8AEB500749EF8 /* LeftRightSymmetryProcesses.html */,
+				A72ADAAE16A8AEB500749EF8 /* LeptoquarkProcesses.html */,
+				A72ADAAF16A8AEB500749EF8 /* LesHouchesAccord.html */,
+				A72ADAB016A8AEB500749EF8 /* MadGraph5Processes.html */,
+				A72ADAB116A8AEB500749EF8 /* MainProgramSettings.html */,
+				A72ADAB216A8AEB500749EF8 /* MasterSwitches.html */,
+				A72ADAB316A8AEB500749EF8 /* MatrixElementMerging.html */,
+				A72ADAB416A8AEB500749EF8 /* MultipartonInteractions.html */,
+				A72ADAB516A8AEB500749EF8 /* NewGaugeBosonProcesses.html */,
+				A72ADAB616A8AEB500749EF8 /* OniaProcesses.html */,
+				A72ADAB716A8AEB500749EF8 /* ParticleData.html */,
+				A72ADAB816A8AEB500749EF8 /* ParticleDataScheme.html */,
+				A72ADAB916A8AEB500749EF8 /* ParticleDecays.html */,
+				A72ADABA16A8AEB500749EF8 /* ParticleProperties.html */,
+				A72ADABB16A8AEB500749EF8 /* PartonDistributions.html */,
+				A72ADABC16A8AEB500749EF8 /* PDFSelection.html */,
+				A72ADABD16A8AEB500749EF8 /* PhaseSpaceCuts.html */,
+				A72ADABE16A8AEB500749EF8 /* ProcessSelection.html */,
+				A72ADABF16A8AEB500749EF8 /* ProgramClasses.html */,
+				A72ADAC016A8AEB500749EF8 /* ProgramFiles.html */,
+				A72ADAC116A8AEB500749EF8 /* ProgramFlow.html */,
+				A72ADAC216A8AEB500749EF8 /* ProgramMethods.html */,
+				A72ADAC316A8AEB500749EF8 /* pythia.css */,
+				A72ADAC416A8AEB500749EF8 /* pythia32.gif */,
+				A72ADAC516A8AEB500749EF8 /* pythia8100.pdf */,
+				A72ADAC616A8AEB500749EF8 /* pythia99.gif */,
+				A72ADAC716A8AEB500749EF8 /* QCDProcesses.html */,
+				A72ADAC816A8AEB500749EF8 /* RandomNumbers.html */,
+				A72ADAC916A8AEB500749EF8 /* RandomNumberSeed.html */,
+				A72ADACA16A8AEB500749EF8 /* ResonanceDecays.html */,
+				A72ADACB16A8AEB500749EF8 /* RHadrons.html */,
+				A72ADACC16A8AEB500749EF8 /* RIVETusage.html */,
+				A72ADACD16A8AEB500749EF8 /* ROOTusage.html */,
+				A72ADACE16A8AEB500749EF8 /* SampleMainPrograms.html */,
+				A72ADACF16A8AEB500749EF8 /* SaveSettings.html */,
+				A72ADAD016A8AEB500749EF8 /* SemiInternalProcesses.html */,
+				A72ADAD116A8AEB500749EF8 /* SemiInternalResonances.html */,
+				A72ADAD216A8AEB500749EF8 /* SettingsScheme.html */,
+				A72ADAD316A8AEB500749EF8 /* SpacelikeShowers.html */,
+				A72ADAD416A8AEB500749EF8 /* StandardModelParameters.html */,
+				A72ADAD516A8AEB500749EF8 /* SUSYLesHouchesAccord.html */,
+				A72ADAD616A8AEB500749EF8 /* SUSYProcesses.html */,
+				A72ADAD716A8AEB500749EF8 /* TimelikeShowers.html */,
+				A72ADAD816A8AEB500749EF8 /* TopProcesses.html */,
+				A72ADAD916A8AEB500749EF8 /* TotalCrossSections.html */,
+				A72ADADA16A8AEB500749EF8 /* Tunes.html */,
+				A72ADADB16A8AEB500749EF8 /* UpdateHistory.html */,
+				A72ADADC16A8AEB500749EF8 /* UserHooks.html */,
+				A72ADADD16A8AEB500749EF8 /* Version.html */,
+				A72ADADE16A8AEB500749EF8 /* Welcome.html */,
+				A72ADADF16A8AEB500749EF8 /* worksheet.pdf */,
+			);
+			path = htmldoc;
+			sourceTree = "<group>";
+		};
+		A72ADAE016A8AEB500749EF8 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADAE116A8AEB500749EF8 /* Analysis.h */,
+				A72ADAE216A8AEB500749EF8 /* Basics.h */,
+				A72ADAE316A8AEB500749EF8 /* BeamParticle.h */,
+				A72ADAE416A8AEB500749EF8 /* BeamRemnants.h */,
+				A72ADAE516A8AEB500749EF8 /* BeamShape.h */,
+				A72ADAE616A8AEB500749EF8 /* BoseEinstein.h */,
+				A72ADAE716A8AEB500749EF8 /* Event.h */,
+				A72ADAE816A8AEB500749EF8 /* FastJet3.h */,
+				A72ADAE916A8AEB500749EF8 /* FragmentationFlavZpT.h */,
+				A72ADAEA16A8AEB500749EF8 /* FragmentationSystems.h */,
+				A72ADAEB16A8AEB500749EF8 /* HadronLevel.h */,
+				A72ADAEC16A8AEB500749EF8 /* HadronScatter.h */,
+				A72ADAED16A8AEB500749EF8 /* HelicityBasics.h */,
+				A72ADAEE16A8AEB500749EF8 /* HelicityMatrixElements.h */,
+				A72ADAEF16A8AEB500749EF8 /* HepMCInterface.h */,
+				A72ADAF016A8AEB500749EF8 /* HiddenValleyFragmentation.h */,
+				A72ADAF116A8AEB500749EF8 /* History.h */,
+				A72ADAF216A8AEB500749EF8 /* Info.h */,
+				A72ADAF316A8AEB500749EF8 /* LesHouches.h */,
+				A72ADAF416A8AEB500749EF8 /* LHAFortran.h */,
+				A72ADAF516A8AEB500749EF8 /* LHAPDFInterface.h */,
+				A72ADAF616A8AEB500749EF8 /* MergingHooks.h */,
+				A72ADAF716A8AEB500749EF8 /* MiniStringFragmentation.h */,
+				A72ADAF816A8AEB500749EF8 /* MultipartonInteractions.h */,
+				A72ADAF916A8AEB500749EF8 /* ParticleData.h */,
+				A72ADAFA16A8AEB500749EF8 /* ParticleDecays.h */,
+				A72ADAFB16A8AEB500749EF8 /* PartonDistributions.h */,
+				A72ADAFC16A8AEB500749EF8 /* PartonLevel.h */,
+				A72ADAFD16A8AEB500749EF8 /* PartonSystems.h */,
+				A72ADAFE16A8AEB500749EF8 /* PhaseSpace.h */,
+				A72ADAFF16A8AEB500749EF8 /* ProcessContainer.h */,
+				A72ADB0016A8AEB500749EF8 /* ProcessLevel.h */,
+				A72ADB0116A8AEB500749EF8 /* Pythia.h */,
+				A72ADB0216A8AEB500749EF8 /* PythiaComplex.h */,
+				A72ADB0316A8AEB500749EF8 /* PythiaStdlib.h */,
+				A72ADB0416A8AEB500749EF8 /* ResonanceDecays.h */,
+				A72ADB0516A8AEB500749EF8 /* ResonanceWidths.h */,
+				A72ADB0616A8AEB500749EF8 /* RHadrons.h */,
+				A72ADB0716A8AEB500749EF8 /* Settings.h */,
+				A72ADB0816A8AEB500749EF8 /* SigmaCompositeness.h */,
+				A72ADB0916A8AEB500749EF8 /* SigmaEW.h */,
+				A72ADB0A16A8AEB500749EF8 /* SigmaExtraDim.h */,
+				A72ADB0B16A8AEB500749EF8 /* SigmaGeneric.h */,
+				A72ADB0C16A8AEB500749EF8 /* SigmaHiggs.h */,
+				A72ADB0D16A8AEB500749EF8 /* SigmaLeftRightSym.h */,
+				A72ADB0E16A8AEB500749EF8 /* SigmaLeptoquark.h */,
+				A72ADB0F16A8AEB500749EF8 /* SigmaNewGaugeBosons.h */,
+				A72ADB1016A8AEB500749EF8 /* SigmaOnia.h */,
+				A72ADB1116A8AEB500749EF8 /* SigmaProcess.h */,
+				A72ADB1216A8AEB500749EF8 /* SigmaQCD.h */,
+				A72ADB1316A8AEB500749EF8 /* SigmaSUSY.h */,
+				A72ADB1416A8AEB500749EF8 /* SigmaTotal.h */,
+				A72ADB1516A8AEB500749EF8 /* SpaceShower.h */,
+				A72ADB1616A8AEB500749EF8 /* StandardModel.h */,
+				A72ADB1716A8AEB500749EF8 /* StringFragmentation.h */,
+				A72ADB1816A8AEB500749EF8 /* SusyCouplings.h */,
+				A72ADB1916A8AEB500749EF8 /* SusyLesHouches.h */,
+				A72ADB1A16A8AEB500749EF8 /* SusyResonanceWidths.h */,
+				A72ADB1B16A8AEB500749EF8 /* TauDecays.h */,
+				A72ADB1C16A8AEB500749EF8 /* TimeShower.h */,
+				A72ADB1D16A8AEB500749EF8 /* UserHooks.h */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		A72ADB1E16A8AEB500749EF8 /* lhapdfdummy */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADB1F16A8AEB500749EF8 /* LHAPDFDummy.cc */,
+			);
+			path = lhapdfdummy;
+			sourceTree = "<group>";
+		};
+		A72ADB2016A8AEB500749EF8 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADB2116A8AEB500749EF8 /* archive */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		A72ADB2116A8AEB500749EF8 /* archive */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADB2216A8AEB500749EF8 /* liblhapdfdummy.a */,
+				A72ADB2316A8AEB500749EF8 /* libpythia8.a */,
+			);
+			path = archive;
+			sourceTree = "<group>";
+		};
+		A72ADB2616A8AEB500749EF8 /* phpdoc */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADB2716A8AEB500749EF8 /* AdvancedUsage.php */,
+				A72ADB2816A8AEB500749EF8 /* AlpgenAndMLM.php */,
+				A72ADB2916A8AEB500749EF8 /* ASecondHardProcess.php */,
+				A72ADB2A16A8AEB500749EF8 /* BeamParameters.php */,
+				A72ADB2B16A8AEB500749EF8 /* BeamRemnants.php */,
+				A72ADB2C16A8AEB500749EF8 /* BeamShape.php */,
+				A72ADB2D16A8AEB500749EF8 /* Bibliography.php */,
+				A72ADB2E16A8AEB500749EF8 /* BoseEinsteinEffects.php */,
+				A72ADB2F16A8AEB500749EF8 /* CompositenessProcesses.php */,
+				A72ADB3016A8AEB500749EF8 /* COPYING */,
+				A72ADB3116A8AEB500749EF8 /* CouplingsAndScales.php */,
+				A72ADB3216A8AEB500749EF8 /* Diffraction.php */,
+				A72ADB3316A8AEB500749EF8 /* ElectroweakProcesses.php */,
+				A72ADB3416A8AEB500749EF8 /* ErrorChecks.php */,
+				A72ADB3516A8AEB500749EF8 /* EventAnalysis.php */,
+				A72ADB3616A8AEB500749EF8 /* EventInformation.php */,
+				A72ADB3716A8AEB500749EF8 /* EventRecord.php */,
+				A72ADB3816A8AEB500749EF8 /* EventStatistics.php */,
+				A72ADB3916A8AEB500749EF8 /* ExternalDecays.php */,
+				A72ADB3A16A8AEB500749EF8 /* ExtraDimensionalProcesses.php */,
+				A72ADB3B16A8AEB500749EF8 /* files */,
+				A72ADB3C16A8AEB500749EF8 /* FlavourSelection.php */,
+				A72ADB3D16A8AEB500749EF8 /* FourthGenerationProcesses.php */,
+				A72ADB3E16A8AEB500749EF8 /* FourVectors.php */,
+				A72ADB3F16A8AEB500749EF8 /* Fragmentation.php */,
+				A72ADB4016A8AEB500749EF8 /* Frontpage.php */,
+				A72ADB4116A8AEB500749EF8 /* Glossary.php */,
+				A72ADB4216A8AEB500749EF8 /* GUIDELINES */,
+				A72ADB4316A8AEB500749EF8 /* HadronLevelStandalone.php */,
+				A72ADB4416A8AEB500749EF8 /* HadronScattering.php */,
+				A72ADB4516A8AEB500749EF8 /* HepMCInterface.php */,
+				A72ADB4616A8AEB500749EF8 /* HiddenValleyProcesses.php */,
+				A72ADB4716A8AEB500749EF8 /* HiggsProcesses.php */,
+				A72ADB4816A8AEB500749EF8 /* Histograms.php */,
+				A72ADB4916A8AEB500749EF8 /* ImplementNewShowers.php */,
+				A72ADB4A16A8AEB500749EF8 /* Index.php */,
+				A72ADB4B16A8AEB500749EF8 /* JetFinders.php */,
+				A72ADB4C16A8AEB500749EF8 /* LeftRightSymmetryProcesses.php */,
+				A72ADB4D16A8AEB500749EF8 /* LeptoquarkProcesses.php */,
+				A72ADB4E16A8AEB500749EF8 /* LesHouchesAccord.php */,
+				A72ADB4F16A8AEB500749EF8 /* MadGraph5Processes.php */,
+				A72ADB5016A8AEB500749EF8 /* MainProgramSettings.php */,
+				A72ADB5116A8AEB500749EF8 /* MasterSwitches.php */,
+				A72ADB5216A8AEB500749EF8 /* MatrixElementMerging.php */,
+				A72ADB5316A8AEB500749EF8 /* MultipartonInteractions.php */,
+				A72ADB5416A8AEB500749EF8 /* NewGaugeBosonProcesses.php */,
+				A72ADB5516A8AEB500749EF8 /* OniaProcesses.php */,
+				A72ADB5616A8AEB500749EF8 /* ParticleData.php */,
+				A72ADB5716A8AEB500749EF8 /* ParticleDataScheme.php */,
+				A72ADB5816A8AEB500749EF8 /* ParticleDecays.php */,
+				A72ADB5916A8AEB500749EF8 /* ParticleProperties.php */,
+				A72ADB5A16A8AEB500749EF8 /* PartonDistributions.php */,
+				A72ADB5B16A8AEB500749EF8 /* PDFSelection.php */,
+				A72ADB5C16A8AEB500749EF8 /* PhaseSpaceCuts.php */,
+				A72ADB5D16A8AEB500749EF8 /* php.txt */,
+				A72ADB5E16A8AEB500749EF8 /* ProcessSelection.php */,
+				A72ADB5F16A8AEB500749EF8 /* ProgramClasses.php */,
+				A72ADB6016A8AEB500749EF8 /* ProgramFiles.php */,
+				A72ADB6116A8AEB500749EF8 /* ProgramFlow.php */,
+				A72ADB6216A8AEB500749EF8 /* ProgramMethods.php */,
+				A72ADB6316A8AEB500749EF8 /* pythia.css */,
+				A72ADB6416A8AEB500749EF8 /* pythia32.gif */,
+				A72ADB6516A8AEB500749EF8 /* pythia8100.pdf */,
+				A72ADB6616A8AEB500749EF8 /* pythia99.gif */,
+				A72ADB6716A8AEB500749EF8 /* QCDProcesses.php */,
+				A72ADB6816A8AEB500749EF8 /* RandomNumbers.php */,
+				A72ADB6916A8AEB500749EF8 /* RandomNumberSeed.php */,
+				A72ADB6A16A8AEB500749EF8 /* ResonanceDecays.php */,
+				A72ADB6B16A8AEB500749EF8 /* RHadrons.php */,
+				A72ADB6C16A8AEB500749EF8 /* RIVETusage.php */,
+				A72ADB6D16A8AEB500749EF8 /* ROOTusage.php */,
+				A72ADB6E16A8AEB500749EF8 /* SampleMainPrograms.php */,
+				A72ADB6F16A8AEB500749EF8 /* SaveSettings.php */,
+				A72ADB7016A8AEB500749EF8 /* SemiInternalProcesses.php */,
+				A72ADB7116A8AEB500749EF8 /* SemiInternalResonances.php */,
+				A72ADB7216A8AEB500749EF8 /* SettingsScheme.php */,
+				A72ADB7316A8AEB500749EF8 /* SpacelikeShowers.php */,
+				A72ADB7416A8AEB500749EF8 /* StandardModelParameters.php */,
+				A72ADB7516A8AEB500749EF8 /* SUSYLesHouchesAccord.php */,
+				A72ADB7616A8AEB500749EF8 /* SUSYProcesses.php */,
+				A72ADB7716A8AEB500749EF8 /* TimelikeShowers.php */,
+				A72ADB7816A8AEB500749EF8 /* TopProcesses.php */,
+				A72ADB7916A8AEB500749EF8 /* TotalCrossSections.php */,
+				A72ADB7A16A8AEB500749EF8 /* Tunes.php */,
+				A72ADB7B16A8AEB500749EF8 /* UpdateHistory.php */,
+				A72ADB7C16A8AEB500749EF8 /* UserHooks.php */,
+				A72ADB7D16A8AEB500749EF8 /* Version.php */,
+				A72ADB7E16A8AEB500749EF8 /* Welcome.php */,
+				A72ADB7F16A8AEB500749EF8 /* worksheet.pdf */,
+			);
+			path = phpdoc;
+			sourceTree = "<group>";
+		};
+		A72ADB3B16A8AEB500749EF8 /* files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = files;
+			sourceTree = "<group>";
+		};
+		A72ADB8316A8AEB500749EF8 /* rootexamples */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADB8416A8AEB500749EF8 /* hist.cc */,
+				A72ADB8516A8AEB500749EF8 /* Makefile */,
+				A72ADB8616A8AEB500749EF8 /* pythiaLinkdef.h */,
+				A72ADB8716A8AEB500749EF8 /* pythiaROOT.h */,
+				A72ADB8816A8AEB500749EF8 /* README */,
+				A72ADB8916A8AEB500749EF8 /* tree.cc */,
+			);
+			path = rootexamples;
+			sourceTree = "<group>";
+		};
+		A72ADB8A16A8AEB500749EF8 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADB8B16A8AEB500749EF8 /* Analysis.cc */,
+				A72ADB8C16A8AEB500749EF8 /* Basics.cc */,
+				A72ADB8D16A8AEB500749EF8 /* BeamParticle.cc */,
+				A72ADB8E16A8AEB500749EF8 /* BeamRemnants.cc */,
+				A72ADB8F16A8AEB500749EF8 /* BeamShape.cc */,
+				A72ADB9016A8AEB500749EF8 /* BoseEinstein.cc */,
+				A72ADB9116A8AEB500749EF8 /* Event.cc */,
+				A72ADB9216A8AEB500749EF8 /* FragmentationFlavZpT.cc */,
+				A72ADB9316A8AEB500749EF8 /* FragmentationSystems.cc */,
+				A72ADB9416A8AEB500749EF8 /* HadronLevel.cc */,
+				A72ADB9516A8AEB500749EF8 /* HadronScatter.cc */,
+				A72ADB9616A8AEB500749EF8 /* HelicityBasics.cc */,
+				A72ADB9716A8AEB500749EF8 /* HelicityMatrixElements.cc */,
+				A72ADB9816A8AEB500749EF8 /* HiddenValleyFragmentation.cc */,
+				A72ADB9916A8AEB500749EF8 /* History.cc */,
+				A72ADB9A16A8AEB500749EF8 /* Info.cc */,
+				A72ADB9B16A8AEB500749EF8 /* LesHouches.cc */,
+				A72ADB9C16A8AEB500749EF8 /* MergingHooks.cc */,
+				A72ADB9D16A8AEB500749EF8 /* MiniStringFragmentation.cc */,
+				A72ADB9E16A8AEB500749EF8 /* MultipartonInteractions.cc */,
+				A72ADB9F16A8AEB500749EF8 /* ParticleData.cc */,
+				A72ADBA016A8AEB500749EF8 /* ParticleDecays.cc */,
+				A72ADBA116A8AEB500749EF8 /* PartonDistributions.cc */,
+				A72ADBA216A8AEB500749EF8 /* PartonLevel.cc */,
+				A72ADBA316A8AEB500749EF8 /* PartonSystems.cc */,
+				A72ADBA416A8AEB500749EF8 /* PhaseSpace.cc */,
+				A72ADBA516A8AEB500749EF8 /* ProcessContainer.cc */,
+				A72ADBA616A8AEB500749EF8 /* ProcessLevel.cc */,
+				A72ADBA716A8AEB500749EF8 /* Pythia.cc */,
+				A72ADBA816A8AEB500749EF8 /* PythiaStdlib.cc */,
+				A72ADBA916A8AEB500749EF8 /* ResonanceDecays.cc */,
+				A72ADBAA16A8AEB500749EF8 /* ResonanceWidths.cc */,
+				A72ADBAB16A8AEB500749EF8 /* RHadrons.cc */,
+				A72ADBAC16A8AEB500749EF8 /* Settings.cc */,
+				A72ADBAD16A8AEB500749EF8 /* SigmaCompositeness.cc */,
+				A72ADBAE16A8AEB500749EF8 /* SigmaEW.cc */,
+				A72ADBAF16A8AEB500749EF8 /* SigmaExtraDim.cc */,
+				A72ADBB016A8AEB500749EF8 /* SigmaGeneric.cc */,
+				A72ADBB116A8AEB500749EF8 /* SigmaHiggs.cc */,
+				A72ADBB216A8AEB500749EF8 /* SigmaLeftRightSym.cc */,
+				A72ADBB316A8AEB500749EF8 /* SigmaLeptoquark.cc */,
+				A72ADBB416A8AEB500749EF8 /* SigmaNewGaugeBosons.cc */,
+				A72ADBB516A8AEB500749EF8 /* SigmaOnia.cc */,
+				A72ADBB616A8AEB500749EF8 /* SigmaProcess.cc */,
+				A72ADBB716A8AEB500749EF8 /* SigmaQCD.cc */,
+				A72ADBB816A8AEB500749EF8 /* SigmaSUSY.cc */,
+				A72ADBB916A8AEB500749EF8 /* SigmaTotal.cc */,
+				A72ADBBA16A8AEB500749EF8 /* SpaceShower.cc */,
+				A72ADBBB16A8AEB500749EF8 /* StandardModel.cc */,
+				A72ADBBC16A8AEB500749EF8 /* StringFragmentation.cc */,
+				A72ADBBD16A8AEB500749EF8 /* SusyCouplings.cc */,
+				A72ADBBE16A8AEB500749EF8 /* SusyLesHouches.cc */,
+				A72ADBBF16A8AEB500749EF8 /* SusyResonanceWidths.cc */,
+				A72ADBC016A8AEB500749EF8 /* TauDecays.cc */,
+				A72ADBC116A8AEB500749EF8 /* TimeShower.cc */,
+				A72ADBC216A8AEB500749EF8 /* UserHooks.cc */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		A72ADBC316A8AEB500749EF8 /* tmp */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADBC416A8AEB500749EF8 /* archive */,
+			);
+			path = tmp;
+			sourceTree = "<group>";
+		};
+		A72ADBC416A8AEB500749EF8 /* archive */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADBC516A8AEB500749EF8 /* Analysis.d */,
+				A72ADBC616A8AEB500749EF8 /* Analysis.o */,
+				A72ADBC716A8AEB500749EF8 /* Basics.d */,
+				A72ADBC816A8AEB500749EF8 /* Basics.o */,
+				A72ADBC916A8AEB500749EF8 /* BeamParticle.d */,
+				A72ADBCA16A8AEB500749EF8 /* BeamParticle.o */,
+				A72ADBCB16A8AEB500749EF8 /* BeamRemnants.d */,
+				A72ADBCC16A8AEB500749EF8 /* BeamRemnants.o */,
+				A72ADBCD16A8AEB500749EF8 /* BeamShape.d */,
+				A72ADBCE16A8AEB500749EF8 /* BeamShape.o */,
+				A72ADBCF16A8AEB500749EF8 /* BoseEinstein.d */,
+				A72ADBD016A8AEB500749EF8 /* BoseEinstein.o */,
+				A72ADBD116A8AEB500749EF8 /* Event.d */,
+				A72ADBD216A8AEB500749EF8 /* Event.o */,
+				A72ADBD316A8AEB500749EF8 /* FragmentationFlavZpT.d */,
+				A72ADBD416A8AEB500749EF8 /* FragmentationFlavZpT.o */,
+				A72ADBD516A8AEB500749EF8 /* FragmentationSystems.d */,
+				A72ADBD616A8AEB500749EF8 /* FragmentationSystems.o */,
+				A72ADBD716A8AEB500749EF8 /* HadronLevel.d */,
+				A72ADBD816A8AEB500749EF8 /* HadronLevel.o */,
+				A72ADBD916A8AEB500749EF8 /* HadronScatter.d */,
+				A72ADBDA16A8AEB500749EF8 /* HadronScatter.o */,
+				A72ADBDB16A8AEB500749EF8 /* HelicityBasics.d */,
+				A72ADBDC16A8AEB500749EF8 /* HelicityBasics.o */,
+				A72ADBDD16A8AEB500749EF8 /* HelicityMatrixElements.d */,
+				A72ADBDE16A8AEB500749EF8 /* HelicityMatrixElements.o */,
+				A72ADBDF16A8AEB500749EF8 /* HiddenValleyFragmentation.d */,
+				A72ADBE016A8AEB500749EF8 /* HiddenValleyFragmentation.o */,
+				A72ADBE116A8AEB500749EF8 /* History.d */,
+				A72ADBE216A8AEB500749EF8 /* History.o */,
+				A72ADBE316A8AEB500749EF8 /* Info.d */,
+				A72ADBE416A8AEB500749EF8 /* Info.o */,
+				A72ADBE516A8AEB500749EF8 /* LesHouches.d */,
+				A72ADBE616A8AEB500749EF8 /* LesHouches.o */,
+				A72ADBE716A8AEB500749EF8 /* LHAPDFDummy.o */,
+				A72ADBE816A8AEB500749EF8 /* MergingHooks.d */,
+				A72ADBE916A8AEB500749EF8 /* MergingHooks.o */,
+				A72ADBEA16A8AEB500749EF8 /* MiniStringFragmentation.d */,
+				A72ADBEB16A8AEB500749EF8 /* MiniStringFragmentation.o */,
+				A72ADBEC16A8AEB500749EF8 /* MultipartonInteractions.d */,
+				A72ADBED16A8AEB500749EF8 /* MultipartonInteractions.o */,
+				A72ADBEE16A8AEB500749EF8 /* ParticleData.d */,
+				A72ADBEF16A8AEB500749EF8 /* ParticleData.o */,
+				A72ADBF016A8AEB500749EF8 /* ParticleDecays.d */,
+				A72ADBF116A8AEB500749EF8 /* ParticleDecays.o */,
+				A72ADBF216A8AEB500749EF8 /* PartonDistributions.d */,
+				A72ADBF316A8AEB500749EF8 /* PartonDistributions.o */,
+				A72ADBF416A8AEB500749EF8 /* PartonLevel.d */,
+				A72ADBF516A8AEB500749EF8 /* PartonLevel.o */,
+				A72ADBF616A8AEB500749EF8 /* PartonSystems.d */,
+				A72ADBF716A8AEB500749EF8 /* PartonSystems.o */,
+				A72ADBF816A8AEB500749EF8 /* PhaseSpace.d */,
+				A72ADBF916A8AEB500749EF8 /* PhaseSpace.o */,
+				A72ADBFA16A8AEB500749EF8 /* ProcessContainer.d */,
+				A72ADBFB16A8AEB500749EF8 /* ProcessContainer.o */,
+				A72ADBFC16A8AEB500749EF8 /* ProcessLevel.d */,
+				A72ADBFD16A8AEB500749EF8 /* ProcessLevel.o */,
+				A72ADBFE16A8AEB500749EF8 /* Pythia.d */,
+				A72ADBFF16A8AEB500749EF8 /* Pythia.o */,
+				A72ADC0016A8AEB500749EF8 /* PythiaStdlib.d */,
+				A72ADC0116A8AEB500749EF8 /* PythiaStdlib.o */,
+				A72ADC0216A8AEB500749EF8 /* ResonanceDecays.d */,
+				A72ADC0316A8AEB500749EF8 /* ResonanceDecays.o */,
+				A72ADC0416A8AEB500749EF8 /* ResonanceWidths.d */,
+				A72ADC0516A8AEB500749EF8 /* ResonanceWidths.o */,
+				A72ADC0616A8AEB500749EF8 /* RHadrons.d */,
+				A72ADC0716A8AEB500749EF8 /* RHadrons.o */,
+				A72ADC0816A8AEB500749EF8 /* Settings.d */,
+				A72ADC0916A8AEB500749EF8 /* Settings.o */,
+				A72ADC0A16A8AEB500749EF8 /* SigmaCompositeness.d */,
+				A72ADC0B16A8AEB500749EF8 /* SigmaCompositeness.o */,
+				A72ADC0C16A8AEB500749EF8 /* SigmaEW.d */,
+				A72ADC0D16A8AEB500749EF8 /* SigmaEW.o */,
+				A72ADC0E16A8AEB500749EF8 /* SigmaExtraDim.d */,
+				A72ADC0F16A8AEB500749EF8 /* SigmaExtraDim.o */,
+				A72ADC1016A8AEB500749EF8 /* SigmaGeneric.d */,
+				A72ADC1116A8AEB500749EF8 /* SigmaGeneric.o */,
+				A72ADC1216A8AEB500749EF8 /* SigmaHiggs.d */,
+				A72ADC1316A8AEB500749EF8 /* SigmaHiggs.o */,
+				A72ADC1416A8AEB500749EF8 /* SigmaLeftRightSym.d */,
+				A72ADC1516A8AEB500749EF8 /* SigmaLeftRightSym.o */,
+				A72ADC1616A8AEB500749EF8 /* SigmaLeptoquark.d */,
+				A72ADC1716A8AEB500749EF8 /* SigmaLeptoquark.o */,
+				A72ADC1816A8AEB500749EF8 /* SigmaNewGaugeBosons.d */,
+				A72ADC1916A8AEB500749EF8 /* SigmaNewGaugeBosons.o */,
+				A72ADC1A16A8AEB500749EF8 /* SigmaOnia.d */,
+				A72ADC1B16A8AEB500749EF8 /* SigmaOnia.o */,
+				A72ADC1C16A8AEB500749EF8 /* SigmaProcess.d */,
+				A72ADC1D16A8AEB500749EF8 /* SigmaProcess.o */,
+				A72ADC1E16A8AEB500749EF8 /* SigmaQCD.d */,
+				A72ADC1F16A8AEB500749EF8 /* SigmaQCD.o */,
+				A72ADC2016A8AEB500749EF8 /* SigmaSUSY.d */,
+				A72ADC2116A8AEB500749EF8 /* SigmaSUSY.o */,
+				A72ADC2216A8AEB500749EF8 /* SigmaTotal.d */,
+				A72ADC2316A8AEB500749EF8 /* SigmaTotal.o */,
+				A72ADC2416A8AEB500749EF8 /* SpaceShower.d */,
+				A72ADC2516A8AEB500749EF8 /* SpaceShower.o */,
+				A72ADC2616A8AEB500749EF8 /* StandardModel.d */,
+				A72ADC2716A8AEB500749EF8 /* StandardModel.o */,
+				A72ADC2816A8AEB500749EF8 /* StringFragmentation.d */,
+				A72ADC2916A8AEB500749EF8 /* StringFragmentation.o */,
+				A72ADC2A16A8AEB500749EF8 /* SusyCouplings.d */,
+				A72ADC2B16A8AEB500749EF8 /* SusyCouplings.o */,
+				A72ADC2C16A8AEB500749EF8 /* SusyLesHouches.d */,
+				A72ADC2D16A8AEB500749EF8 /* SusyLesHouches.o */,
+				A72ADC2E16A8AEB500749EF8 /* SusyResonanceWidths.d */,
+				A72ADC2F16A8AEB500749EF8 /* SusyResonanceWidths.o */,
+				A72ADC3016A8AEB500749EF8 /* TauDecays.d */,
+				A72ADC3116A8AEB500749EF8 /* TauDecays.o */,
+				A72ADC3216A8AEB500749EF8 /* TimeShower.d */,
+				A72ADC3316A8AEB500749EF8 /* TimeShower.o */,
+				A72ADC3416A8AEB500749EF8 /* UserHooks.d */,
+				A72ADC3516A8AEB500749EF8 /* UserHooks.o */,
+			);
+			path = archive;
+			sourceTree = "<group>";
+		};
+		A72ADC3716A8AEB500749EF8 /* xmldoc */ = {
+			isa = PBXGroup;
+			children = (
+				A72ADC3816A8AEB500749EF8 /* AdvancedUsage.xml */,
+				A72ADC3916A8AEB500749EF8 /* AlpgenAndMLM.xml */,
+				A72ADC3A16A8AEB500749EF8 /* ASecondHardProcess.xml */,
+				A72ADC3B16A8AEB500749EF8 /* BeamParameters.xml */,
+				A72ADC3C16A8AEB500749EF8 /* BeamRemnants.xml */,
+				A72ADC3D16A8AEB500749EF8 /* BeamShape.xml */,
+				A72ADC3E16A8AEB500749EF8 /* Bibliography.xml */,
+				A72ADC3F16A8AEB500749EF8 /* BoseEinsteinEffects.xml */,
+				A72ADC4016A8AEB500749EF8 /* CompositenessProcesses.xml */,
+				A72ADC4116A8AEB500749EF8 /* CouplingsAndScales.xml */,
+				A72ADC4216A8AEB500749EF8 /* ct09mc1.pds */,
+				A72ADC4316A8AEB500749EF8 /* ct09mc2.pds */,
+				A72ADC4416A8AEB500749EF8 /* ct09mcs.pds */,
+				A72ADC4516A8AEB500749EF8 /* cteq6l.tbl */,
+				A72ADC4616A8AEB500749EF8 /* cteq6l1.tbl */,
+				A72ADC4716A8AEB500749EF8 /* ctq66.00.pds */,
+				A72ADC4816A8AEB500749EF8 /* Diffraction.xml */,
+				A72ADC4916A8AEB500749EF8 /* ElectroweakProcesses.xml */,
+				A72ADC4A16A8AEB500749EF8 /* ErrorChecks.xml */,
+				A72ADC4B16A8AEB500749EF8 /* EventAnalysis.xml */,
+				A72ADC4C16A8AEB500749EF8 /* EventInformation.xml */,
+				A72ADC4D16A8AEB500749EF8 /* EventRecord.xml */,
+				A72ADC4E16A8AEB500749EF8 /* EventStatistics.xml */,
+				A72ADC4F16A8AEB500749EF8 /* ExternalDecays.xml */,
+				A72ADC5016A8AEB500749EF8 /* ExtraDimensionalProcesses.xml */,
+				A72ADC5116A8AEB500749EF8 /* FlavourSelection.xml */,
+				A72ADC5216A8AEB500749EF8 /* FourthGenerationProcesses.xml */,
+				A72ADC5316A8AEB500749EF8 /* FourVectors.xml */,
+				A72ADC5416A8AEB500749EF8 /* Fragmentation.xml */,
+				A72ADC5516A8AEB500749EF8 /* Frontpage.xml */,
+				A72ADC5616A8AEB500749EF8 /* Glossary.xml */,
+				A72ADC5716A8AEB500749EF8 /* HadronLevelStandalone.xml */,
+				A72ADC5816A8AEB500749EF8 /* HadronScattering.xml */,
+				A72ADC5916A8AEB500749EF8 /* HepMCInterface.xml */,
+				A72ADC5A16A8AEB500749EF8 /* HiddenValleyProcesses.xml */,
+				A72ADC5B16A8AEB500749EF8 /* HiggsProcesses.xml */,
+				A72ADC5C16A8AEB500749EF8 /* Histograms.xml */,
+				A72ADC5D16A8AEB500749EF8 /* ImplementNewShowers.xml */,
+				A72ADC5E16A8AEB500749EF8 /* Index.xml */,
+				A72ADC5F16A8AEB500749EF8 /* JetFinders.xml */,
+				A72ADC6016A8AEB500749EF8 /* LeftRightSymmetryProcesses.xml */,
+				A72ADC6116A8AEB500749EF8 /* lejon2.eps */,
+				A72ADC6216A8AEB500749EF8 /* LeptoquarkProcesses.xml */,
+				A72ADC6316A8AEB500749EF8 /* LesHouchesAccord.xml */,
+				A72ADC6416A8AEB500749EF8 /* MadGraph5Processes.xml */,
+				A72ADC6516A8AEB500749EF8 /* MainProgramSettings.xml */,
+				A72ADC6616A8AEB500749EF8 /* MasterSwitches.xml */,
+				A72ADC6716A8AEB500749EF8 /* MatrixElementMerging.xml */,
+				A72ADC6816A8AEB500749EF8 /* mrstlostar.00.dat */,
+				A72ADC6916A8AEB500749EF8 /* mrstlostarstar.00.dat */,
+				A72ADC6A16A8AEB500749EF8 /* mstw2008lo.00.dat */,
+				A72ADC6B16A8AEB500749EF8 /* mstw2008nlo.00.dat */,
+				A72ADC6C16A8AEB500749EF8 /* MultipartonInteractions.xml */,
+				A72ADC6D16A8AEB500749EF8 /* NewGaugeBosonProcesses.xml */,
+				A72ADC6E16A8AEB500749EF8 /* OniaProcesses.xml */,
+				A72ADC6F16A8AEB500749EF8 /* ParticleData.xml */,
+				A72ADC7016A8AEB500749EF8 /* ParticleDataScheme.xml */,
+				A72ADC7116A8AEB500749EF8 /* ParticleDecays.xml */,
+				A72ADC7216A8AEB500749EF8 /* ParticleProperties.xml */,
+				A72ADC7316A8AEB500749EF8 /* PartonDistributions.xml */,
+				A72ADC7416A8AEB500749EF8 /* PDFSelection.xml */,
+				A72ADC7516A8AEB500749EF8 /* PhaseSpaceCuts.xml */,
+				A72ADC7616A8AEB500749EF8 /* piK-Estabrooks.dat */,
+				A72ADC7716A8AEB500749EF8 /* piN-SAID-WI08.dat */,
+				A72ADC7816A8AEB500749EF8 /* pipi-Froggatt.dat */,
+				A72ADC7916A8AEB500749EF8 /* pomH1FitA.data */,
+				A72ADC7A16A8AEB500749EF8 /* pomH1FitB.data */,
+				A72ADC7B16A8AEB500749EF8 /* pomH1FitBlo.data */,
+				A72ADC7C16A8AEB500749EF8 /* pomH1JetsCharm.data */,
+				A72ADC7D16A8AEB500749EF8 /* pomH1JetsGluon.data */,
+				A72ADC7E16A8AEB500749EF8 /* pomH1JetsSinglet.data */,
+				A72ADC7F16A8AEB500749EF8 /* ProcessSelection.xml */,
+				A72ADC8016A8AEB500749EF8 /* ProgramClasses.xml */,
+				A72ADC8116A8AEB500749EF8 /* ProgramFiles.xml */,
+				A72ADC8216A8AEB500749EF8 /* ProgramFlow.xml */,
+				A72ADC8316A8AEB500749EF8 /* ProgramMethods.xml */,
+				A72ADC8416A8AEB500749EF8 /* pythia8100.tex */,
+				A72ADC8516A8AEB500749EF8 /* pythiapicture.eps */,
+				A72ADC8616A8AEB500749EF8 /* QCDProcesses.xml */,
+				A72ADC8716A8AEB500749EF8 /* RandomNumbers.xml */,
+				A72ADC8816A8AEB500749EF8 /* RandomNumberSeed.xml */,
+				A72ADC8916A8AEB500749EF8 /* ResonanceDecays.xml */,
+				A72ADC8A16A8AEB500749EF8 /* RHadrons.xml */,
+				A72ADC8B16A8AEB500749EF8 /* RIVETusage.xml */,
+				A72ADC8C16A8AEB500749EF8 /* ROOTusage.xml */,
+				A72ADC8D16A8AEB500749EF8 /* SampleMainPrograms.xml */,
+				A72ADC8E16A8AEB500749EF8 /* SaveSettings.xml */,
+				A72ADC8F16A8AEB500749EF8 /* SemiInternalProcesses.xml */,
+				A72ADC9016A8AEB500749EF8 /* SemiInternalResonances.xml */,
+				A72ADC9116A8AEB500749EF8 /* SettingsScheme.xml */,
+				A72ADC9216A8AEB500749EF8 /* SpacelikeShowers.xml */,
+				A72ADC9316A8AEB500749EF8 /* StandardModelParameters.xml */,
+				A72ADC9416A8AEB500749EF8 /* SUSYLesHouchesAccord.xml */,
+				A72ADC9516A8AEB500749EF8 /* SUSYProcesses.xml */,
+				A72ADC9616A8AEB500749EF8 /* TimelikeShowers.xml */,
+				A72ADC9716A8AEB500749EF8 /* TopProcesses.xml */,
+				A72ADC9816A8AEB500749EF8 /* TotalCrossSections.xml */,
+				A72ADC9916A8AEB500749EF8 /* Tunes.xml */,
+				A72ADC9A16A8AEB500749EF8 /* UpdateHistory.xml */,
+				A72ADC9B16A8AEB500749EF8 /* UserHooks.xml */,
+				A72ADC9C16A8AEB500749EF8 /* Version.xml */,
+				A72ADC9D16A8AEB500749EF8 /* Welcome.xml */,
+				A72ADC9E16A8AEB500749EF8 /* worksheet.tex */,
+			);
+			path = xmldoc;
+			sourceTree = "<group>";
+		};
+		A7500F5916A98B4000279454 /* libraries */ = {
+			isa = PBXGroup;
+			children = (
+				A7500EF916A9863500279454 /* libpythia8.a */,
+				A7500EFA16A9863500279454 /* liblhapdfdummy.a */,
+				A7500E5016A977C600279454 /* libCint.so */,
+				A7500E5316A977C600279454 /* libCore.so */,
+				A7500E6316A977C600279454 /* libGraf.so */,
+				A7500E6416A977C600279454 /* libGraf3d.so */,
+				A7500E6516A977C600279454 /* libGui.so */,
+				A7500E6C16A977C600279454 /* libHist.so */,
+				A7500E7316A977C600279454 /* libMathCore.so */,
+				A7500E7416A977C600279454 /* libMatrix.so */,
+				A7500E7C16A977C700279454 /* libNet.so */,
+				A7500E7F16A977C700279454 /* libPhysics.so */,
+				A7500E8B16A977C700279454 /* libRint.so */,
+				A7500E8C16A977C700279454 /* libRIO.so */,
+				A7500E9816A977C700279454 /* libThread.so */,
+				A7500E9A16A977C700279454 /* libTree.so */,
+				A72ADCAF16A8B2C000749EF8 /* libpthread.dylib */,
+				A72ADCAD16A8B2B100749EF8 /* libm.dylib */,
+				A72ADCAB16A8B27900749EF8 /* libdl.dylib */,
+			);
+			name = libraries;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A72AD9F316A8AC6B00749EF8 /* genSun */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A72AD9FC16A8AC6B00749EF8 /* Build configuration list for PBXNativeTarget "genSun" */;
+			buildPhases = (
+				A72AD9F016A8AC6B00749EF8 /* Sources */,
+				A72AD9F116A8AC6B00749EF8 /* Frameworks */,
+				A72AD9F216A8AC6B00749EF8 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = genSun;
+			productName = genSun;
+			productReference = A72AD9F416A8AC6B00749EF8 /* genSun */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A72AD9E316A8AAF900749EF8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+			};
+			buildConfigurationList = A72AD9E616A8AAF900749EF8 /* Build configuration list for PBXProject "genSun" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = A72AD9E116A8AAF900749EF8;
+			productRefGroup = A72AD9F516A8AC6B00749EF8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A72AD9F316A8AC6B00749EF8 /* genSun */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A72AD9F016A8AC6B00749EF8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A72AD9FF16A8ACD200749EF8 /* genSun.cc in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A72AD9E816A8AAF900749EF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GENERATE_MASTER_OBJECT_FILE = NO;
+				GENERATE_PROFILING_CODE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Users/joosep/Documents/pythia8170/include,
+					/Applications/root/include,
+				);
+				LD_MAP_FILE_PATH = "";
+				LIBRARY_SEARCH_PATHS = /Users/joosep/Documents/pythia8170/lib/archive;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				PRELINK_LIBS = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx10.8;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Debug;
+		};
+		A72AD9E916A8AAF900749EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_CHAR_IS_UNSIGNED_CHAR = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GENERATE_MASTER_OBJECT_FILE = NO;
+				GENERATE_PROFILING_CODE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Users/joosep/Documents/pythia8170/include,
+					/Applications/root/include,
+				);
+				LIBRARY_SEARCH_PATHS = /Users/joosep/Documents/pythia8170/lib/archive;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				PRELINK_LIBS = "";
+				RUN_CLANG_STATIC_ANALYZER = YES;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx10.8;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A72AD9FD16A8AC6B00749EF8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_LINK_OBJC_RUNTIME = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = ansi;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				GENERATE_MASTER_OBJECT_FILE = NO;
+				GENERATE_PROFILING_CODE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Applications/root/include,
+					/Users/joosep/Documents/pythia8170/include,
+				);
+				KEEP_PRIVATE_EXTERNS = NO;
+				LD_GENERATE_MAP_FILE = NO;
+				LD_MAP_FILE_PATH = "$(TARGET_TEMP_DIR)/$(PRODUCT_NAME)-LinkMap-$(CURRENT_VARIANT)-$(CURRENT_ARCH).txt";
+				LD_NO_PIE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					/Users/joosep/Documents/pythia8170/lib/archive,
+					"\"$(SYSTEM_APPS_DIR)/root/lib\"",
+				);
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				OSACOMPILE_EXECUTE_ONLY = NO;
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-W",
+					"-Wall",
+					"-Wshadow",
+					"-Wlong-long",
+					"-Wunused-variable",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				PRELINK_LIBS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx;
+				SEPARATE_SYMBOL_EDIT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Debug;
+		};
+		A72AD9FE16A8AC6B00749EF8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_LINK_OBJC_RUNTIME = NO;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_C_LANGUAGE_STANDARD = ansi;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_USE_STANDARD_INCLUDE_SEARCHING = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				GENERATE_MASTER_OBJECT_FILE = NO;
+				GENERATE_PROFILING_CODE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Applications/root/include,
+					/Users/joosep/Documents/pythia8170/include,
+				);
+				KEEP_PRIVATE_EXTERNS = NO;
+				LD_GENERATE_MAP_FILE = NO;
+				LD_NO_PIE = NO;
+				LIBRARY_SEARCH_PATHS = (
+					/Users/joosep/Documents/pythia8170/lib/archive,
+					"\"$(SYSTEM_APPS_DIR)/root/lib\"",
+				);
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				OSACOMPILE_EXECUTE_ONLY = NO;
+				OTHER_CFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-W",
+					"-Wall",
+					"-Wshadow",
+					"-Wlong-long",
+					"-Wunused-variable",
+				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
+				PRELINK_LIBS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx;
+				SEPARATE_SYMBOL_EDIT = NO;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A72AD9E616A8AAF900749EF8 /* Build configuration list for PBXProject "genSun" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A72AD9E816A8AAF900749EF8 /* Debug */,
+				A72AD9E916A8AAF900749EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A72AD9FC16A8AC6B00749EF8 /* Build configuration list for PBXNativeTarget "genSun" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A72AD9FD16A8AC6B00749EF8 /* Debug */,
+				A72AD9FE16A8AC6B00749EF8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A72AD9E316A8AAF900749EF8 /* Project object */;
+}
