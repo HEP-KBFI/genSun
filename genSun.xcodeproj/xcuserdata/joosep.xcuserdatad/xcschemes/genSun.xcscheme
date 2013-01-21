@@ -46,7 +46,7 @@
       useCustomWorkingDirectory = "YES"
       customWorkingDirectory = "/Users/joosep/Documents/pythia8170/genSun"
       buildConfiguration = "Debug"
-      ignoresPersistentStateOnLaunch = "YES"
+      ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
       <BuildableProductRunnable>
@@ -64,7 +64,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "100"
+            argument = "200"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -72,22 +72,10 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "gammaPlusX.card"
+            argument = "/Users/joosep/Documents/pythia8170/genSun/gammaPlusX.card"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "PATH"
-            value = "/Applications/root/bin:$(PATH)"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "MYROOTSYS"
-            value = "/Applications/root"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

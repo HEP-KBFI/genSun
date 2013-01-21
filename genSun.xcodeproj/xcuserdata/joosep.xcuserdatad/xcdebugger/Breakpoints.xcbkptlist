@@ -8,21 +8,26 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "genSun.cc"
-         timestampString = "380215836.732959"
+         timestampString = "380459130.6822"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "104"
-         endingLineNumber = "104"
-         landmarkName = "BCHadronDecay::decay(vector&lt;int&gt;&amp; idProd, vector&lt;double&gt;&amp; mProd, vector&lt;Vec4&gt;&amp; pProd, int iDec, const Event&amp; event)"
-         landmarkType = "5">
+         startingLineNumber = "34"
+         endingLineNumber = "34"
+         landmarkName = "idQuark(int idHad)"
+         landmarkType = "7">
       </FileBreakpoint>
-   </FileBreakpoints>
-   <SymbolicBreakpoints>
-      <AddressBreakpoint
-         shouldBeEnabled = "Yes"
+      <FileBreakpoint
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         symbolName = "*0x00007fff5fc0109d">
-      </AddressBreakpoint>
-   </SymbolicBreakpoints>
+         filePath = "genSun.cc"
+         timestampString = "380459130.6822"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "78"
+         endingLineNumber = "78"
+         landmarkName = "E(double E0, int idHad, Pythia8::ParticleData* pdt)"
+         landmarkType = "7">
+      </FileBreakpoint>
+   </FileBreakpoints>
 </Bucket>
