@@ -34,6 +34,9 @@ const std::vector<const unsigned int> cHadrons({
     443,
     4122, 4222, 4212, 4112, 4232, 4132,
 });
+const std::vector<const unsigned int> lHadrons({
+    111, 211,
+});
 
 TH1D* hEnergySF = 0;
 
@@ -49,7 +52,7 @@ int idQuark(int idHad) {
 }
 
 void gslErrorHandler(const char* reason, const char* file, int line, int gsl_errno) {
-    cerr << "GSL error: " << gsl_errno << " in file " << file << " with reason " << reason << "\n";
+    cerr << "GSL error: " << gsl_errno << " in file " << file << " with reason '" << reason << "'\n";
 }
 
 //Calculates the average energy loss that a B or C hadron suffers in
@@ -63,8 +66,6 @@ namespace avgEnergyLoss {
     double x(int idQ, int idHad, Pythia8::ParticleData* pdt) {
         if(idQ==4 || idQ==5) { //c or b
             return pdt->m0(idQ)/pdt->m0(idHad);
-        } else {
-            assert(1 && "x not defined");
         }
         return GSL_NAN;
     }
@@ -74,8 +75,6 @@ namespace avgEnergyLoss {
             return 0.6;
         } else if (idQ == 5) { //b
             return 0.8;
-        } else {
-            assert(1 && "z not defined");
         }
         return GSL_NAN;
     }
@@ -84,13 +83,13 @@ namespace avgEnergyLoss {
         
         int idQ = idQuark(idHad);
         double Z = x(idQ, idHad, pdt)*z(idQ);
-        double tstop = tint/(1-Z);
+        double tstop = tint/(1.0-Z);
         double Ec = (pdt->m0(idHad))*tstop/tdec;
         double _x = Ec/E0;
         
         double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
         double _E = 0.0;
-        if (f != GSL_ERANGE) { //no underflow
+        if (f != GSL_ERANGE) { //no over/underflow
             _E = Ec*exp(_x)*f;
         }
         return _E;
@@ -99,18 +98,19 @@ namespace avgEnergyLoss {
 
 using namespace Pythia8;
 
-class BCHadronDecay : public DecayHandler {
+class EnergyLossDecay : public DecayHandler {
 public:
     
-    BCHadronDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn) {
+    EnergyLossDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn) {
         pdtPtr = pdtPtrIn; rndmPtr = rndmPtrIn;
     }
     
     bool decay(vector<int>& idProd, vector<double>& mProd,
                vector<Vec4>& pProd, int iDec, const Event& event);
     
-private:
+protected:
     
+    virtual Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) = 0;
     
     // Pointer to the particle data table.
     ParticleData* pdtPtr;
@@ -120,37 +120,32 @@ private:
     
 };
 
-bool BCHadronDecay::decay(vector<int>& idProd, vector<double>& mProd,
+bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
                           vector<Vec4>& pProd, int iDec, const Event& event) {
     
 #ifdef NDEBUG
     cout << "Decaying particle id" << idProd[0] << ", index " << iDec << ", status: " << event[iDec].status() << "\n";
 #endif
-    
+
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
-#ifdef NDEBUG
-        cout << "This particle has already been decayed by energy reduction, decaying normally.\n";
-#endif
         //Decay normally
         return false;
     }
-    
     int id = idProd[0];
     double m = mProd[0];
     Vec4 p4 = pProd[0];
     idProd.push_back(id);
     mProd.push_back(m);
-    
-    //FIXME: Put proper energy reduction formula here
-    double e_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
-    double sf = e_new/p4.e();
-    Vec4 p4_out = p4 * sf;
-    hEnergySF->Fill(sf);
-    
-    //Vec4 p4_out(p4.px(), p4.py(), p4.pz(), e_new);
+    if (event[iDec].tau() < event[iDec].tau0()) {
+        pProd.push_back(p4);
+        return true;
+    }
+
+    Vec4 p4_out = energyLoss(p4, id, iDec, event);
     pProd.push_back(p4_out);
     
+    //Create fake graviton to respect energy conservation
     idProd.push_back(39);
     mProd.push_back(0);
     pProd.push_back(p4-p4_out);
@@ -160,7 +155,33 @@ bool BCHadronDecay::decay(vector<int>& idProd, vector<double>& mProd,
     
 }
 
-//**************************************************************************
+class BCHadronDecay : public EnergyLossDecay {
+
+public:
+    BCHadronDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
+    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {}
+
+protected:
+    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
+        double e_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
+        double sf = e_new/p4.e();
+        Vec4 p4_out = p4*sf;
+        return p4_out;
+    }
+};
+
+class LHadronDecay : public EnergyLossDecay {
+
+public:
+    LHadronDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
+    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {}
+    
+protected:
+    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
+        Vec4 p4_out(0, 0, 0, pdtPtr->m0(id));
+        return p4_out;
+    }
+};
 
 // A derived class for (e+ e- ->) GenericResonance -> various final states.
 
@@ -168,7 +189,6 @@ class Sigma1GenRes : public Sigma1Process {
     
 public:
     
-    // Constructor.
     Sigma1GenRes() {}
     
     // Evaluate sigmaHat(sHat): dummy unit cross section.
@@ -185,38 +205,28 @@ public:
     
 };
 
-//**************************************************************************
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
-    gsl_set_error_handler (&gslErrorHandler);
     
     if (argc < 5) {
         cout << "Usage: ./gen part DMmass output.root params.card" << endl;
         return 1;
     }
-    //setenv("ROOTSYS", getenv("MYROOTSYS"), 1);
+    gsl_set_error_handler(&gslErrorHandler);
     
     int partId, apartId;
     double dmMass;
     partId = atoi(argv[1]);
     dmMass = atof(argv[2]);
     if (partId == 23 || partId == 25) apartId = partId; else apartId = -partId;
-    // Pythia generator.
+
     Pythia pythia;
     
     // A class to generate the fictitious resonance initial state.
     SigmaProcess* sigma1GenRes = new Sigma1GenRes();
-    
-    // Hand pointer to Pythia.
     pythia.setSigmaPtr( sigma1GenRes);
-    
-    cout << "argv:(" << argv[4] << ")\n";
-    
-    cout << "test";
-    // Read in the rest of the settings and data from a separate file.
     pythia.readFile(argv[4]);
     
-    // Select the decay channel
     char ch[60];
     
     if (partId != 1)
@@ -233,41 +243,53 @@ int main(int argc, char **argv) {
     // Initialization.
     
     // Extract settings to be used in the main program.
-    int    nEvent  = pythia.mode("Main:numberOfEvents");
-    int    nList   = pythia.mode("Main:numberToList");
+    int nEvent = pythia.mode("Main:numberOfEvents");
+    int nList = pythia.mode("Main:numberToList");
     //int    nShow   = pythia.mode("Main:timesToShow");
-    int    nAbort  = pythia.mode("Main:timesAllowErrors");
-    bool   showCS  = pythia.flag("Main:showChangedSettings");
-    bool   showCPD = pythia.flag("Main:showChangedParticleData");
+    int nAbort = pythia.mode("Main:timesAllowErrors");
+    bool showCS = pythia.flag("Main:showChangedSettings");
+    bool showCPD = pythia.flag("Main:showChangedParticleData");
+    
+    bool reduceBC = true;
+    bool reduceL = true;
     
     
-    DecayHandler* handleBCHadDecays = new BCHadronDecay(&pythia.particleData,
-                                                        &pythia.rndm);
-    // The list of particles the class can handle.
-    //FIXME: Add proper b and c hadrons
-    vector<int> handledBCHadrons;
-    
-    for(auto& id : bHadrons) {
-        handledBCHadrons.push_back(id);
-        handledBCHadrons.push_back(-id);
+    //Add energy loss decay for b and c hadrons
+    if (reduceBC) {
+        DecayHandler* handleBCHadDecays = new BCHadronDecay(&pythia.particleData,
+                                                            &pythia.rndm);
+        vector<int> handledBCHadrons;
+        for(auto& id : bHadrons) {
+            handledBCHadrons.push_back(id);
+            handledBCHadrons.push_back(-id);
+        }
+        for(auto& id : cHadrons) {
+            handledBCHadrons.push_back(id);
+            handledBCHadrons.push_back(-id);
+        }
+        pythia.setDecayPtr( handleBCHadDecays, handledBCHadrons);
     }
-    for(auto& id : cHadrons) {
-        handledBCHadrons.push_back(id);
-        handledBCHadrons.push_back(-id);
+    
+    if (reduceL) {
+        //Add energy loss decay for light
+        DecayHandler* handleLHadDecays = new LHadronDecay(&pythia.particleData,
+                                                          &pythia.rndm);
+        vector<int> handledLHadrons;
+        for(auto& id : lHadrons) {
+            handledLHadrons.push_back(id);
+            handledLHadrons.push_back(-id);
+        }
+        pythia.setDecayPtr( handleLHadDecays, handledLHadrons);
     }
     
-    pythia.setDecayPtr( handleBCHadDecays, handledBCHadrons);
     
     pythia.init();
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
-    // List changes.
     if (showCS)  pythia.settings.listChanged();
     if (showCPD) pythia.particleData.listChanged();
     
-    //    // Open the root file for output
     TFile f(argv[3],"RECREATE");
-    //
-    //    // Initialize the histograms
+    
     TH1D *hantip = new TH1D("antip","Antiproton distribution",300,-9,0);
     TH1D *hantin = new TH1D("antin","Antineutron distribution",300,-9,0);
     TH2D *hantid = new TH2D("antid","Antideteron distribution",300,-9,0,400,0,0.4);
@@ -276,17 +298,17 @@ int main(int argc, char **argv) {
     TH1D *hnumu = new TH1D("numu","Muon nu distribution",300,-9,0);
     TH1D *hnutau = new TH1D("nutau","Tau nu distribution",300,-9,0);
     TH1D *hgam = new TH1D("gam","Gamma distribution",300,-9,0);
-    TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",300,0,100);
+    TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",300,0,200);
+    TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",300,0,150);
+    TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",300,0,30);
     hEnergySF = new TH1D("ESF","Energy loss scale factor",300,0,1);
     
     vector<Particle> antip;
     vector<Particle> antin;
-    // Begin event loop.
+
     int iAbort = 0;
     for (int iEvent = 0; iEvent < nEvent; ++iEvent) {
-        //        if (iEvent%(max(1,nEvent/nShow)) == 0) cout << " Now begin event "
-        //            << iEvent << "\n";
-        
+
         // Generate events. Quit if many failures.
         if (!pythia.next()) {
             if (++iAbort < nAbort) continue;
@@ -354,11 +376,20 @@ int main(int argc, char **argv) {
                 if (id == 22) hgam->Fill(x);
                 if (id == -2212) hantip->Fill(x);
             }
+            
+            //decayed by pythia
             if(pythia.event[i].statusAbs()==91) {
                 if(std::find(bHadrons.begin(), bHadrons.end(), idAbs) != bHadrons.end()) {
                     hBHad->Fill(pythia.event[i].e());
                 }
+                if(std::find(cHadrons.begin(), cHadrons.end(), idAbs) != cHadrons.end()) {
+                    hCHad->Fill(pythia.event[i].e());
+                }
+                if(std::find(lHadrons.begin(), lHadrons.end(), idAbs) != lHadrons.end()) {
+                    hLHad->Fill(pythia.event[i].e());
+                }
             }
+            
         }
         // Loop over anti-partons and fill histograms
         for (vector<Particle>::iterator ap = antip.begin(); ap != antip.end(); ap++)
