@@ -20,8 +20,22 @@
 
 //#define NDEBUG
 
-const std::vector<const unsigned int> bHadrons({511, 1, 2, 513, 523, 515, 525, 531, 533, 535, 541, 543, 545, 551, 553, 555, 557, 5122, 5112, 5212, 5222, 5114, 5214, 5224});
+const std::vector<const unsigned int> bHadrons({
+    511,
+    521,
+    551,
+    553,
+    5122, 5112, 5212, 5222, 5114, 5214, 5224
+});
+const std::vector<const unsigned int> cHadrons({
+    411,
+    421,
+    441,
+    443,
+    4122, 4222, 4212, 4112, 4232, 4132,
+});
 
+TH1D* hEnergySF = 0;
 
 //Returns the pdgId of the primary quark in the hadron
 int idQuark(int idHad) {
@@ -67,7 +81,7 @@ namespace avgEnergyLoss {
     }
     
     double E(double E0, int idHad, Pythia8::ParticleData* pdt) {
-       
+        
         int idQ = idQuark(idHad);
         double Z = x(idQ, idHad, pdt)*z(idQ);
         double tstop = tint/(1-Z);
@@ -130,8 +144,11 @@ bool BCHadronDecay::decay(vector<int>& idProd, vector<double>& mProd,
     
     //FIXME: Put proper energy reduction formula here
     double e_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
+    double sf = e_new/p4.e();
+    Vec4 p4_out = p4 * sf;
+    hEnergySF->Fill(sf);
     
-    Vec4 p4_out(p4.px(), p4.py(), p4.pz(), e_new);
+    //Vec4 p4_out(p4.px(), p4.py(), p4.pz(), e_new);
     pProd.push_back(p4_out);
     
     idProd.push_back(39);
@@ -171,8 +188,8 @@ public:
 //**************************************************************************
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
-    gsl_set_error_handler (&gslErrorHandler); 
-
+    gsl_set_error_handler (&gslErrorHandler);
+    
     if (argc < 5) {
         cout << "Usage: ./gen part DMmass output.root params.card" << endl;
         return 1;
@@ -234,8 +251,12 @@ int main(int argc, char **argv) {
         handledBCHadrons.push_back(id);
         handledBCHadrons.push_back(-id);
     }
+    for(auto& id : cHadrons) {
+        handledBCHadrons.push_back(id);
+        handledBCHadrons.push_back(-id);
+    }
     
-    //pythia.setDecayPtr( handleBCHadDecays, handledBCHadrons);
+    pythia.setDecayPtr( handleBCHadDecays, handledBCHadrons);
     
     pythia.init();
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
@@ -256,6 +277,8 @@ int main(int argc, char **argv) {
     TH1D *hnutau = new TH1D("nutau","Tau nu distribution",300,-9,0);
     TH1D *hgam = new TH1D("gam","Gamma distribution",300,-9,0);
     TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",300,0,100);
+    hEnergySF = new TH1D("ESF","Energy loss scale factor",300,0,1);
+    
     vector<Particle> antip;
     vector<Particle> antin;
     // Begin event loop.
@@ -321,7 +344,7 @@ int main(int argc, char **argv) {
         for (int i = 0; i < pythia.event.size(); ++i) {
             int id = pythia.event[i].id();
             int idAbs = abs(id);
-
+            
             if (pythia.event[i].isFinal()) {
                 double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
                 if (idAbs == 11) hel->Fill(x);
