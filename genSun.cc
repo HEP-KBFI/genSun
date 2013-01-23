@@ -290,18 +290,21 @@ int main(int argc, char **argv) {
     
     TFile f(argv[3],"RECREATE");
     
-    TH1D *hantip = new TH1D("antip","Antiproton distribution",300,-9,0);
-    TH1D *hantin = new TH1D("antin","Antineutron distribution",300,-9,0);
-    TH2D *hantid = new TH2D("antid","Antideteron distribution",300,-9,0,400,0,0.4);
-    TH1D *hel = new TH1D("el","Electron distribution",300,-9,0);
-    TH1D *hnuel = new TH1D("nuel","Electron nu distribution",300,-9,0);
-    TH1D *hnumu = new TH1D("numu","Muon nu distribution",300,-9,0);
-    TH1D *hnutau = new TH1D("nutau","Tau nu distribution",300,-9,0);
-    TH1D *hgam = new TH1D("gam","Gamma distribution",300,-9,0);
-    TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",300,0,200);
-    TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",300,0,150);
-    TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",300,0,30);
-    hEnergySF = new TH1D("ESF","Energy loss scale factor",300,0,1);
+    const unsigned int nBins = 500;
+    
+    TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,5);
+    TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,5);
+    TH2D *hantid = new TH2D("antid","Antideteron distribution",nBins,-9,0,400,0,0.4);
+    TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,5);
+    TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,5);
+    TH1D *hnumu = new TH1D("numu","Muon nu distribution",nBins,-9,5);
+    TH1D *hnumuE = new TH1D("numuE","Muon nu energy distribution",nBins,0,500);
+    TH1D *hnutau = new TH1D("nutau","Tau nu distribution",nBins,-9,5);
+    TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,5);
+    TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",nBins,0,200);
+    TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",nBins,0,150);
+    TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",nBins,0,30);
+    hEnergySF = new TH1D("ESF","Energy loss scale factor",nBins,0,1);
     
     vector<Particle> antip;
     vector<Particle> antin;
@@ -372,6 +375,7 @@ int main(int argc, char **argv) {
                 if (idAbs == 11) hel->Fill(x);
                 if (idAbs == 12) hnuel->Fill(x);
                 if (idAbs == 14) hnumu->Fill(x);
+                if (idAbs == 14) hnumuE->Fill(pythia.event[i].e());
                 if (idAbs == 16) hnutau->Fill(x);
                 if (id == 22) hgam->Fill(x);
                 if (id == -2212) hantip->Fill(x);
