@@ -18,7 +18,7 @@
 #include <vector>
 //#include <initializer_list>
 
-//#define NDEBUG
+#define NDEBUG
 
 const std::vector<const unsigned int> bHadrons({
     511,
@@ -124,12 +124,18 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
                           vector<Vec4>& pProd, int iDec, const Event& event) {
     
 #ifdef NDEBUG
-    cout << "Decaying particle id" << idProd[0] << ", index " << iDec << ", status: " << event[iDec].status() << "\n";
+    cout << "Decaying particle id " << idProd[0] << ", index " << iDec << ", status " << event[iDec].status() << "\n";
+#endif
+
+#ifdef NDEBUG
+    event.list();
 #endif
 
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
-        //Decay normally
+#ifdef NDEBUG
+    cout << "This particle has already decayed externally, decaying normally.\n";
+#endif
         return false;
     }
     int id = idProd[0];
@@ -137,14 +143,18 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     Vec4 p4 = pProd[0];
     idProd.push_back(id);
     mProd.push_back(m);
+    /*
     if (event[iDec].tau() < event[iDec].tau0()) {
         pProd.push_back(p4);
+#ifdef NDEBUG
+        cout << "Lifetime not exceeded: " << event[iDec].tau() " < " << event[iDec].tau0() << "\n";
+#endif
         return true;
-    }
+    }*/
 
     Vec4 p4_out = energyLoss(p4, id, iDec, event);
     pProd.push_back(p4_out);
-    
+
     //Create fake graviton to respect energy conservation
     idProd.push_back(39);
     mProd.push_back(0);
@@ -314,10 +324,20 @@ int main(int argc, char **argv) {
 
         // Generate events. Quit if many failures.
         if (!pythia.next()) {
-            if (++iAbort < nAbort) continue;
+            if (++iAbort < nAbort) {
+#ifdef NDEBUG
+                cout << "Error generating event!\n";
+#endif
+                continue;
+            }
             cout << " Event generation aborted prematurely, owing to error!\n";
             break;
         }
+        
+#ifdef NDEBUG
+        cout << "Listing final event content.\n";
+        pythia.event.list();
+#endif
         
         // Here's where we have to decay the particles that were still left intact
         // 1. loop over all particles and add at the end of the event copies of those while they are standing still
