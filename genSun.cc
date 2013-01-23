@@ -20,6 +20,7 @@
 
 #define NDEBUG
 
+//For convenience, list the absolute pdgId values of b, c and light hadrons
 const std::vector<const unsigned int> bHadrons({
     511,
     521,
@@ -40,7 +41,8 @@ const std::vector<const unsigned int> lHadrons({
 
 TH1D* hEnergySF = 0;
 
-//Returns the pdgId of the primary quark in the hadron
+//Returns the pdgId of the primary quark in the hadron by getting the first digit
+// of the absolute value.
 int idQuark(int idHad) {
     
     std::ostringstream os;
@@ -143,7 +145,11 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     Vec4 p4 = pProd[0];
     idProd.push_back(id);
     mProd.push_back(m);
+    
+    
     /*
+    //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
+    //do it already before calling the decay method?
     if (event[iDec].tau() < event[iDec].tau0()) {
         pProd.push_back(p4);
 #ifdef NDEBUG
@@ -165,6 +171,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     
 }
 
+//B or C hadrons lose energy in a continous way
 class BCHadronDecay : public EnergyLossDecay {
 
 public:
@@ -180,6 +187,7 @@ protected:
     }
 };
 
+//Light hadrons just stop
 class LHadronDecay : public EnergyLossDecay {
 
 public:
@@ -194,7 +202,6 @@ protected:
 };
 
 // A derived class for (e+ e- ->) GenericResonance -> various final states.
-
 class Sigma1GenRes : public Sigma1Process {
     
 public:
@@ -260,6 +267,7 @@ int main(int argc, char **argv) {
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
     
+    //Flags that control if BC and/or L should be reduced in energy before decaying
     bool reduceBC = true;
     bool reduceL = true;
     
@@ -339,6 +347,12 @@ int main(int argc, char **argv) {
         pythia.event.list();
 #endif
         
+        // FIXME: This decay hack is from the old method and probably can be done
+        // instead using a specific decay handler for leptons (basically just add
+        // Leptons to the LDecayHandler. However, it is to be checked if this gives
+        // the same result as the calculation below!
+        // --JP
+        
         // Here's where we have to decay the particles that were still left intact
         // 1. loop over all particles and add at the end of the event copies of those while they are standing still
         int nn = pythia.event.size();
@@ -383,9 +397,13 @@ int main(int argc, char **argv) {
                     hantin->Fill(x);
                 }
             }
+        
+        //FIXME: Why are we decaying protons?
         pythia.particleData.mayDecay(2112,true);
         pythia.moreDecays();
         pythia.particleData.mayDecay(2112,false);
+        
+        
         for (int i = 0; i < pythia.event.size(); ++i) {
             int id = pythia.event[i].id();
             int idAbs = abs(id);
@@ -401,7 +419,8 @@ int main(int argc, char **argv) {
                 if (id == -2212) hantip->Fill(x);
             }
             
-            //decayed by pythia
+            //Fill histograms for particles that have been decayed by pythia
+            //even if they are not "final" particles
             if(pythia.event[i].statusAbs()==91) {
                 if(std::find(bHadrons.begin(), bHadrons.end(), idAbs) != bHadrons.end()) {
                     hBHad->Fill(pythia.event[i].e());
