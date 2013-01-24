@@ -18,7 +18,7 @@
 #include <vector>
 //#include <initializer_list>
 
-#define NDEBUG
+//#define NDEBUG
 
 //For convenience, list the absolute pdgId values of b, c and light hadrons
 const std::vector<const unsigned int> bHadrons({
@@ -37,6 +37,10 @@ const std::vector<const unsigned int> cHadrons({
 });
 const std::vector<const unsigned int> lHadrons({
     111, 211,
+});
+
+const std::vector<const unsigned int> misclight({
+13,15,4,5,6,23,24,25
 });
 
 TH1D* hEnergySF = 0;
@@ -133,6 +137,17 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     event.list();
 #endif
 
+/*
+    //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
+    //do it already before calling the decay method?
+    if (event[iDec].tau() < event[iDec].tau0()) {
+        //pProd.push_back(p4);
+#ifdef NDEBUG
+        cout << "Lifetime not exceeded: " << event[iDec].tau() << " < " << event[iDec].tau0() << "\n";
+#endif
+        return true;
+    }
+*/
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
 #ifdef NDEBUG
@@ -146,17 +161,11 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     idProd.push_back(id);
     mProd.push_back(m);
     
+    double tau = event[iDec].tau();
+    double tau0 = event[iDec].tau0();
     
-    /*
-    //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
-    //do it already before calling the decay method?
-    if (event[iDec].tau() < event[iDec].tau0()) {
-        pProd.push_back(p4);
-#ifdef NDEBUG
-        cout << "Lifetime not exceeded: " << event[iDec].tau() " < " << event[iDec].tau0() << "\n";
-#endif
-        return true;
-    }*/
+    
+
 
     Vec4 p4_out = energyLoss(p4, id, iDec, event);
     pProd.push_back(p4_out);
@@ -266,7 +275,8 @@ int main(int argc, char **argv) {
     int nAbort = pythia.mode("Main:timesAllowErrors");
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
-    
+    pythia.readString("ParticleDecays:limitTau = on");
+
     //Flags that control if BC and/or L should be reduced in energy before decaying
     bool reduceBC = true;
     bool reduceL = true;
@@ -308,7 +318,7 @@ int main(int argc, char **argv) {
     
     TFile f(argv[3],"RECREATE");
     
-    const unsigned int nBins = 500;
+    const unsigned int nBins = 10000;
     
     TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,5);
     TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,5);
@@ -316,7 +326,7 @@ int main(int argc, char **argv) {
     TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,5);
     TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,5);
     TH1D *hnumu = new TH1D("numu","Muon nu distribution",nBins,-9,5);
-    TH1D *hnumuE = new TH1D("numuE","Muon nu energy distribution",nBins,0,500);
+    TH1D *hnumuE = new TH1D("numuE","Muon nu energy distribution",nBins,0,10000);
     TH1D *hnutau = new TH1D("nutau","Tau nu distribution",nBins,-9,5);
     TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,5);
     TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",nBins,0,200);
@@ -356,12 +366,13 @@ int main(int argc, char **argv) {
         // Here's where we have to decay the particles that were still left intact
         // 1. loop over all particles and add at the end of the event copies of those while they are standing still
         int nn = pythia.event.size();
-        //cout << "Event originally had " << pythia.event.size() << " particles" << endl;
         for (int i=0; i < nn; ++i)
             if (pythia.event[i].isFinal()) {
                 int id = pythia.event[i].id();
                 int idAbs = abs(id);
                 double m = pythia.event[i].mass();
+                
+                //mu, tau, c, b, t, Z0, W+-, H0
                 if (idAbs == 13 || idAbs == 15 || idAbs == 4 || idAbs == 5 || idAbs == 6 || idAbs == 23 || idAbs == 24 || idAbs == 25) {
                     // If it's one of the relevant particles, then add a respective particle to the event, but at rest
                     pythia.event.append(id,1,0,0,0.,0.,0.,m,m);
@@ -371,9 +382,9 @@ int main(int argc, char **argv) {
         
         //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
         // Force the new particles to decay
-        //pythia.readString("ParticleDecays:limitTau = off");
+        pythia.readString("ParticleDecays:limitTau = off");
         pythia.moreDecays();
-        //pythia.readString("ParticleDecays:limitTau = on");
+        pythia.readString("ParticleDecays:limitTau = on");
         //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
         
         // List first few events.
