@@ -11,14 +11,32 @@
 
 #include <cstdlib>
 #include <cassert>
-#include <specfunc/gsl_sf.h>
-#include <gsl_math.h>
-#include <gsl_errno.h>
+#include <gsl/gsl_sf.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_rng.h>
+#include <gsl/gsl_randist.h>
 
 #include <vector>
 //#include <initializer_list>
 
 //#define NDEBUG
+
+//Set up the GSL random number generation
+const gsl_rng_type * randomGeneratorType;
+gsl_rng * rng;
+
+void seedRandom() {
+    ifstream f("/dev/urandom");
+    unsigned long seed;
+    f.read(reinterpret_cast<char*>(&seed), sizeof(seed));
+    cout << "Setting GSL random seed to " << seed << endl;
+    gsl_rng_set(rng, seed); 
+}
+
+#ifdef NDEBUG
+unsigned int countHeavyHadProbabilisticLosses = 0;
+#endif
 
 //For convenience, list the absolute pdgId values of b, c and light hadrons
 const std::vector<const unsigned int> bHadrons({
@@ -39,8 +57,8 @@ const std::vector<const unsigned int> lHadrons({
     111, 211,
 });
 
-const std::vector<const unsigned int> misclight({
-13,15,4,5,6,23,24,25
+const std::vector<const unsigned int> chLeptons({
+13,15
 });
 
 TH1D* hEnergySF = 0;
@@ -59,6 +77,16 @@ int idQuark(int idHad) {
 
 void gslErrorHandler(const char* reason, const char* file, int line, int gsl_errno) {
     cerr << "GSL error: " << gsl_errno << " in file " << file << " with reason '" << reason << "'\n";
+}
+
+//samples a number from the power distribution
+double powerDistributionRandom(double xu, double xl, double n) {
+    double y = gsl_rng_uniform(rng);
+    double x = pow(
+        (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
+        n/(n+1.0)
+    );
+    return x;
 }
 
 //Calculates the average energy loss that a B or C hadron suffers in
@@ -85,6 +113,14 @@ namespace avgEnergyLoss {
         return GSL_NAN;
     }
     
+    double Ecr(double E0, int idHad, Pythia8::ParticleData* pdt) {
+        int idQ = idQuark(idHad);
+        double Z = x(idQ, idHad, pdt)*z(idQ);
+        double tstop = tint/(1.0-Z);
+        double Ec = (pdt->m0(idHad))*tstop/tdec;
+        return Ec;
+    }
+    
     double E(double E0, int idHad, Pythia8::ParticleData* pdt) {
         
         int idQ = idQuark(idHad);
@@ -99,6 +135,42 @@ namespace avgEnergyLoss {
             _E = Ec*exp(_x)*f;
         }
         return _E;
+    }
+}
+
+namespace energyLossDistributions {
+
+    //Charged lepton energy loss rate in the Sun [GeV/s].
+    const double chLeptonELossRate = 0.8E10;
+
+    //Draws the energy loss from the exponential distribution p(x)=\exp(x_0 - x) where
+    // x = E_cr / E and x_0 = E_cr / E_0 with E_cr depending on the hadron species
+    
+    //FIXME: draw value for x from gsl_ran_exponential
+    double E_hadronic(double E0, int idHad, Pythia8::ParticleData* pdt) {
+    
+        // The PDF for x is p(x)=\exp(x_0 - x) with normalization \int_x0^\infty p(x) dx = 1
+        // Thus by change of variables u = x_0 - x we have an exponential distribution
+        // \exp(u) with mean 1
+        double u = gsl_ran_exponential(rng, 1.0);
+        double Ecr = avgEnergyLoss::Ecr(E0, idHad, pdt);
+        double x0 = Ecr/E0;
+        
+        double x = u + x0;
+        double E = Ecr/x;
+        return E;
+    }
+    
+    double chLeptonExponent(const int idLep, Pythia8::ParticleData* pdt) {
+        const double& E = energyLossDistributions::chLeptonELossRate;
+        return pdt->tau0(idLep) * E / pdt->m0(idLep);
+    }
+    
+    double E_leptonic(double E0, const int idLep, Pythia8::ParticleData* pdt) {
+        double p = chLeptonExponent(idLep, pdt);
+        double x = powerDistributionRandom(0, 1, p);
+        double E = E0*x;
+        return E;
     }
 }
 
@@ -123,6 +195,8 @@ protected:
     
     // Pointer to the random number generator.
     Rndm* rndmPtr;
+    
+    TH1D* hEAfterLoss = 0;
     
 };
 
@@ -163,9 +237,6 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     
     double tau = event[iDec].tau();
     double tau0 = event[iDec].tau0();
-    
-    
-
 
     Vec4 p4_out = energyLoss(p4, id, iDec, event);
     pProd.push_back(p4_out);
@@ -175,37 +246,97 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     mProd.push_back(0);
     pProd.push_back(p4-p4_out);
     
+    this->hEAfterLoss->Fill(p4_out.e());
+    
     //This particle decayed successfully externally
     return true;
     
 }
 
-//B or C hadrons lose energy in a continous way
-class BCHadronDecay : public EnergyLossDecay {
+// B or C hadrons lose energy in a continous way, based on the initial energy
+// and the average energy loss. Based on Ritz-Seckel 2.5 (15)-(18)
+class BCHadronDecayAverage : public EnergyLossDecay {
 
 public:
-    BCHadronDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {}
+    BCHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
+    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
+        h_sf = new TH1D("hHeavyHadronAverageESF", "heavy hadron E/E_{0} average scale factor", 300, 0, 1);
+        hEAfterLoss = new TH1D("hHeavyHadronEAfterAverageLoss", "heavy hadron E after average energy loss", 10000, 0, 10000);
+    }
 
+private:
+    TH1D* h_sf;
+    
 protected:
     Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
         double e_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
         double sf = e_new/p4.e();
+        this->h_sf->Fill(sf);
+        Vec4 p4_out = p4*sf;
+        return p4_out;
+    }
+};
+
+class HeavyHadronDecayProbabilistic : public EnergyLossDecay {
+
+public:
+    HeavyHadronDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
+    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
+        h_sf = new TH1D("hHeavyHadronProbabilisticESF", "heavy hadron E/E_{0} probabilistic scale factor", 300, 0, 1);
+        hEAfterLoss = new TH1D("hHeavyHadronEAfterProbabilisticLoss", "heavy hadron E after probabilistic energy loss", 10000, 0, 10000);
+    }
+    
+private:
+    TH1D* h_sf;
+
+protected:
+    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
+    
+#ifdef NDEBUG
+        countHeavyHadProbabilisticLosses++;
+#endif
+        double e_new = energyLossDistributions::E_hadronic(p4.e(), id, pdtPtr);
+        double sf = e_new/p4.e();
+        this->h_sf->Fill(sf);
         Vec4 p4_out = p4*sf;
         return p4_out;
     }
 };
 
 //Light hadrons just stop
-class LHadronDecay : public EnergyLossDecay {
+class LHadronDecayAverage : public EnergyLossDecay {
 
 public:
-    LHadronDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {}
+    LHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
+    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
+        hEAfterLoss = new TH1D("hLightHadronEAfterAverageLoss", "light hadron E after average energy loss", 10000, 0, 10000);
+    }
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
         Vec4 p4_out(0, 0, 0, pdtPtr->m0(id));
+        return p4_out;
+    }
+};
+
+class CHLeptonDecayProbabilistic : public EnergyLossDecay {
+
+public:
+    CHLeptonDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
+    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
+        h_sf = new TH1D("hChargedLeptonProbabilisticESF", "charged lepton E/E_{0} probabilistic scale factor", 300, 0, 1);
+        hEAfterLoss = new TH1D("hChargedLeptonEAfterProbabilisticLoss", "charged lepton E after probabilistic energy loss", 10000, 0, 10000);
+    }
+
+private:
+    TH1D* h_sf;
+    
+protected:
+    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
+        double e_new = energyLossDistributions::E_leptonic(p4.e(), id, pdtPtr);
+        double sf = e_new/p4.e();
+        this->h_sf->Fill(sf);
+        Vec4 p4_out = p4*sf;
         return p4_out;
     }
 };
@@ -233,6 +364,14 @@ public:
 
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
+    
+    //Set up the GSL random number generator from the environment variables
+    //GSL_RNG_SEED=123
+    //GSL_RNG_TYPE=mrg <- multiple recursive generator
+    gsl_rng_env_setup();
+    randomGeneratorType = gsl_rng_default;
+    rng = gsl_rng_alloc (randomGeneratorType);
+    seedRandom();
     
     if (argc < 5) {
         cout << "Usage: ./gen part DMmass output.root params.card" << endl;
@@ -275,17 +414,20 @@ int main(int argc, char **argv) {
     int nAbort = pythia.mode("Main:timesAllowErrors");
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
-    pythia.readString("ParticleDecays:limitTau = on");
+    pythia.readString("ParticleDecays:limitTau = off");
 
     //Flags that control if BC and/or L should be reduced in energy before decaying
     bool reduceBC = true;
     bool reduceL = true;
+    bool reduceChargedLepton = true;
     
+    TFile f(argv[3],"RECREATE");
     
     //Add energy loss decay for b and c hadrons
     if (reduceBC) {
-        DecayHandler* handleBCHadDecays = new BCHadronDecay(&pythia.particleData,
-                                                            &pythia.rndm);
+        DecayHandler* handleBCHadDecays = new HeavyHadronDecayProbabilistic(
+            &pythia.particleData, &pythia.rndm
+        );
         vector<int> handledBCHadrons;
         for(auto& id : bHadrons) {
             handledBCHadrons.push_back(id);
@@ -300,7 +442,7 @@ int main(int argc, char **argv) {
     
     if (reduceL) {
         //Add energy loss decay for light
-        DecayHandler* handleLHadDecays = new LHadronDecay(&pythia.particleData,
+        DecayHandler* handleLHadDecays = new LHadronDecayAverage(&pythia.particleData,
                                                           &pythia.rndm);
         vector<int> handledLHadrons;
         for(auto& id : lHadrons) {
@@ -310,13 +452,22 @@ int main(int argc, char **argv) {
         pythia.setDecayPtr( handleLHadDecays, handledLHadrons);
     }
     
+    if (reduceChargedLepton) {
+        DecayHandler* handleChLepDecays = new CHLeptonDecayProbabilistic(&pythia.particleData,
+                                                          &pythia.rndm);
+        vector<int> handledChLeptons;
+        for(auto& id : chLeptons) {
+            handledChLeptons.push_back(id);
+            handledChLeptons.push_back(-id);
+        }
+        pythia.setDecayPtr( handleChLepDecays, handledChLeptons);
+    }
+    
     
     pythia.init();
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
     if (showCS)  pythia.settings.listChanged();
     if (showCPD) pythia.particleData.listChanged();
-    
-    TFile f(argv[3],"RECREATE");
     
     const unsigned int nBins = 10000;
     
@@ -469,5 +620,9 @@ int main(int argc, char **argv) {
     f.Write();
     f.Close();
     // Done.
+    
+#ifdef NDEBUG
+        cout << "Performed " << countHeavyHadPorbabilisticLosses << " heavy hadron probabilistic energy losses\";
+#endif
     return 0;
 }
