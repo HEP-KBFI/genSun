@@ -31,7 +31,7 @@ void seedRandom() {
     unsigned long seed;
     f.read(reinterpret_cast<char*>(&seed), sizeof(seed));
     cout << "Setting GSL random seed to " << seed << endl;
-    gsl_rng_set(rng, seed); 
+    gsl_rng_set(rng, seed);
 }
 
 TH1D* hEnergySF = 0;
@@ -56,9 +56,9 @@ void gslErrorHandler(const char* reason, const char* file, int line, int gsl_err
 double powerDistributionRandom(double xu, double xl, double n) {
     double y = gsl_rng_uniform(rng);
     double x = pow(
-        (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
-        n/(n+1.0)
-    );
+                   (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
+                   n/(n+1.0)
+                   );
     return x;
 }
 
@@ -112,16 +112,16 @@ namespace avgEnergyLoss {
 }
 
 namespace energyLossDistributions {
-
+    
     //Charged lepton energy loss rate in the Sun [GeV/s].
     const double chLeptonELossRate = 0.8E10;
-
+    
     //Draws the energy loss from the exponential distribution p(x)=\exp(x_0 - x) where
     // x = E_cr / E and x_0 = E_cr / E_0 with E_cr depending on the hadron species
     
     //FIXME: draw value for x from gsl_ran_exponential
     double E_hadronic(double E0, int idHad, Pythia8::ParticleData* pdt) {
-    
+        
         // The PDF for x is p(x)=\exp(x_0 - x) with normalization \int_x0^\infty p(x) dx = 1
         // Thus by change of variables u = x_0 - x we have an exponential distribution
         // \exp(u) with mean 1
@@ -234,19 +234,19 @@ protected:
 };
 
 bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
-                          vector<Vec4>& pProd, int iDec, const Event& event) {
+                            vector<Vec4>& pProd, int iDec, const Event& event) {
     
-/*
-    //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
-    //do it already before calling the decay method?
-    if (event[iDec].tau() < event[iDec].tau0()) {
-        //pProd.push_back(p4);
-#ifdef NDEBUG
-        cout << "Lifetime not exceeded: " << event[iDec].tau() << " < " << event[iDec].tau0() << "\n";
-#endif
-        return true;
-    }
-*/
+    /*
+     //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
+     //do it already before calling the decay method?
+     if (event[iDec].tau() < event[iDec].tau0()) {
+     //pProd.push_back(p4);
+     #ifdef NDEBUG
+     cout << "Lifetime not exceeded: " << event[iDec].tau() << " < " << event[iDec].tau0() << "\n";
+     #endif
+     return true;
+     }
+     */
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
         return false;
@@ -261,10 +261,10 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     
     double tau = event[iDec].tau();
     double tau0 = event[iDec].tau0();
-
+    
     Vec4 p4_out = energyLoss(p4, id, iDec, event);
     pProd.push_back(p4_out);
-
+    
     //Create fake graviton to respect energy conservation
     idProd.push_back(39);
     mProd.push_back(0);
@@ -280,7 +280,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
 // B or C hadrons lose energy in a continous way, based on the initial energy
 // and the average energy loss. Based on Ritz-Seckel 2.5 (15)-(18)
 class HeavyHadronDecayAverage : public EnergyLossDecay {
-
+    
 public:
     HeavyHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
@@ -288,7 +288,7 @@ public:
         hEAfterLoss = new TH1D("hHeavyHadronEAfterAverageLoss", "heavy hadron E after average energy loss", 10000, 0, 10000);
         hEBeforeLoss = new TH1D("hHeavyHadronEBeforeAverageLoss", "heavy hadron E before average energy loss", 10000, 0, 10000);
     }
-
+    
 private:
     TH1D* h_sf;
     
@@ -303,7 +303,7 @@ protected:
 };
 
 class HeavyHadronDecayProbabilistic : public EnergyLossDecay {
-
+    
 public:
     HeavyHadronDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
@@ -314,7 +314,7 @@ public:
     
 private:
     TH1D* h_sf;
-
+    
 protected:
     Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
         double e_new = energyLossDistributions::E_hadronic(p4.e(), id, pdtPtr);
@@ -327,7 +327,7 @@ protected:
 
 //Light hadrons just stop
 class LHadronDecayAverage : public EnergyLossDecay {
-
+    
 public:
     LHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
@@ -343,7 +343,7 @@ protected:
 };
 
 class CHLeptonDecayAverage : public EnergyLossDecay {
-
+    
 public:
     CHLeptonDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
@@ -359,7 +359,7 @@ protected:
 };
 
 class CHLeptonDecayProbabilistic : public EnergyLossDecay {
-
+    
 public:
     CHLeptonDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
@@ -367,7 +367,7 @@ public:
         hEAfterLoss = new TH1D("hChargedLeptonEAfterProbabilisticLoss", "charged lepton E after probabilistic energy loss", 10000, 0, 10000);
         hEBeforeLoss = new TH1D("hChargedLeptonEBeforeProbabilisticLoss", "charged lepton E before probabilistic energy loss", 10000, 0, 10000);
     }
-
+    
 private:
     TH1D* h_sf;
     
@@ -424,7 +424,7 @@ int main(int argc, char **argv) {
     });
     
     const std::vector<unsigned int> chLeptons({
-    13,15
+        13,15
     });
     
     //Set up the GSL random number generator from the environment variables
@@ -450,7 +450,7 @@ int main(int argc, char **argv) {
     int chLeptonELossInstruction = atoi(argv[7]);
     
     if (partId == 23 || partId == 25) apartId = partId; else apartId = -partId;
-
+    
     Pythia pythia;
     
     // A class to generate the fictitious resonance initial state.
@@ -481,7 +481,7 @@ int main(int argc, char **argv) {
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
     pythia.readString("ParticleDecays:limitTau = on");
-
+    
     //Flags that control if BC and/or L should be reduced in energy before decaying
     bool reduceBC = true;
     bool reduceL = true;
@@ -497,8 +497,8 @@ int main(int argc, char **argv) {
         if (hHadronELossInstruction == 1) {
             cout << "Decaying heavy hadron energy by HeavyHadronDecayAverage" << endl;
             handleBCHadDecays = new HeavyHadronDecayAverage(
-                                                                  &pythia.particleData, &pythia.rndm
-                                                                  );
+                                                            &pythia.particleData, &pythia.rndm
+                                                            );
             
         } else if (hHadronELossInstruction == 2) {
             cout << "Decaying heavy hadron energy by HeavyHadronDecayProbabilistic" << endl;
@@ -528,7 +528,7 @@ int main(int argc, char **argv) {
         DecayHandler* handleLHadDecays = 0;
         if (lHadronELossInstruction == 1) {
             cout << "Decaying light hadron energy by LHadronDecayAverage" << endl;
-
+            
             handleLHadDecays = new LHadronDecayAverage(&pythia.particleData,
                                                        &pythia.rndm);
         } else {
@@ -542,7 +542,7 @@ int main(int argc, char **argv) {
             handledLHadrons.push_back(-id);
         }
         mainDecayHandler->addHandler(handleLHadDecays, handledLHadrons);
-
+        
         //pythia.setDecayPtr(handleLHadDecays, handledLHadrons);
     }
     
@@ -550,9 +550,9 @@ int main(int argc, char **argv) {
         DecayHandler* handleChLepDecays = 0;
         if (chLeptonELossInstruction == 1) {
             cout << "Decaying charged lepton energy by CHLeptonDecayAverage" << endl;
-
+            
             handleChLepDecays = new CHLeptonDecayAverage(&pythia.particleData,
-                                                               &pythia.rndm);
+                                                         &pythia.rndm);
             
         } else if (chLeptonELossInstruction == 2) {
             cout << "Decaying charged lepton energy by CHLeptonDecayProbabilistic" << endl;
@@ -585,10 +585,16 @@ int main(int argc, char **argv) {
     TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,5);
     TH2D *hantid = new TH2D("antid","Antideteron distribution",nBins,-9,0,400,0,0.4);
     TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,5);
+    
     TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,5);
+    TH1D *hnuelE = new TH1D("nuelE","Electron nu energy distribution",nBins,0,10000);
+    
     TH1D *hnumu = new TH1D("numu","Muon nu distribution",nBins,-9,5);
     TH1D *hnumuE = new TH1D("numuE","Muon nu energy distribution",nBins,0,10000);
+    
     TH1D *hnutau = new TH1D("nutau","Tau nu distribution",nBins,-9,5);
+    TH1D *hnutauE = new TH1D("nutauE","Tau nu energy distribution",nBins,0,10000);
+    
     TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,5);
     TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",nBins,0,200);
     TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",nBins,0,150);
@@ -597,10 +603,10 @@ int main(int argc, char **argv) {
     
     vector<Particle> antip;
     vector<Particle> antin;
-
+    
     int iAbort = 0;
     for (int iEvent = 0; iEvent < nEvent; ++iEvent) {
-
+        
         // Generate events. Quit if many failures.
         if (!pythia.next()) {
             if (++iAbort < nAbort) {
@@ -675,10 +681,18 @@ int main(int argc, char **argv) {
             if (pythia.event[i].isFinal()) {
                 double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
                 if (idAbs == 11) hel->Fill(x);
-                if (idAbs == 12) hnuel->Fill(x);
-                if (idAbs == 14) hnumu->Fill(x);
-                if (idAbs == 14) hnumuE->Fill(pythia.event[i].e());
-                if (idAbs == 16) hnutau->Fill(x);
+                if (idAbs == 12) {
+                    hnuel->Fill(x);
+                    hnuelE->Fill(pythia.event[i].e());
+                }
+                if (idAbs == 14) {
+                    hnumu->Fill(x);
+                    hnumuE->Fill(pythia.event[i].e());
+                }
+                if (idAbs == 16) {
+                    hnutau->Fill(x);
+                    hnutauE->Fill(pythia.event[i].e());
+                }
                 if (id == 22) hgam->Fill(x);
                 if (id == -2212) hantip->Fill(x);
             }
@@ -724,7 +738,7 @@ int main(int argc, char **argv) {
     // Done.
     
 #ifdef NDEBUG
-        cout << "Performed " << countHeavyHadPorbabilisticLosses << " heavy hadron probabilistic energy losses\";
+    cout << "Performed " << countHeavyHadPorbabilisticLosses << " heavy hadron probabilistic energy losses\";
 #endif
     return 0;
 }
