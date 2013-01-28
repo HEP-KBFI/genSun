@@ -4,13 +4,9 @@
 // PYTHIA is licenced under the GNU GPL version 2, see COPYING for details.
 // Please respect the MCnet Guidelines, see GUIDELINES for details.
 
-#include "Pythia.h"
-#include "TFile.h"
-#include "TH1.h"
-#include "TH2.h"
 
-#include <cstdlib>
-#include <cassert>
+//#include <cstdlib>
+//#include <cassert>
 #include <gsl/gsl_sf.h>
 #include <gsl/gsl_math.h>
 #include <gsl/gsl_errno.h>
@@ -19,6 +15,10 @@
 
 #include <vector>
 //#include <initializer_list>
+#include <Pythia.h>
+#include <TFile.h>
+#include <TH1.h>
+#include <TH2.h>
 
 //#define NDEBUG
 
@@ -39,27 +39,27 @@ unsigned int countHeavyHadProbabilisticLosses = 0;
 #endif
 
 //For convenience, list the absolute pdgId values of b, c and light hadrons
-const std::vector<const unsigned int> bHadrons({
-    511,
-    521,
-    551,
-    553,
-    5122, 5112, 5212, 5222, 5114, 5214, 5224
-});
-const std::vector<const unsigned int> cHadrons({
-    411,
-    421,
-    441,
-    443,
-    4122, 4222, 4212, 4112, 4232, 4132,
-});
-const std::vector<const unsigned int> lHadrons({
-    111, 211,
-});
-
-const std::vector<const unsigned int> chLeptons({
-13,15
-});
+//const std::vector<const unsigned int> bHadrons({
+//    511,
+//    521,
+//    551,
+//    553,
+//    5122, 5112, 5212, 5222, 5114, 5214, 5224
+//});
+//const std::vector<const unsigned int> cHadrons({
+//    411,
+//    421,
+//    441,
+//    443,
+//    4122, 4222, 4212, 4112, 4232, 4132,
+//});
+//const std::vector<const unsigned int> lHadrons({
+//    111, 211,
+//});
+//
+//const std::vector<const unsigned int> chLeptons({
+//13,15
+//});
 
 TH1D* hEnergySF = 0;
 
@@ -364,6 +364,28 @@ public:
 
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
+    
+    const std::vector<unsigned int> bHadrons({
+        511,
+        521,
+        551,
+        553,
+        5122, 5112, 5212, 5222, 5114, 5214, 5224
+    });
+    const std::vector<unsigned int> cHadrons({
+        411,
+        421,
+        441,
+        443,
+        4122, 4222, 4212, 4112, 4232, 4132,
+    });
+    const std::vector<unsigned int> lHadrons({
+        111, 211,
+    });
+    
+    const std::vector<unsigned int> chLeptons({
+    13,15
+    });
     
     //Set up the GSL random number generator from the environment variables
     //GSL_RNG_SEED=123
