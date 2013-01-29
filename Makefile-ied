@@ -4,10 +4,10 @@ INCDIR=include
 SRCDIR=src
 LIBDIR=lib
 LIBDIRARCH=lib/archive
-PYTHIA8LOCATION=/Users/joosep/Documents/pythia8170
+PYTHIA8LOCATION=..
 CC=g++
 ROOTFLAGS=`root-config --cflags --ldflags --libs`
-CFLAGS= -std=c++11 -stdlib=libc++ $(ROOTFLAGS) -funsigned-char -keep_private_externs -arch x86_64 -O2 -pedantic -W -Wall -Wshadow -Wlong-long -Wunused-variable -I$(PYTHIA8LOCATION)/$(INCDIR)
-LDFLAGS= -L$(PYTHIA8LOCATION)/$(LIBDIRARCH) -O2 -pedantic -W -Wall -Wshadow -flat_namespace -lpythia8 -llhapdfdummy -lgsl
+CFLAGS= -w -std=c++11  $(ROOTFLAGS) -O2 -funsigned-char -I$(PYTHIA8LOCATION)/$(INCDIR)
+LDFLAGS= -L$(PYTHIA8LOCATION)/$(LIBDIRARCH) -O2 -lpythia8 -llhapdfdummy -lgsl -lgslcblas
 genSun: genSun.cc
 	$(CC) $(CFLAGS) $@.cc $(LDFLAGS) $(FILELIST) -v -o $@.exe
