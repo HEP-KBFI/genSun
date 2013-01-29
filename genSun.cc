@@ -55,10 +55,12 @@ void gslErrorHandler(const char* reason, const char* file, int line, int gsl_err
 //samples a number from the power distribution
 double powerDistributionRandom(double xu, double xl, double n) {
     double y = gsl_rng_uniform(rng);
-    double x = pow(
-                   (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
-                   n/(n+1.0)
-                   );
+//    double x = pow(
+//                   (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
+//                   n/(n+1.0)
+//                   );
+    double x = pow(y, n);
+
     return x;
 }
 
@@ -145,7 +147,9 @@ namespace energyLossDistributions {
     double E_leptonic(double E0, const int idLep, Pythia8::ParticleData* pdt) {
         double p = chLeptonExponent(idLep, pdt);
         double x = powerDistributionRandom(0, 1, p);
-        double E = E0*x;
+        
+        //The E should be between [m0...E0] with m0 being the rest mass and E0 the initial energy
+        double E = (pdt->m0(idLep)) + (E0-pdt->m0(idLep))*x;
         return E;
     }
 }
