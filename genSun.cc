@@ -256,7 +256,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     if (ELossHistMap.find(absId) == ELossHistMap.end()) {
         stringstream ss;
         ss << "ELossIdAbs" << absId;
-        ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 10000, 0, 10000, 10000, 0, 10000);
+        ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 10000, 1000, 0, 10000);
     }
     hELoss = ELossHistMap[absId];
     
