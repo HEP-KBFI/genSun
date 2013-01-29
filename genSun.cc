@@ -163,7 +163,7 @@ public:
     
     const std::vector<int> getHandledParticles();
     
-    ~SubDecayHandler();
+    //~SubDecayHandler();
     
     
 protected:
@@ -178,11 +178,8 @@ protected:
     
 };
 
-SubDecayHandler::~SubDecayHandler() {
-    //for (auto* elem : decayHandlers) {
-    //    delete elem;
-    //}
-}
+//SubDecayHandler::~SubDecayHandler() {
+//}
 
 void SubDecayHandler::addHandler(DecayHandler* handler, const std::vector<int>& particles) {
     decayHandlers.push_back(handler);
@@ -228,8 +225,10 @@ protected:
     // Pointer to the random number generator.
     Rndm* rndmPtr;
     
-    TH1D* hEAfterLoss = 0;
-    TH1D* hEBeforeLoss = 0;
+    //TH1D* hEAfterLoss = 0;
+    //TH1D* hEBeforeLoss = 0;
+    std::map<const unsigned int, TH2D*> ELossHistMap;
+    //std::map<const unsigned int, TH1D*> EBeforeLossHistMap;
 
     ~EnergyLossDecay() {};
     
@@ -249,6 +248,18 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
      return true;
      }
      */
+    
+    const unsigned int absId = abs(idProd[0]);
+    
+    TH2D* hELoss = 0;
+    
+    if (ELossHistMap.find(absId) == ELossHistMap.end()) {
+        stringstream ss;
+        ss << "ELossIdAbs" << absId;
+        ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 10000, 0, 10000, 10000, 0, 10000);
+    }
+    hELoss = ELossHistMap[absId];
+    
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
         return false;
@@ -258,9 +269,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     Vec4 p4 = pProd[0];
     idProd.push_back(id);
     mProd.push_back(m);
-    
-    this->hEBeforeLoss->Fill(p4.e());
-    
+        
     double tau = event[iDec].tau();
     double tau0 = event[iDec].tau0();
     
@@ -272,7 +281,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     mProd.push_back(0);
     pProd.push_back(p4-p4_out);
     
-    this->hEAfterLoss->Fill(p4_out.e());
+    hELoss->Fill(p4.e(), p4_out.e());
     
     //This particle decayed successfully externally
     return true;
@@ -287,8 +296,8 @@ public:
     HeavyHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
         h_sf = new TH1D("hHeavyHadronAverageESF", "heavy hadron E/E_{0} average scale factor", 300, 0, 1);
-        hEAfterLoss = new TH1D("hHeavyHadronEAfterAverageLoss", "heavy hadron E after average energy loss", 10000, 0, 10000);
-        hEBeforeLoss = new TH1D("hHeavyHadronEBeforeAverageLoss", "heavy hadron E before average energy loss", 10000, 0, 10000);
+        //hEAfterLoss = new TH1D("hHeavyHadronEAfterAverageLoss", "heavy hadron E after average energy loss", 10000, 0, 10000);
+        //hEBeforeLoss = new TH1D("hHeavyHadronEBeforeAverageLoss", "heavy hadron E before average energy loss", 10000, 0, 10000);
     }
     
 private:
@@ -310,8 +319,8 @@ public:
     HeavyHadronDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
         h_sf = new TH1D("hHeavyHadronProbabilisticESF", "heavy hadron E/E_{0} probabilistic scale factor", 300, 0, 1);
-        hEAfterLoss = new TH1D("hHeavyHadronEAfterProbabilisticLoss", "heavy hadron E after probabilistic energy loss", 10000, 0, 10000);
-        hEBeforeLoss = new TH1D("hHeavyHadronEBeforeProbabilisticLoss", "heavy hadron E before probabilistic energy loss", 10000, 0, 10000);
+        //hEAfterLoss = new TH1D("hHeavyHadronEAfterProbabilisticLoss", "heavy hadron E after probabilistic energy loss", 10000, 0, 10000);
+        //hEBeforeLoss = new TH1D("hHeavyHadronEBeforeProbabilisticLoss", "heavy hadron E before probabilistic energy loss", 10000, 0, 10000);
     }
     
 private:
@@ -333,8 +342,8 @@ class LHadronDecayAverage : public EnergyLossDecay {
 public:
     LHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-        hEAfterLoss = new TH1D("hLightHadronEAfterAverageLoss", "light hadron E after average energy loss", 10000, 0, 10000);
-        hEBeforeLoss = new TH1D("hLightHadronEBeforeAverageLoss", "light hadron E before average energy loss", 10000, 0, 10000);
+        //hEAfterLoss = new TH1D("hLightHadronEAfterAverageLoss", "light hadron E after average energy loss", 10000, 0, 10000);
+        //hEBeforeLoss = new TH1D("hLightHadronEBeforeAverageLoss", "light hadron E before average energy loss", 10000, 0, 10000);
     }
     
 protected:
@@ -349,8 +358,8 @@ class CHLeptonDecayAverage : public EnergyLossDecay {
 public:
     CHLeptonDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-        hEAfterLoss = new TH1D("hCHLeptonEAfterAverageLoss", "light hadron E after average energy loss", 10000, 0, 10000);
-        hEBeforeLoss = new TH1D("hCHLeptonEBeforeAverageLoss", "light hadron E before average energy loss", 10000, 0, 10000);
+        //hEAfterLoss = new TH1D("hCHLeptonEAfterAverageLoss", "light hadron E after average energy loss", 10000, 0, 10000);
+        //hEBeforeLoss = new TH1D("hCHLeptonEBeforeAverageLoss", "light hadron E before average energy loss", 10000, 0, 10000);
     }
     
 protected:
@@ -366,8 +375,8 @@ public:
     CHLeptonDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
     : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
         h_sf = new TH1D("hChargedLeptonProbabilisticESF", "charged lepton E/E_{0} probabilistic scale factor", 300, 0, 1);
-        hEAfterLoss = new TH1D("hChargedLeptonEAfterProbabilisticLoss", "charged lepton E after probabilistic energy loss", 10000, 0, 10000);
-        hEBeforeLoss = new TH1D("hChargedLeptonEBeforeProbabilisticLoss", "charged lepton E before probabilistic energy loss", 10000, 0, 10000);
+        //hEAfterLoss = new TH1D("hChargedLeptonEAfterProbabilisticLoss", "charged lepton E after probabilistic energy loss", 10000, 0, 10000);
+        //hEBeforeLoss = new TH1D("hChargedLeptonEBeforeProbabilisticLoss", "charged lepton E before probabilistic energy loss", 10000, 0, 10000);
     }
     
 private:
@@ -403,6 +412,15 @@ public:
     virtual string inFlux()  const {return "ffbarSame";}
     
 };
+
+TDirectory* subDir(TDirectory* f, const char* prefix, const int val) {
+    stringstream ss;
+    ss << prefix << "_" << val;
+    TDirectory* out = f->mkdir(ss.str().c_str());
+    //f.cd(ss.str().c_str());
+    out->cd();
+    return out;
+}
 
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
@@ -478,7 +496,7 @@ int main(int argc, char **argv) {
     // Extract settings to be used in the main program.
     int nEvent = pythia.mode("Main:numberOfEvents");
     int nList = pythia.mode("Main:numberToList");
-    int    nShow   = pythia.mode("Main:timesToShow");
+    int nShow = pythia.mode("Main:timesToShow");
     int nAbort = pythia.mode("Main:timesAllowErrors");
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
@@ -490,6 +508,11 @@ int main(int argc, char **argv) {
     bool reduceChargedLepton = true;
     
     TFile f(argv[3],"RECREATE");
+    
+    TDirectory* massDir = subDir(&f, "mass", (int)dmMass);
+    TDirectory* particleDir = subDir(massDir, "particle", (int)partId);
+    TDirectory* energyLossDir = subDir(particleDir, "energyloss",
+        (100*hHadronELossInstruction + 10*lHadronELossInstruction + chLeptonELossInstruction));
     
     //Add energy loss decay for b and c hadrons
     SubDecayHandler* mainDecayHandler = new SubDecayHandler(&pythia.particleData, &pythia.rndm);
@@ -601,7 +624,7 @@ int main(int argc, char **argv) {
     TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",nBins,0,200);
     TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",nBins,0,150);
     TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",nBins,0,30);
-    hEnergySF = new TH1D("ESF","Energy loss scale factor",nBins,0,1);
+    //hEnergySF = new TH1D("ESF","Energy loss scale factor",nBins,0,1);
     
     vector<Particle> antip;
     vector<Particle> antin;
@@ -618,19 +641,18 @@ int main(int argc, char **argv) {
             break;
         }
 
-        if(iEvent%nShow==0)
+        if(nShow>0 && iEvent%nShow==0)
             cout << "Processed " << iEvent << " events" << endl;
         
         // FIXME: This decay hack is from the old method and probably can be done
-        // instead using a specific decay handler for leptons (basically just add
-        // Leptons to the LDecayHandler. However, it is to be checked if this gives
-        // the same result as the calculation below!
+        // instead using a specific decay handler for leptons.
         // --JP
         
         // Here's where we have to decay the particles that were still left intact
         // 1. loop over all particles and add at the end of the event copies of those while they are standing still
         int nn = pythia.event.size();
         for (int i=0; i < nn; ++i)
+            /* //DEPRECATED
             if (pythia.event[i].isFinal()) {
                 int id = pythia.event[i].id();
                 int idAbs = abs(id);
@@ -643,12 +665,13 @@ int main(int argc, char **argv) {
                     //cout << " New particle: " << ni << " mayDecay = " << pythia.event[ni].mayDecay() << " tau=" << pythia.event[ni].tau() << endl;
                 }
             }
+            */
         
         //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
         // Force the new particles to decay
-        pythia.readString("ParticleDecays:limitTau = off");
-        pythia.moreDecays();
-        pythia.readString("ParticleDecays:limitTau = on");
+        //pythia.readString("ParticleDecays:limitTau = off");
+        //pythia.moreDecays();
+        //pythia.readString("ParticleDecays:limitTau = on");
         //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
         
         // List first few events.
@@ -657,7 +680,8 @@ int main(int argc, char **argv) {
             pythia.event.list();
         }
         
-        // Loop over all particles and analyze the final-state ones.
+        
+        //Get spectra of protons and neutrons
         for (int i = 0; i < pythia.event.size(); ++i)
             if (pythia.event[i].isFinal()) {
                 int id = pythia.event[i].id();
@@ -673,7 +697,7 @@ int main(int argc, char **argv) {
                 }
             }
         
-        //FIXME: Why are we decaying protons?
+        //FIXME: Why are we decaying neutrons?
         pythia.particleData.mayDecay(2112,true);
         pythia.moreDecays();
         pythia.particleData.mayDecay(2112,false);
@@ -736,14 +760,10 @@ int main(int argc, char **argv) {
         antin.clear();
         // End of event loop.
     }
-    cout << "Writing output" << endl;
+    cout << "Writing output from " << nEvent << " events." << endl;
     f.cd();
     f.Write();
     f.Close();
-    // Done.
     
-#ifdef NDEBUG
-    cout << "Performed " << countHeavyHadPorbabilisticLosses << " heavy hadron probabilistic energy losses\";
-#endif
     return 0;
 }
