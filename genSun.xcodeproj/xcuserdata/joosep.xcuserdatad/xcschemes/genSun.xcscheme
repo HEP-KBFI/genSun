@@ -60,11 +60,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "1"
+            argument = "6"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "200"
+            argument = "10000"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -73,6 +73,18 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/joosep/Documents/pythia8170/genSun/gammaPlusX.card"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "2"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "1"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "2"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

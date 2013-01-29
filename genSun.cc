@@ -179,9 +179,9 @@ protected:
 };
 
 SubDecayHandler::~SubDecayHandler() {
-    for (auto* elem : decayHandlers) {
-        delete elem;
-    }
+    //for (auto* elem : decayHandlers) {
+    //    delete elem;
+    //}
 }
 
 void SubDecayHandler::addHandler(DecayHandler* handler, const std::vector<int>& particles) {
@@ -217,7 +217,7 @@ public:
     
     bool decay(vector<int>& idProd, vector<double>& mProd,
                vector<Vec4>& pProd, int iDec, const Event& event);
-    
+       
 protected:
     
     virtual Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) = 0;
@@ -230,6 +230,8 @@ protected:
     
     TH1D* hEAfterLoss = 0;
     TH1D* hEBeforeLoss = 0;
+
+    ~EnergyLossDecay() {};
     
 };
 
@@ -435,8 +437,8 @@ int main(int argc, char **argv) {
     rng = gsl_rng_alloc (randomGeneratorType);
     seedRandom();
     
-    if (argc < 5) {
-        cout << "Usage: ./gen part DMmass output.root params.card" << endl;
+    if (argc != 8 ) {
+        cout << "Usage: ./gen part DMmass output.root params.card bchad lhad chlep" << endl;
         return 1;
     }
     gsl_set_error_handler(&gslErrorHandler);
@@ -476,7 +478,7 @@ int main(int argc, char **argv) {
     // Extract settings to be used in the main program.
     int nEvent = pythia.mode("Main:numberOfEvents");
     int nList = pythia.mode("Main:numberToList");
-    //int    nShow   = pythia.mode("Main:timesToShow");
+    int    nShow   = pythia.mode("Main:timesToShow");
     int nAbort = pythia.mode("Main:timesAllowErrors");
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
@@ -615,6 +617,9 @@ int main(int argc, char **argv) {
             cout << " Event generation aborted prematurely, owing to error!\n";
             break;
         }
+
+        if(iEvent%nShow==0)
+            cout << "Processed " << iEvent << " events" << endl;
         
         // FIXME: This decay hack is from the old method and probably can be done
         // instead using a specific decay handler for leptons (basically just add

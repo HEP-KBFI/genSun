@@ -1,9 +1,11 @@
-OF=out
+DMMASS=1000
+
+OF="out_m_"$DMMASS
 mkdir $OF
-particles=( 1 5 6 11 12 13 15 22 23 24 25  )
+particles=( 1 5 6 11 12 13 22 23 24 25  )
 for i in "${particles[@]}"
 do
-	LD_LIBRARY_PATH=/home/joosep/local/lib:$LD_LIBRARY_PATH time ./genSun.exe $i 1000 $OF/output$i.root gammaPlusX.card &> $OF/log$i & 
+	time ./genSun.exe $i $DMMASS $OF/output$i.root gammaPlusX.card 2 1 2 &> $OF/log$i & 
 done
 
 
