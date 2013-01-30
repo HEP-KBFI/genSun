@@ -2,7 +2,7 @@
 ! Lines not beginning with a letter or digit are comments.
 
 ! 1) Settings used in the main program.
-Main:numberOfEvents = 100000      ! number of events to generate
+Main:numberOfEvents = 5000000      ! number of events to generate
 Main:numberToList = 0              ! number of events to print
 Main:timesToShow = 0              ! show how far along run is
 Main:timesAllowErrors = 100      ! allow a few failures before quitting
