@@ -20,21 +20,30 @@
 #include <TH1.h>
 #include <TH2.h>
 
+#include <iostream>
+
 //#define NDEBUG
 
 //Set up the GSL random number generation
-const gsl_rng_type * randomGeneratorType;
-gsl_rng * rng;
+const gsl_rng_type * randomGeneratorType = 0;
+const gsl_rng * rng = 0;
+TH1D* hEnergySF = 0;
 
 void seedRandom() {
     ifstream f("/dev/urandom");
-    unsigned long seed;
-    f.read(reinterpret_cast<char*>(&seed), sizeof(seed));
-    cout << "Setting GSL random seed to " << seed << endl;
+    unsigned short seed=0;
+    if(f.good()) {
+        f.read(reinterpret_cast<char*>(&seed), sizeof(seed));
+        cout << "Setting GSL random seed to " << seed << endl;
+        f.close();
+
+    } else {
+        cerr << "Failed to open stream from /dev/urandom." << endl;
+    }
     gsl_rng_set(rng, seed);
+    return;
 }
 
-TH1D* hEnergySF = 0;
 
 //Returns the pdgId of the primary quark in the hadron by getting the first digit
 // of the absolute value.
@@ -474,7 +483,8 @@ int main(int argc, char **argv) {
     
     if (partId == 23 || partId == 25) apartId = partId; else apartId = -partId;
     
-    Pythia pythia;
+    Pythia* _pythia = new Pythia();
+    Pythia& pythia = *_pythia;
     
     // A class to generate the fictitious resonance initial state.
     SigmaProcess* sigma1GenRes = new Sigma1GenRes();
@@ -609,6 +619,8 @@ int main(int argc, char **argv) {
     
     const unsigned int nBins = 10000;
     
+    TH1I *hEventStatus = new TH1I("eventStatus","Event status distribution",2,0,2);
+
     TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,5);
     TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,5);
     TH2D *hantid = new TH2D("antid","Antideteron distribution",nBins,-9,0,400,0,0.4);
@@ -638,11 +650,13 @@ int main(int argc, char **argv) {
         // Generate events. Quit if many failures.
         if (!pythia.next()) {
             if (++iAbort < nAbort) {
+                hEventStatus->Fill(1);
                 continue;
             }
             cout << " Event generation aborted prematurely, owing to error!\n";
             break;
         }
+        hEventStatus->Fill(0);
 
         if(nShow>0 && iEvent%nShow==0)
             cout << "Processed " << iEvent << " events" << endl;
