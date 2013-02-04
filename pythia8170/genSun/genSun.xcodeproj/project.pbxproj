@@ -250,7 +250,7 @@
 				HEADER_SEARCH_PATHS = (
 					/Applications/root/include,
 					"/Users/joosep/Documents/gsl/**",
-					/Users/joosep/Documents/pythia8170/include,
+					../include,
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = NO;
@@ -259,7 +259,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SYSTEM_APPS_DIR)/root/lib\"",
 					/Users/joosep/Documents/gsl/libs,
-					/Users/joosep/pythia8170/lib/archive,
+					../lib/archive,
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -296,8 +296,8 @@
 					"-lMatrix",
 					"-lPhysics",
 					"-lMathCore",
-					/Users/joosep/Documents/pythia8170/lib/archive/liblhapdfdummy.a,
-					/Users/joosep/Documents/pythia8170/lib/archive/libpythia8.a,
+					../lib/archive/liblhapdfdummy.a,
+					../lib/archive/libpythia8.a,
 					"-lThread",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
@@ -376,7 +376,7 @@
 				HEADER_SEARCH_PATHS = (
 					/Applications/root/include,
 					"/Users/joosep/Documents/gsl/**",
-					/Users/joosep/Documents/pythia8170/include,
+					../include,
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = NO;
@@ -384,7 +384,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SYSTEM_APPS_DIR)/root/lib\"",
 					/Users/joosep/Documents/gsl/libs,
-					/Users/joosep/pythia8170/lib/archive,
+					../lib/archive,
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -421,8 +421,8 @@
 					"-lMatrix",
 					"-lPhysics",
 					"-lMathCore",
-					/Users/joosep/Documents/pythia8170/lib/archive/liblhapdfdummy.a,
-					/Users/joosep/Documents/pythia8170/lib/archive/libpythia8.a,
+					../lib/archive/liblhapdfdummy.a,
+					../lib/archive/libpythia8.a,
 					"-lThread",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
