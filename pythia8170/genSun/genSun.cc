@@ -21,6 +21,7 @@
 #include <TH2.h>
 
 #include <iostream>
+#include <cmath>
 
 //#define NDEBUG
 
@@ -113,10 +114,12 @@ namespace avgEnergyLoss {
         double Ec = (pdt->m0(idHad))*tstop/tdec;
         double _x = Ec/E0;
         
-        double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
-        double _E = 0.0;
-        if (f != GSL_ERANGE) { //no over/underflow
-            _E = Ec*exp(_x)*f;
+        double _E = std::numeric_limits<double>::quiet_NaN();
+        if(!isnan(_x)) {
+            double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
+            if (f != GSL_ERANGE) { //no over/underflow
+                _E = Ec*exp(_x)*f;
+            }
         }
         return _E;
     }
