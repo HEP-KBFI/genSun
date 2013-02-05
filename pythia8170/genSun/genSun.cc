@@ -233,7 +233,7 @@ public:
        
 protected:
     
-    virtual Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) = 0;
+    virtual Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) = 0;
     
     // Pointer to the particle data table.
     ParticleData* pdtPtr;
@@ -248,7 +248,20 @@ protected:
 
     ~EnergyLossDecay() {};
     
+    Vec4 newP4(const Vec4& p4_0, double E_new, const int id);
+    
 };
+
+Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
+    double sf = E_1/p4_0.e();
+    Vec4 p4_1(p4_0);
+    p4_1.rescale3(sf);
+    double sig = 0.0;
+    if (p4_0.e()>0) sig=1.0;
+    else sig=-1.0;
+    p4_1.e( sqrt( pow(pdtPtr->m0(id),2) - p4_1.pAbs2() ) );
+    return p4_1;
+}
 
 bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
                             vector<Vec4>& pProd, int iDec, const Event& event) {
@@ -325,10 +338,9 @@ private:
     TH1D* h_sf;
     
 protected:
-    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
-        double e_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
-        double sf = e_new/p4.e();
-        Vec4 p4_out = p4*sf;
+    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
+        double E_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
+        Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }
 };
@@ -344,10 +356,9 @@ private:
     TH1D* h_sf;
     
 protected:
-    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
-        double e_new = energyLossDistributions::E_hadronic(p4.e(), id, pdtPtr);
-        double sf = e_new/p4.e();
-        Vec4 p4_out = p4*sf;
+    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
+        double E_new = energyLossDistributions::E_hadronic(p4.e(), id, pdtPtr);
+        Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }
 };
@@ -361,7 +372,7 @@ public:
     }
     
 protected:
-    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
+    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
         Vec4 p4_out(0, 0, 0, pdtPtr->m0(id));
         return p4_out;
     }
@@ -375,12 +386,11 @@ public:
     }
     
 protected:
-    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
+    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
         double p = energyLossDistributions::chLeptonExponent(id, pdtPtr);
         
         double E_new = p4.e() / (1.0 + p);
-        double sf = E_new/p4.e();
-        Vec4 p4_out = sf * p4;
+        Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }
 };
@@ -396,10 +406,9 @@ private:
     TH1D* h_sf;
     
 protected:
-    Vec4 energyLoss(const Vec4& p4, const int& id, const int& iDec, const Event& event) {
-        double e_new = energyLossDistributions::E_leptonic(p4.e(), id, pdtPtr);
-        double sf = e_new/p4.e();
-        Vec4 p4_out = p4*sf;
+    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
+        double E_new = energyLossDistributions::E_leptonic(p4.e(), id, pdtPtr);
+        Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }
 };
