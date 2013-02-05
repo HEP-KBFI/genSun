@@ -119,7 +119,7 @@ namespace avgEnergyLoss {
         double _x = Ec/E0;
         
         double _E = std::numeric_limits<double>::quiet_NaN();
-        if(!isnan(_x)) {
+        if(!std::isnan(_x)) {
             double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
             if (f != GSL_ERANGE) { //no over/underflow
                 _E = Ec*exp(_x)*f;
