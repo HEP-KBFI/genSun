@@ -7,6 +7,7 @@ DMMASS=$2
 HHADINSTR=$3
 LHADINSTR=$4
 LEPINSTR=$5
+OFDIR=$6
 
 echo "PARTID="$PARTID
 echo "DMMASS="$DMMASS
@@ -22,8 +23,8 @@ cp -R /home/joosep/solarNu/pythia8170 $WD
 cd $WD
 cd genSun
 LD_LIBRARY_PATH=/home/joosep/local/lib:/home/joosep/local/lib64:$LD_LIBRARY_PATH ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR &> log \
-&& cp output.root /home/joosep/solarNu/out/output_$SLURM_JOB_ID.root
-mv log /home/joosep/solarNu/out/log_$SLURM_JOB_ID.txt
+&& cp output.root $OFDIR/output_$SLURM_JOB_ID.root
+mv log $OFDIR/log_$SLURM_JOB_ID.txt
 
 ls -al
 rm -Rf $WD
