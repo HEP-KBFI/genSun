@@ -21,6 +21,7 @@
 #include <TH2.h>
 
 #include <iostream>
+#include <cmath>
 
 //#define NDEBUG
 
@@ -28,6 +29,9 @@
 const gsl_rng_type * randomGeneratorType = 0;
 const gsl_rng * rng = 0;
 TH1D* hEnergySF = 0;
+
+unsigned int gslErrCount = 0;
+unsigned int PythiaErrCount = 0;
 
 void seedRandom() {
     ifstream f("/dev/urandom");
@@ -58,6 +62,7 @@ int idQuark(int idHad) {
 }
 
 void gslErrorHandler(const char* reason, const char* file, int line, int gsl_errno) {
+    gslErrCount++;
     cerr << "GSL error: " << gsl_errno << " in file " << file << " with reason '" << reason << "'\n";
 }
 
@@ -113,10 +118,12 @@ namespace avgEnergyLoss {
         double Ec = (pdt->m0(idHad))*tstop/tdec;
         double _x = Ec/E0;
         
-        double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
-        double _E = 0.0;
-        if (f != GSL_ERANGE) { //no over/underflow
-            _E = Ec*exp(_x)*f;
+        double _E = std::numeric_limits<double>::quiet_NaN();
+        if(!isnan(_x)) {
+            double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
+            if (f != GSL_ERANGE) { //no over/underflow
+                _E = Ec*exp(_x)*f;
+            }
         }
         return _E;
     }
@@ -660,6 +667,7 @@ int main(int argc, char **argv) {
         if (!pythia.next()) {
             if (++iAbort < nAbort) {
                 hEventStatus->Fill(1);
+                PythiaErrCount++;
                 continue;
             }
             cout << " Event generation aborted prematurely, owing to error!\n";
@@ -787,6 +795,8 @@ int main(int argc, char **argv) {
         // End of event loop.
     }
     cout << "Writing output from " << nEvent << " events." << endl;
+    cout << "GSL error count: " << gslErrCount << endl;
+    cout << "Pythia error count: " << PythiaErrCount << endl;
     f.cd();
     f.Write();
     f.Close();
