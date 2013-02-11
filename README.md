@@ -50,3 +50,8 @@ Run genSun.exe with the following parameters:
 ##Output
 The output root file contains directories for each mass, loss mechanism and particle with the histograms nu{el, mu, tau} being the primary output.
 In these histograms, the event-by-event distribution of log((E_nu - m_nu)/M_resonance) is plotted.
+The loss mechanism nomenclature contains 1-3 numbers in the directory name, these are the values of CHARGEDHADRONLOSS, LIGHTHADRONLOSS, CHARGEDLEPTONLOSS in
+the same order. If there are less than 3 numbers, you need to prepend 0-s. So, for example, 
+* 1 -> 001 stands for charged hadrons default, light hadrons default, charged leptons average
+* 12 -> 012 stands for charged hadrons default(no loss), light hadrons average, charged leptons probabilistic
+* 100 stands for charged hadrons average, the other particles default
