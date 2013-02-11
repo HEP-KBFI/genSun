@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A72AD9FF16A8ACD200749EF8 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A72AD9ED16A8ABCD00749EF8 /* genSun.cc */; };
-		A741F69816AD4F9800D50F5C /* gammaPlusX.card in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7500F5A16A98C9600279454 /* gammaPlusX.card */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +17,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				A741F69816AD4F9800D50F5C /* gammaPlusX.card in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -28,7 +26,7 @@
 		A72AD9ED16A8ABCD00749EF8 /* genSun.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genSun.cc; sourceTree = SOURCE_ROOT; };
 		A72AD9EF16A8AC0200749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		A72AD9F416A8AC6B00749EF8 /* genSun */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genSun; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7500F5A16A98C9600279454 /* gammaPlusX.card */ = {isa = PBXFileReference; lastKnownFileType = text; path = gammaPlusX.card; sourceTree = "<group>"; };
+		A755C6AF16C90CCC0089F9EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,10 +43,10 @@
 		A72AD9E116A8AAF900749EF8 = {
 			isa = PBXGroup;
 			children = (
+				A755C6AF16C90CCC0089F9EF /* README.md */,
 				A72AD9EF16A8AC0200749EF8 /* Makefile */,
 				A72AD9F716A8AC6B00749EF8 /* genSun */,
 				A72AD9F516A8AC6B00749EF8 /* Products */,
-				A7500F5A16A98C9600279454 /* gammaPlusX.card */,
 			);
 			sourceTree = "<group>";
 		};
