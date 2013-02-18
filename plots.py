@@ -29,15 +29,15 @@ def drawParticle(mass, lepName, pdgId, firstDraw=True):
     h2.Rebin(rebin)
     h3.Rebin(rebin)
 
-    j = 0
-    for h in [h1, h2, h3]:
-        h.GetXaxis().SetRangeUser(10, 1500)
-        h.SetLineColor(colors[pdgId]+j)
-        h.SetLineWidth(2)
-        norm(h)
-        h.SetStats(False)
-        h.SetTitle(title)
-        j += 1
+   # j = 0
+   # for h in [h1, h2, h3]:
+   #     h.GetXaxis().SetRangeUser(10, 1500)
+   #     h.SetLineColor(colors[pdgId]+j)
+   #     h.SetLineWidth(2)
+   #     norm(h)
+   #     h.SetStats(False)
+   #     h.SetTitle(title)
+   #     j += 1
 
     c = ROOT.TCanvas()
     c.SetLogy()
@@ -49,13 +49,13 @@ def drawParticle(mass, lepName, pdgId, firstDraw=True):
     h3.Draw("H SAME")
     h2.SetLineStyle(2)
     h3.SetLineStyle(9)
-    leg = ROOT.TLegend(0.75, 0.68, 0.88, 0.88)
-    leg.SetFillColor(ROOT.kWhite)
-    leg.SetLineColor(ROOT.kWhite)
-    leg.AddEntry(h1, "no")
-    leg.AddEntry(h2, "avg")
-    leg.AddEntry(h3, "MC")
-    leg.Draw("SAME")
+   # leg = ROOT.TLegend(0.75, 0.68, 0.88, 0.88)
+   # leg.SetFillColor(ROOT.kWhite)
+   # leg.SetLineColor(ROOT.kWhite)
+   # leg.AddEntry(h1, "no")
+   # leg.AddEntry(h2, "avg")
+   # leg.AddEntry(h3, "MC")
+   # leg.Draw("SAME")
     return c, leg
 
 masses = [1000, 2500, 5000, 7500, 10000]
