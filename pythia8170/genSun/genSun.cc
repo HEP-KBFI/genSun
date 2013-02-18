@@ -260,14 +260,21 @@ protected:
 };
 
 Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
-    double sf = E_1/p4_0.e();
-    Vec4 p4_1(p4_0);
+    double p_abs_1 = sqrt( pow(E_1,2) - pow(pdtPtr->m0(id),2) );
+    double sf = p_abs_1/p4_0.pAbs();
+    Vec4 p4_1(p4_0);  
     p4_1.rescale3(sf);
-    double sig = 0.0;
-    if (p4_0.e()>0) sig=1.0;
-    else sig=-1.0;
-    p4_1.e( sqrt( pow(pdtPtr->m0(id),2) - p4_1.pAbs2() ) );
+    p4_1.e(E_1);
     return p4_1;
+//    
+//    double sf = E_1/p4_0.e();
+//    Vec4 p4_1(p4_0);
+//    p4_1.rescale3(sf);
+//    double sig = 0.0;
+//    if (p4_0.e()>0) sig=1.0;
+//    else sig=-1.0;
+//    p4_1.e( sqrt( pow(pdtPtr->m0(id),2) - p4_1.pAbs2() ) );
+//    return p4_1;
 }
 
 bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
