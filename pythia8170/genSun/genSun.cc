@@ -554,7 +554,7 @@ int main(int argc, char **argv) {
     
     TDirectory* energyLossDir = particleDir->mkdir(ss.str().c_str());
     energyLossDir->cd();
-
+    
     
     //Add energy loss decay for b and c hadrons
     SubDecayHandler* mainDecayHandler = new SubDecayHandler(&pythia.particleData, &pythia.rndm);
@@ -686,10 +686,18 @@ int main(int argc, char **argv) {
             cout << " Event generation aborted prematurely, owing to error!\n";
             break;
         }
-        hEventStatus->Fill(0);
+        hEventStatus->Fill(0); //Fill with return code 0: successful event generation
         
+        
+        //Show how far along the run is
         if(nShow>0 && iEvent%nShow==0)
             cout << "Processed " << iEvent << " events" << endl;
+        
+        //List the events
+        if (iEvent < nList) {
+            pythia.info.list();
+            pythia.event.list();
+        }
         
         // FIXME: This decay hack is from the old method and probably can be done
         // instead using a specific decay handler for leptons.
@@ -722,27 +730,22 @@ int main(int argc, char **argv) {
             //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
             
             // List first few events.
-            if (iEvent < nList) {
-                pythia.info.list();
-                pythia.event.list();
-            }
-        
-        
-        //Get spectra of protons and neutrons
-        for (int i = 0; i < pythia.event.size(); ++i)
-            if (pythia.event[i].isFinal()) {
-                int id = pythia.event[i].id();
-                //int idAbs = abs(id);
-                double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
-                if (id == -2212) {
-                    antip.push_back(pythia.event[i]);
-                    hantip->Fill(x);
+            
+            //Get spectra of protons and neutrons
+            for (int i = 0; i < pythia.event.size(); ++i)
+                if (pythia.event[i].isFinal()) {
+                    int id = pythia.event[i].id();
+                    //int idAbs = abs(id);
+                    double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
+                    if (id == -2212) {
+                        antip.push_back(pythia.event[i]);
+                        hantip->Fill(x);
+                    }
+                    if (id == -2112) {
+                        antin.push_back(pythia.event[i]);
+                        hantin->Fill(x);
+                    }
                 }
-                if (id == -2112) {
-                    antin.push_back(pythia.event[i]);
-                    hantin->Fill(x);
-                }
-            }
         
         //FIXME: Why are we decaying neutrons?
         pythia.particleData.mayDecay(2112,true);
