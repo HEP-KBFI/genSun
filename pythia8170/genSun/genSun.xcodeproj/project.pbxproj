@@ -27,6 +27,8 @@
 		A72AD9EF16A8AC0200749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		A72AD9F416A8AC6B00749EF8 /* genSun */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genSun; sourceTree = BUILT_PRODUCTS_DIR; };
 		A755C6AF16C90CCC0089F9EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
+		A7EAECBC16D22F29004D032C /* cardSunBatch.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunBatch.card; sourceTree = SOURCE_ROOT; };
+		A7EAECBD16D22F29004D032C /* cardSunTest.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunTest.card; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +64,8 @@
 			isa = PBXGroup;
 			children = (
 				A72AD9ED16A8ABCD00749EF8 /* genSun.cc */,
+				A7EAECBC16D22F29004D032C /* cardSunBatch.card */,
+				A7EAECBD16D22F29004D032C /* cardSunTest.card */,
 			);
 			path = genSun;
 			sourceTree = "<group>";

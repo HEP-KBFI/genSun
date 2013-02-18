@@ -40,7 +40,7 @@ void seedRandom() {
         f.read(reinterpret_cast<char*>(&seed), sizeof(seed));
         cout << "Setting GSL random seed to " << seed << endl;
         f.close();
-
+        
     } else {
         cerr << "Failed to open stream from /dev/urandom." << endl;
     }
@@ -69,12 +69,12 @@ void gslErrorHandler(const char* reason, const char* file, int line, int gsl_err
 //samples a number from the power distribution
 double powerDistributionRandom(double xu, double xl, double n) {
     double y = gsl_rng_uniform(rng);
-//    double x = pow(
-//                   (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
-//                   n/(n+1.0)
-//                   );
+    //    double x = pow(
+    //                   (pow(xu, n + 1.0) - pow(xl, n + 1.0))*y + pow(xl, n + 1.0),
+    //                   n/(n+1.0)
+    //                   );
     double x = pow(y, n);
-
+    
     return x;
 }
 
@@ -237,7 +237,7 @@ public:
     
     bool decay(vector<int>& idProd, vector<double>& mProd,
                vector<Vec4>& pProd, int iDec, const Event& event);
-       
+    
 protected:
     
     virtual Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) = 0;
@@ -252,7 +252,7 @@ protected:
     //TH1D* hEBeforeLoss = 0;
     std::map<const unsigned int, TH2D*> ELossHistMap;
     std::map<const unsigned int, TH1D*> EScaleFactorHistMap;
-
+    
     ~EnergyLossDecay() {};
     
     Vec4 newP4(const Vec4& p4_0, double E_new, const int id);
@@ -262,19 +262,19 @@ protected:
 Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
     double p_abs_1 = sqrt( pow(E_1,2) - pow(pdtPtr->m0(id),2) );
     double sf = p_abs_1/p4_0.pAbs();
-    Vec4 p4_1(p4_0);  
+    Vec4 p4_1(p4_0);
     p4_1.rescale3(sf);
     p4_1.e(E_1);
     return p4_1;
-//    
-//    double sf = E_1/p4_0.e();
-//    Vec4 p4_1(p4_0);
-//    p4_1.rescale3(sf);
-//    double sig = 0.0;
-//    if (p4_0.e()>0) sig=1.0;
-//    else sig=-1.0;
-//    p4_1.e( sqrt( pow(pdtPtr->m0(id),2) - p4_1.pAbs2() ) );
-//    return p4_1;
+    //
+    //    double sf = E_1/p4_0.e();
+    //    Vec4 p4_1(p4_0);
+    //    p4_1.rescale3(sf);
+    //    double sig = 0.0;
+    //    if (p4_0.e()>0) sig=1.0;
+    //    else sig=-1.0;
+    //    p4_1.e( sqrt( pow(pdtPtr->m0(id),2) - p4_1.pAbs2() ) );
+    //    return p4_1;
 }
 
 bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
@@ -319,7 +319,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     Vec4 p4 = pProd[0];
     idProd.push_back(id);
     mProd.push_back(m);
-        
+    
     double tau = event[iDec].tau();
     double tau0 = event[iDec].tau0();
     
@@ -545,10 +545,16 @@ int main(int argc, char **argv) {
     
     TFile f(argv[3],"RECREATE");
     
+    
+    std::stringstream ss;
+    ss << "energyLoss" << "_hhad_" << hHadronELossInstruction << "_lhad_" << lHadronELossInstruction << "_chlep_" << chLeptonELossInstruction;
+    
     TDirectory* massDir = subDir(&f, "mass", (int)dmMass);
     TDirectory* particleDir = subDir(massDir, "particle", (int)partId);
-    TDirectory* energyLossDir = subDir(particleDir, "energyloss",
-        (100*hHadronELossInstruction + 10*lHadronELossInstruction + chLeptonELossInstruction));
+    
+    TDirectory* energyLossDir = particleDir->mkdir(ss.str().c_str());
+    energyLossDir->cd();
+
     
     //Add energy loss decay for b and c hadrons
     SubDecayHandler* mainDecayHandler = new SubDecayHandler(&pythia.particleData, &pythia.rndm);
@@ -643,7 +649,7 @@ int main(int argc, char **argv) {
     const unsigned int nBins = 10000;
     
     TH1I *hEventStatus = new TH1I("eventStatus","Event status distribution",2,0,2);
-
+    
     TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,5);
     TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,5);
     TH2D *hantid = new TH2D("antid","Antideteron distribution",nBins,-9,0,400,0,0.4);
@@ -681,7 +687,7 @@ int main(int argc, char **argv) {
             break;
         }
         hEventStatus->Fill(0);
-
+        
         if(nShow>0 && iEvent%nShow==0)
             cout << "Processed " << iEvent << " events" << endl;
         
@@ -693,33 +699,33 @@ int main(int argc, char **argv) {
         // 1. loop over all particles and add at the end of the event copies of those while they are standing still
         int nn = pythia.event.size();
         for (int i=0; i < nn; ++i)
-            /* //DEPRECATED(?)
-            if (pythia.event[i].isFinal()) {
-                int id = pythia.event[i].id();
-                int idAbs = abs(id);
-                double m = pythia.event[i].mass();
-                
-                //mu, tau, c, b, t, Z0, W+-, H0
-                if (idAbs == 13 || idAbs == 15 || idAbs == 4 || idAbs == 5 || idAbs == 6 || idAbs == 23 || idAbs == 24 || idAbs == 25) {
-                    // If it's one of the relevant particles, then add a respective particle to the event, but at rest
-                    pythia.event.append(id,1,0,0,0.,0.,0.,m,m);
-                    //cout << " New particle: " << ni << " mayDecay = " << pythia.event[ni].mayDecay() << " tau=" << pythia.event[ni].tau() << endl;
-                }
+        /* //DEPRECATED(?)
+         if (pythia.event[i].isFinal()) {
+         int id = pythia.event[i].id();
+         int idAbs = abs(id);
+         double m = pythia.event[i].mass();
+         
+         //mu, tau, c, b, t, Z0, W+-, H0
+         if (idAbs == 13 || idAbs == 15 || idAbs == 4 || idAbs == 5 || idAbs == 6 || idAbs == 23 || idAbs == 24 || idAbs == 25) {
+         // If it's one of the relevant particles, then add a respective particle to the event, but at rest
+         pythia.event.append(id,1,0,0,0.,0.,0.,m,m);
+         //cout << " New particle: " << ni << " mayDecay = " << pythia.event[ni].mayDecay() << " tau=" << pythia.event[ni].tau() << endl;
+         }
+         }
+         */
+            
+            //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
+            // Force the new particles to decay
+            //pythia.readString("ParticleDecays:limitTau = off");
+            //pythia.moreDecays();
+            //pythia.readString("ParticleDecays:limitTau = on");
+            //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
+            
+            // List first few events.
+            if (iEvent < nList) {
+                pythia.info.list();
+                pythia.event.list();
             }
-            */
-        
-        //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
-        // Force the new particles to decay
-        //pythia.readString("ParticleDecays:limitTau = off");
-        //pythia.moreDecays();
-        //pythia.readString("ParticleDecays:limitTau = on");
-        //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
-        
-        // List first few events.
-        if (iEvent < nList) {
-            pythia.info.list();
-            pythia.event.list();
-        }
         
         
         //Get spectra of protons and neutrons
