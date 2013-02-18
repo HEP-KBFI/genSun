@@ -4,7 +4,7 @@
 ! 1) Settings used in the main program.
 Main:numberOfEvents = 10000      ! number of events to generate
 Main:numberToList = 1              ! number of events to print
-Main:timesToShow = 0              ! show how far along run is
+Main:timesToShow = 10             ! show how far along run is
 Main:timesAllowErrors = 100      ! allow a few failures before quitting
 Main:showChangedSettings = off      ! print changed flags/modes/parameters
 Main:showChangedParticleData = off  ! print changed particle and decay data
