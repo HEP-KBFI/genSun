@@ -46,7 +46,7 @@ f = ROOT.TFile("output.root")
 rebin = 50
 hists = dict()
 
-def drawParticle(mass, lepName, pdgId):
+def drawParticle(mass, pdgId, lepName):
 
 	partStr = "particle_{0}".format(pdgId)
 	title="Energy spectrum of {0} in channel DM({2})->2*{1}".format(lepPretty[lepName], partNames[pdgId], mass)
@@ -108,7 +108,7 @@ leps = ["el", "mu", "tau"]
 for m in masses:
 	for p in particles:
 		for l in leps:
-			c, hists = drawParticle(m, l, p)
+			c, hists = drawParticle(m, p, l)
 			#c.Print("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
 			c.SaveAs("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
 
