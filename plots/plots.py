@@ -12,7 +12,7 @@ lepNames = {"el": "Electron", "mu": "Muon", "tau": "Tau"}
 lepPretty={"el":"#nu_{e}", "mu":"#nu_{#mu}", "tau":"#nu_{#tau}"}
 
 energyLossMechanisms = {
-		#"no":        "000",
+		#"no":		"000",
 		#"chHadAvg":  "100",
 		#"lHadAvg":   "010",
 		#"chLepAvg":  "001",
@@ -106,11 +106,14 @@ masses = [5000]
 particles = [25]
 leps = ["el", "mu", "tau"]
 
-for m in masses:
-	for p in particles:
-		for l in leps:
-			c = ROOT.TCanvas('cvs_{0}_p_{1}_l_{2}.png'.format(m, p, l))
-			hists = drawParticle(m, p, l)
-			#c.Print("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
-			c.SaveAs("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
+def main():
+	for m in masses:
+		for p in particles:
+			for l in leps:
+				c = ROOT.TCanvas('cvs_{0}_p_{1}_l_{2}.png'.format(m, p, l))
+				hists = drawParticle(m, p, l)
+				#c.Print("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
+				c.SaveAs("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
 
+if __name__ == "__main__":
+	sys.exit(main())
