@@ -40,7 +40,6 @@ def drawParticle(mass, lepName, pdgId):
     title="Energy spectrum of {0} in channel DM({2})->2*{1}".format(lepPretty[lepName], partNames[pdgId], mass)
     histName = "nu{0}".format(lepName)
     massStr = "mass_{0}".format(mass)
-<<<<<<< HEAD
     for (mechName, mech) in energyLossMechanisms.items():
         hists[mechName] = f.Get(massStr).Get(partStr).Get("energyloss_{0}".format(mech)).Get(histName)
         hists[mechName].Rebin(rebin)
