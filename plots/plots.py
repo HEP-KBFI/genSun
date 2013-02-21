@@ -42,25 +42,25 @@ partNames = {
 }
 
 f = ROOT.TFile("output.root")
-
-rebin = 50
+rebin = 100
 hists = dict()
 
 def drawParticle(mass, pdgId, lepName):
-
+	print 'Rebin:',rebin
 	partStr = "particle_{0}".format(pdgId)
 	title="Energy spectrum of {0} in channel DM({2})->2*{1}".format(lepPretty[lepName], partNames[pdgId], mass)
 	histName = "nu{0}".format(lepName)
 	massStr = "mass_{0}".format(mass)
 	print massStr,partStr,histName
-	for (mechName, mech) in energyLossMechanisms.items():
-		mechStr = 'energyLoss_hhad_{0}_lhad_{1}_chlep_{2}'.format(mech[0], mech[1], mech[2])
+	for mechName,mech in energyLossMechanisms.items():
+		mechStr = 'energyLoss_hhad_{0}_lhad_{1}_chlep_{2}'.format(*mech)
 		print mechStr
 		
 		hists[mechName] = f.Get(massStr).Get(partStr).Get(mechStr).Get(histName)
 		hists[mechName].Rebin(rebin)
 		hists[mechName].SetLineColor(colorsELoss[mechName])
 		if hists[mechName].Integral()==0.0:
+			print 'Popping!'
 			hists.pop(mechName)
 			continue
 		norm(hists[mechName])
@@ -74,10 +74,11 @@ def drawParticle(mass, pdgId, lepName):
 #		h.SetTitle(title)
 #		j += 1
 #
-	c = ROOT.TCanvas()
-	c.SetLogy()
-	firstDraw = False
+	
+	#c.SetLogy()
+	firstDraw = True
 	for hn, h in hists.items():
+		print hn
 		if firstDraw:
 			h.Draw("H")
 		else:
@@ -98,7 +99,7 @@ def drawParticle(mass, pdgId, lepName):
 #	leg.AddEntry(h2, "avg")
 #	leg.AddEntry(h3, "MC")
 #	leg.Draw("SAME")
-	return c, hists
+	return hists
 
 masses = [5000]
 #particles = [1, 5, 6, 11, 13, 15, 22, 23, 24, 25]
@@ -108,7 +109,8 @@ leps = ["el", "mu", "tau"]
 for m in masses:
 	for p in particles:
 		for l in leps:
-			c, hists = drawParticle(m, p, l)
+			c = ROOT.TCanvas('cvs_{0}_p_{1}_l_{2}.png'.format(m, p, l))
+			hists = drawParticle(m, p, l)
 			#c.Print("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
 			c.SaveAs("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
 
