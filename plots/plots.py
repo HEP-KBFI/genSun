@@ -10,13 +10,14 @@ def norm(h):
 
 lepNames = {"el": "Electron", "mu": "Muon", "tau": "Tau"}
 lepPretty={"el":"#nu_{e}", "mu":"#nu_{#mu}", "tau":"#nu_{#tau}"}
+
 energyLossMechanisms = {
-		"no": "0",
-		"chHadAvg": "100",
-		"lHadAvg": "10",
-		"chLepAvg": "1",
-		"chHadProb": "200",
-		"chLepProb": "2",
+		#"no":        "000",
+		#"chHadAvg":  "100",
+		#"lHadAvg":   "010",
+		#"chLepAvg":  "001",
+		#"chHadProb": "200",
+		"chLepProb": (0,0,2),
 }
 colorsELoss = {
 		"no": ROOT.kBlack,
@@ -27,9 +28,20 @@ colorsELoss = {
 		"chLepProb": ROOT.kViolet,
 }
 
-colors = {1: ROOT.kBlue, 5: ROOT.kBlack, 6: ROOT.kRed, 22: ROOT.kOrange, 23: ROOT.kGreen, 24:ROOT.kTeal, 25: ROOT.kViolet, 11: ROOT.kPink+5, 12: ROOT.kViolet+5, 13: ROOT.kSpring+5, 15: ROOT.kBlue+5}
-partNames = {1: "l", 5:"c", 6:"t", 22:"#gamma", 23:"Z_{0}", 24:"W_{#pm}", 25: "h_{0}", 11:"e^{#pm}", 13:"#mu^{#pm}", 15:"#tau^{#pm}", 12: "#nu_{e}", }
-f = ROOT.TFile("spec_Feb11.root")
+colors = {
+	1: ROOT.kBlue, 5: ROOT.kBlack, 6: ROOT.kRed,
+	22: ROOT.kOrange, 23: ROOT.kGreen,24:ROOT.kTeal,
+	25: ROOT.kViolet, 11: ROOT.kPink+5, 12: ROOT.kViolet+5,
+	13: ROOT.kSpring+5, 15: ROOT.kBlue+5
+}
+partNames = {
+	1: "l", 5:"c", 6:"t",
+	22:"#gamma", 23:"Z_{0}", 24:"W_{#pm}",
+	25: "h_{0}", 11:"e^{#pm}", 13:"#mu^{#pm}",
+	15:"#tau^{#pm}", 12: "#nu_{e}"
+}
+
+f = ROOT.TFile("output.root")
 
 rebin = 50
 hists = dict()
@@ -40,8 +52,12 @@ def drawParticle(mass, lepName, pdgId):
 	title="Energy spectrum of {0} in channel DM({2})->2*{1}".format(lepPretty[lepName], partNames[pdgId], mass)
 	histName = "nu{0}".format(lepName)
 	massStr = "mass_{0}".format(mass)
+	print massStr,partStr,histName
 	for (mechName, mech) in energyLossMechanisms.items():
-		hists[mechName] = f.Get(massStr).Get(partStr).Get("energyloss_{0}".format(mech)).Get(histName)
+		mechStr = 'energyLoss_hhad_{0}_lhad_{1}_chlep_{2}'.format(mech[0], mech[1], mech[2])
+		print mechStr
+		
+		hists[mechName] = f.Get(massStr).Get(partStr).Get(mechStr).Get(histName)
 		hists[mechName].Rebin(rebin)
 		hists[mechName].SetLineColor(colorsELoss[mechName])
 		if hists[mechName].Integral()==0.0:
@@ -86,12 +102,13 @@ def drawParticle(mass, lepName, pdgId):
 
 masses = [5000]
 #particles = [1, 5, 6, 11, 13, 15, 22, 23, 24, 25]
-particles = [15]
+particles = [25]
 leps = ["el", "mu", "tau"]
 
 for m in masses:
 	for p in particles:
 		for l in leps:
 			c, hists = drawParticle(m, l, p)
-			c.Print("plots/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
+			#c.Print("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
+			c.SaveAs("out/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
 
