@@ -500,6 +500,8 @@ int main(int argc, char **argv) {
     double dmMass;
     partId = atoi(argv[1]);
     dmMass = atof(argv[2]);
+    
+    //Flags that control if BC and/or L should be reduced in energy before decaying
     int hHadronELossInstruction = atoi(argv[5]);
     int lHadronELossInstruction = atoi(argv[6]);
     int chLeptonELossInstruction = atoi(argv[7]);
@@ -517,9 +519,9 @@ int main(int argc, char **argv) {
     char ch[60];
     
     if (partId != 1)
-        sprintf(ch,"999999:onIfAll %d %d", partId, apartId);
+        sprintf(ch,"999999:onIfAll %d %d", partId, apartId); //turn on (id -id)
     else
-        sprintf(ch,"999999:onIfAny 1 2 3");
+        sprintf(ch,"999999:onIfAny 1 2 3"); //Turn on light quarks
     
     pythia.readString("999999:onMode = off");
     pythia.readString(ch);
@@ -538,13 +540,7 @@ int main(int argc, char **argv) {
     bool showCPD = pythia.flag("Main:showChangedParticleData");
     pythia.readString("ParticleDecays:limitTau = off");
     
-    //Flags that control if BC and/or L should be reduced in energy before decaying
-    bool reduceBC = true;
-    bool reduceL = true;
-    bool reduceChargedLepton = true;
-    
     TFile f(argv[3],"RECREATE");
-    
     
     std::stringstream ss;
     ss << "energyLoss" << "_hhad_" << hHadronELossInstruction << "_lhad_" << lHadronELossInstruction << "_chlep_" << chLeptonELossInstruction;
@@ -572,7 +568,6 @@ int main(int argc, char **argv) {
             handleBCHadDecays = new HeavyHadronDecayProbabilistic(
                                                                   &pythia.particleData, &pythia.rndm
                                                                   );
-            
         } else {
             std::cerr << "hHadronELossInstruction value not recognized" << std::endl;
             exit(1);
@@ -588,7 +583,6 @@ int main(int argc, char **argv) {
             handledBCHadrons.push_back(-id);
         }
         mainDecayHandler->addHandler(handleBCHadDecays, handledBCHadrons);
-        //pythia.setDecayPtr( handleBCHadDecays, handledBCHadrons);
     }
     
     if (lHadronELossInstruction != 0) {
@@ -609,8 +603,6 @@ int main(int argc, char **argv) {
             handledLHadrons.push_back(-id);
         }
         mainDecayHandler->addHandler(handleLHadDecays, handledLHadrons);
-        
-        //pythia.setDecayPtr(handleLHadDecays, handledLHadrons);
     }
     
     if (chLeptonELossInstruction != 0) {
@@ -705,8 +697,8 @@ int main(int argc, char **argv) {
         
         // Here's where we have to decay the particles that were still left intact
         // 1. loop over all particles and add at the end of the event copies of those while they are standing still
-        int nn = pythia.event.size();
-        for (int i=0; i < nn; ++i)
+        //int nn = pythia.event.size();
+        //for (int i=0; i < nn; ++i)
         /* //DEPRECATED(?)
          if (pythia.event[i].isFinal()) {
          int id = pythia.event[i].id();
@@ -721,33 +713,35 @@ int main(int argc, char **argv) {
          }
          }
          */
-            
-            //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
-            // Force the new particles to decay
-            //pythia.readString("ParticleDecays:limitTau = off");
-            //pythia.moreDecays();
-            //pythia.readString("ParticleDecays:limitTau = on");
-            //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
-            
-            // List first few events.
-            
-            //Get spectra of protons and neutrons
-            for (int i = 0; i < pythia.event.size(); ++i)
-                if (pythia.event[i].isFinal()) {
-                    int id = pythia.event[i].id();
-                    //int idAbs = abs(id);
-                    double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
-                    if (id == -2212) {
-                        antip.push_back(pythia.event[i]);
-                        hantip->Fill(x);
-                    }
-                    if (id == -2112) {
-                        antin.push_back(pythia.event[i]);
-                        hantin->Fill(x);
-                    }
-                }
         
-        //FIXME: Why are we decaying neutrons?
+        //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
+        // Force the new particles to decay
+        //pythia.readString("ParticleDecays:limitTau = off");
+        //pythia.moreDecays();
+        //pythia.readString("ParticleDecays:limitTau = on");
+        //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
+        
+        // List first few events.
+        
+        //Get spectra of protons and neutrons
+        for (int i = 0; i < pythia.event.size(); ++i) {
+            if (pythia.event[i].isFinal()) {
+                int id = pythia.event[i].id();
+                //int idAbs = abs(id);
+                //double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
+                double x = 0;
+                if (id == -2212) {
+                    antip.push_back(pythia.event[i]);
+                    hantip->Fill(x);
+                }
+                if (id == -2112) {
+                    antin.push_back(pythia.event[i]);
+                    hantin->Fill(x);
+                }
+            }
+        }
+        
+        //decay neutrons
         pythia.particleData.mayDecay(2112,true);
         pythia.moreDecays();
         pythia.particleData.mayDecay(2112,false);
@@ -759,7 +753,9 @@ int main(int argc, char **argv) {
             
             if (pythia.event[i].isFinal()) {
                 double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
-                if (idAbs == 11) hel->Fill(x);
+                if (idAbs == 11) {
+                    hel->Fill(x);
+                }
                 if (idAbs == 12) {
                     hnuel->Fill(x);
                     hnuelE->Fill(pythia.event[i].e());
@@ -772,10 +768,15 @@ int main(int argc, char **argv) {
                     hnutau->Fill(x);
                     hnutauE->Fill(pythia.event[i].e());
                 }
-                if (id == 22) hgam->Fill(x);
-                if (id == -2212) hantip->Fill(x);
+                if (id == 22) {
+                    hgam->Fill(x);
+                }
+                if (id == -2212) {
+                    hantip->Fill(x);
+                }
             }
             
+            /*
             //Fill histograms for particles that have been decayed by pythia
             //even if they are not "final" particles
             if(pythia.event[i].statusAbs()==91) {
@@ -789,22 +790,26 @@ int main(int argc, char **argv) {
                     hLHad->Fill(pythia.event[i].e());
                 }
             }
+            */
             
         }
+        
+        /*
         // Loop over anti-partons and fill histograms
         for (vector<Particle>::iterator ap = antip.begin(); ap != antip.end(); ap++)
             for (vector<Particle>::iterator an = antin.begin(); an != antin.end(); an++) {
                 Vec4 d = ap->p() - an->p();
                 Vec4 d2 = ap->p() + an->p();
                 double y = sqrt(pow(d.px(),2)+pow(d.py(),2)+pow(d.pz(),2)-pow(ap->e()-an->e(),2));
-                double x = log10((d2.e()-ap->m()-an->m())/dmMass);
+                //double x = log10((d2.e()-ap->m()-an->m())/dmMass);
+                double x = 0;
                 if (y < 0.16 && ap->status() > 0 && an->status() > 0) {
                     hantid->Fill(x,y);
                     ap->statusNeg();
                     an->statusNeg();
                 }
             }
-        
+        */
         // clean up
         antip.clear();
         antin.clear();
