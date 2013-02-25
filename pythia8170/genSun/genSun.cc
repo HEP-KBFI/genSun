@@ -747,6 +747,7 @@ int main(int argc, char **argv) {
         pythia.particleData.mayDecay(2112,false);
         
         
+        //Get spectra of final stable particles
         for (int i = 0; i < pythia.event.size(); ++i) {
             int id = pythia.event[i].id();
             int idAbs = abs(id);

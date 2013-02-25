@@ -3,6 +3,9 @@ import glob
 import re
 import sys
 import pdb
+import rootpy
+import rootpy.io
+import rootpy.plotting
 
 def norm(h):
     h.Sumw2()
@@ -34,6 +37,7 @@ f = ROOT.TFile("spec_Feb11.root")
 rebin = 50
 hists = dict()
 
+"""
 def drawParticle(mass, lepName, pdgId):
 
     partStr = "particle_{0}".format(pdgId)
@@ -84,15 +88,84 @@ def drawParticle(mass, lepName, pdgId):
 #    leg.AddEntry(h3, "MC")
 #    leg.Draw("SAME")
     return c, hists
+"""
 
+"""
 masses = [5000]
 #particles = [1, 5, 6, 11, 13, 15, 22, 23, 24, 25]
 particles = [15]
 leps = ["el", "mu", "tau"]
+"""
 
+"""
 for m in masses:
     for p in particles:
         for l in leps:
             c, hists = drawParticle(m, l, p)
             c.Print("plots/nuE_m_{0}_p_{1}_l_{2}.png".format(m, p, l))
+"""
 
+class EnergyLoss:
+    def __init__(self, *args):
+        self.h_had = args[0]
+        self.l_had = args[1]
+        self.ch_lep = args[2]
+
+    def __str__(self):
+        if self.h_had == 0 and self.l_had == 0 and self.ch_lep == 0:
+            return "no E loss"
+        elif self.h_had == 2 and self.l_had == 1 and self.ch_lep == 2:
+            return "MC(bc had, ch. lep)"
+
+class EnergyDistribution:
+    def __init__(self, *args, *kwargs):
+        hist = args[0]
+        
+        self.dm_mass = kwargs["dm_mass"]
+        self.decay_channel = kwargs["decay_channel"]
+        self.energy_loss = EnergyLoss(kwargs["h_had"], kwargs["l_had"], kwargs["ch_lep"])
+        
+        self.x = [x for x in hist.x()]
+        self.y = [y for y in hist.y()]
+
+if __name__=="__main__":
+    f = rootpy.io.open("pythia8170/genSun/spec.root")
+
+    pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
+    interesting_hists = {"ele": "nuel", "mu": "numu", "tau":"nutau"}
+    hists = dict()
+    for elem in f.walk():
+        m = pat.match(elem[0])
+        if m is not None:
+            mass = m.group(1)
+            partId = m.group(2)
+            hHadInstr = m.group(3)
+            lHadInstr = m.group(4)
+            chLepInstr = m.group(5)
+            print mass, partId, hHadInstr, lHadInstr, chLepInstr
+            
+            
+            for htitle, hname in interesting_hists.items():
+                name = elem[0] + "/" + hname
+                hists[name] = f.get(name)
+                hists[name].rebin(250)
+                
+        else:
+            continue
+
+    def plot(s):
+        pat = re.compile(s)
+        hns_to_plot = filter(lambda x: pat.match(x) is not None, hists.keys())
+        
+        c = ROOT.TCanvas()
+        fh = hists[hns_to_plot[0]]
+        fh.Draw("E1")
+        fh.GetYaxis().SetRangeUser(1, 10000000)
+        for hn in hns_to_plot[1:]:
+            hists[hn].Draw("SAME E1")
+        c.SetLogy()
+
+
+    plot(".*/particle_6/.*/nuel")
+
+    
