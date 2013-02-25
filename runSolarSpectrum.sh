@@ -1,6 +1,8 @@
 #!/bin/bash
 uname -a
 WD=/scratch/joosep/solarNuWD-$SLURM_JOB_ID
+source /cvmfs/cms.cern.ch/slc5_amd64_gcc472/lcg/root/5.34.04/bin/thisroot.sh
+source /cvmfs/cms.cern.ch/cmsset_default.sh
 
 PARTID=$1
 DMMASS=$2
