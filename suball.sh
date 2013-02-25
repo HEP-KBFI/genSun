@@ -10,12 +10,12 @@ for m in "${masses[@]}"
         for p in "${particles[@]}"
             do
                 qsub $DIR/runSolarSpectrum.sh $p $m 2 1 2 $OFDIR
-#                qsub $DIR/runSolarSpectrum.sh $p $m 1 1 1 $OFDIR
+                qsub $DIR/runSolarSpectrum.sh $p $m 1 1 1 $OFDIR
                 qsub $DIR/runSolarSpectrum.sh $p $m 0 0 0 $OFDIR
-#                qsub $DIR/runSolarSpectrum.sh $p $m 1 0 0 $OFDIR
-#                qsub $DIR/runSolarSpectrum.sh $p $m 0 1 0 $OFDIR
-#                qsub $DIR/runSolarSpectrum.sh $p $m 0 0 1 $OFDIR
-#                qsub $DIR/runSolarSpectrum.sh $p $m 2 0 0 $OFDIR
-#                qsub $DIR/runSolarSpectrum.sh $p $m 0 0 2 $OFDIR
+                qsub $DIR/runSolarSpectrum.sh $p $m 1 0 0 $OFDIR
+                qsub $DIR/runSolarSpectrum.sh $p $m 0 1 0 $OFDIR
+                qsub $DIR/runSolarSpectrum.sh $p $m 0 0 1 $OFDIR
+                qsub $DIR/runSolarSpectrum.sh $p $m 2 0 0 $OFDIR
+                qsub $DIR/runSolarSpectrum.sh $p $m 0 0 2 $OFDIR
             done
     done
