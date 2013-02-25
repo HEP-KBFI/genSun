@@ -73,13 +73,26 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "genSun.cc"
-         timestampString = "383465689.517438"
+         timestampString = "383486468.811612"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "808"
-         endingLineNumber = "808"
+         startingLineNumber = "823"
+         endingLineNumber = "823"
          landmarkName = "main(int argc, char **argv)"
          landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "genSun.cc"
+         timestampString = "383486461.821937"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "406"
+         endingLineNumber = "406"
+         landmarkName = "energyLoss(const Vec4&amp; p4, const int id, const int iDec, const Event&amp; event)"
+         landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

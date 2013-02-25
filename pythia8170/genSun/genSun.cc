@@ -260,7 +260,7 @@ protected:
 };
 
 Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
-    double p_abs_1 = sqrt( pow(E_1,2) - pow(pdtPtr->m0(id),2) );
+    double p_abs_1 = sqrt( fabs(pow(E_1,2) - pow(pdtPtr->m0(id),2)) );
     double sf = p_abs_1/p4_0.pAbs();
     Vec4 p4_1(p4_0);
     p4_1.rescale3(sf);
