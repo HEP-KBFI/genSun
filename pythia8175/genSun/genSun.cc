@@ -403,7 +403,7 @@ protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
         double p = energyLossDistributions::chLeptonExponent(id, pdtPtr);
         
-        double E_new = p4.e() / (1.0 + p);
+        double E_new = pdtPtr->m0(id) + (p4.e() - pdtPtr->m0(id)) / (1.0+p);
         Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }

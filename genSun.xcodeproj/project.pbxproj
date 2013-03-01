@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A72AD9FF16A8ACD200749EF8 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A72AD9ED16A8ABCD00749EF8 /* genSun.cc */; };
+		A768B07916E125D90076ADB3 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A768B07316E125D90076ADB3 /* genSun.cc */; };
+		A768B07A16E125D90076ADB3 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A768B07416E125D90076ADB3 /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,13 +24,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A72AD9ED16A8ABCD00749EF8 /* genSun.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = genSun.cc; sourceTree = SOURCE_ROOT; };
-		A72AD9EF16A8AC0200749EF8 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		A72AD9F416A8AC6B00749EF8 /* genSun */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genSun; sourceTree = BUILT_PRODUCTS_DIR; };
-		A730715116DB42E7007DFC5B /* plots.py */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.python; name = plots.py; path = ../../plots.py; sourceTree = "<group>"; };
-		A755C6AF16C90CCC0089F9EF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = README.md; path = ../../README.md; sourceTree = "<group>"; };
-		A7EAECBC16D22F29004D032C /* cardSunBatch.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunBatch.card; sourceTree = SOURCE_ROOT; };
-		A7EAECBD16D22F29004D032C /* cardSunTest.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunTest.card; sourceTree = SOURCE_ROOT; };
+		A768B07116E125D90076ADB3 /* cardSunBatch.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunBatch.card; sourceTree = "<group>"; };
+		A768B07216E125D90076ADB3 /* cardSunTest.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunTest.card; sourceTree = "<group>"; };
+		A768B07316E125D90076ADB3 /* genSun.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = genSun.cc; sourceTree = "<group>"; };
+		A768B07416E125D90076ADB3 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		A768B07516E125D90076ADB3 /* Makefile-ied */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-ied"; sourceTree = "<group>"; };
+		A768B07616E125D90076ADB3 /* Makefile-lxplus */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-lxplus"; sourceTree = "<group>"; };
+		A768B07716E125D90076ADB3 /* Makefile-wn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-wn"; sourceTree = "<group>"; };
+		A768B07816E125D90076ADB3 /* runSpectra.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = runSpectra.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,10 +49,7 @@
 		A72AD9E116A8AAF900749EF8 = {
 			isa = PBXGroup;
 			children = (
-				A755C6AF16C90CCC0089F9EF /* README.md */,
-				A730715116DB42E7007DFC5B /* plots.py */,
-				A72AD9EF16A8AC0200749EF8 /* Makefile */,
-				A72AD9F716A8AC6B00749EF8 /* genSun */,
+				A768B07016E125D90076ADB3 /* genSun */,
 				A72AD9F516A8AC6B00749EF8 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,14 +62,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A72AD9F716A8AC6B00749EF8 /* genSun */ = {
+		A768B07016E125D90076ADB3 /* genSun */ = {
 			isa = PBXGroup;
 			children = (
-				A72AD9ED16A8ABCD00749EF8 /* genSun.cc */,
-				A7EAECBC16D22F29004D032C /* cardSunBatch.card */,
-				A7EAECBD16D22F29004D032C /* cardSunTest.card */,
+				A768B07116E125D90076ADB3 /* cardSunBatch.card */,
+				A768B07216E125D90076ADB3 /* cardSunTest.card */,
+				A768B07316E125D90076ADB3 /* genSun.cc */,
+				A768B07416E125D90076ADB3 /* Makefile */,
+				A768B07516E125D90076ADB3 /* Makefile-ied */,
+				A768B07616E125D90076ADB3 /* Makefile-lxplus */,
+				A768B07716E125D90076ADB3 /* Makefile-wn */,
+				A768B07816E125D90076ADB3 /* runSpectra.sh */,
 			);
-			path = genSun;
+			name = genSun;
+			path = pythia8175/genSun;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,7 +128,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A72AD9FF16A8ACD200749EF8 /* genSun.cc in Sources */,
+				A768B07916E125D90076ADB3 /* genSun.cc in Sources */,
+				A768B07A16E125D90076ADB3 /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
