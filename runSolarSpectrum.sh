@@ -3,7 +3,7 @@ uname -a
 WD=/scratch/joosep/solarNuWD-$SLURM_JOB_ID
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd ~/CMSSW_5_3_8_patch3
-scramv1 runtime -sh
+eval `scramv1 runtime -sh`
 source /cvmfs/cms.cern.ch/slc5_amd64_gcc462/lcg/root/5.32.00-cms21/bin/thisroot.sh
 export PYTHIA8DATA=/home/joosep/solarNu/pythia8175/xmldoc/
 PARTID=$1

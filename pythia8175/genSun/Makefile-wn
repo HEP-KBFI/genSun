@@ -6,9 +6,10 @@ LIBDIR=lib
 LIBDIRARCH=lib/archive
 PYTHIA8LOCATION=..
 OWNINCDIR=/home/joosep/local/include
+OWNLIBDIR=/home/joosep/local/lib
 CC=g++
 ROOTFLAGS=`root-config --cflags --ldflags --libs`
-CFLAGS= -w -std=c++0x -I$(OWNINCDIR) $(ROOTFLAGS) -O2 -funsigned-char -I$(PYTHIA8LOCATION)/$(INCDIR)
-LDFLAGS= -L$(PYTHIA8LOCATION)/$(LIBDIRARCH) -O2 -lpythia8 -llhapdfdummy -lgsl -lgslcblas
+CFLAGS= -w -std=c++0x $(ROOTFLAGS) -I$(OWNINCDIR) -O2 -funsigned-char -I$(PYTHIA8LOCATION)/$(INCDIR)
+LDFLAGS= -L$(PYTHIA8LOCATION)/$(LIBDIRARCH) -L$(OWNLIBDIR) -O2 -lpythia8 -llhapdfdummy -lgsl -lgslcblas
 genSun: genSun.cc
 	$(CC) $(CFLAGS) $@.cc $(LDFLAGS) $(FILELIST) -v -o $@.exe
