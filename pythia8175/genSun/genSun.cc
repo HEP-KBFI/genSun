@@ -82,8 +82,8 @@ double powerDistributionRandom(double xu, double xl, double n) {
 //dense material. Implemented as in http://arxiv.org/pdf/hep-ph/0506298v5.pdf
 //formula 8, 9
 namespace avgEnergyLoss {
-    double tint = 2.0E-10;
-    double tdec = 1.0E-12;
+    double tint = 2.5E-11; // Page 12 of Strumia, Cirelli et al
+    //double tdec = 1.0E-12; //Instead take it from the particle table
     
     //quark/hadron mass ratio
     double x(int idQ, int idHad, Pythia8::ParticleData* pdt) {
@@ -103,6 +103,7 @@ namespace avgEnergyLoss {
     }
     
     double Ecr(double E0, int idHad, Pythia8::ParticleData* pdt) {
+        double tdec = pdt->tau0(idHad);
         int idQ = idQuark(idHad);
         double Z = x(idQ, idHad, pdt)*z(idQ);
         double tstop = tint/(1.0-Z);
@@ -111,7 +112,7 @@ namespace avgEnergyLoss {
     }
     
     double E(double E0, int idHad, Pythia8::ParticleData* pdt) {
-        
+        double tdec = pdt->tau0(idHad);
         int idQ = idQuark(idHad);
         double Z = x(idQ, idHad, pdt)*z(idQ);
         double tstop = tint/(1.0-Z);
@@ -461,21 +462,14 @@ int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
     
     const std::vector<unsigned int> bHadrons({
-        511,
-        521,
-        551,
-        553,
-        5122, 5112, 5212, 5222, 5114, 5214, 5224
+        521,511,531,5122,5232,5132,5332
     });
+    //{211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334}
     const std::vector<unsigned int> cHadrons({
-        411,
-        421,
-        441,
-        443,
-        4122, 4222, 4212, 4112, 4232, 4132,
+        411,421,431,4122,4232,4132,4332
     });
     const std::vector<unsigned int> lHadrons({
-        111, 211,
+        211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334
     });
     
     const std::vector<unsigned int> chLeptons({

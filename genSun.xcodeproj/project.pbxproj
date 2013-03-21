@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A768B07916E125D90076ADB3 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A768B07316E125D90076ADB3 /* genSun.cc */; };
-		A768B07A16E125D90076ADB3 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = A768B07416E125D90076ADB3 /* Makefile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -104,7 +103,7 @@
 		A72AD9E316A8AAF900749EF8 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 0460;
 			};
 			buildConfigurationList = A72AD9E616A8AAF900749EF8 /* Build configuration list for PBXProject "genSun" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -129,7 +128,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A768B07916E125D90076ADB3 /* genSun.cc in Sources */,
-				A768B07A16E125D90076ADB3 /* Makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,7 +159,7 @@
 				PRELINK_LIBS = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				VALIDATE_PRODUCT = NO;
 			};
 			name = Debug;
@@ -190,7 +188,7 @@
 				PRELINK_LIBS = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				VALIDATE_PRODUCT = NO;
 			};
 			name = Release;
@@ -256,21 +254,21 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_MASTER_OBJECT_FILE = NO;
+				GENERATE_MASTER_OBJECT_FILE = YES;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Applications/root/include,
+					"/Applications/root/include/**",
 					"/Users/joosep/Documents/gsl/**",
-					../include,
+					"../include/**",
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = YES;
 				LD_MAP_FILE_PATH = "$(TARGET_TEMP_DIR)/$(PRODUCT_NAME)-LinkMap-$(CURRENT_VARIANT)-$(CURRENT_ARCH).txt";
 				LD_NO_PIE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SYSTEM_APPS_DIR)/root/lib\"",
-					/Users/joosep/Documents/gsl/libs,
-					../lib/archive,
+					"\"$(SYSTEM_APPS_DIR)/root/lib\"/**",
+					"/Users/joosep/Documents/gsl/libs/**",
+					"../lib/archive/**",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -316,7 +314,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				SEPARATE_SYMBOL_EDIT = NO;
 				VALIDATE_PRODUCT = NO;
 			};
@@ -382,20 +380,20 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_MASTER_OBJECT_FILE = NO;
+				GENERATE_MASTER_OBJECT_FILE = YES;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Applications/root/include,
+					"/Applications/root/include/**",
 					"/Users/joosep/Documents/gsl/**",
-					../include,
+					"../include/**",
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = YES;
 				LD_NO_PIE = YES;
 				LIBRARY_SEARCH_PATHS = (
-					"\"$(SYSTEM_APPS_DIR)/root/lib\"",
-					/Users/joosep/Documents/gsl/libs,
-					../lib/archive,
+					"\"$(SYSTEM_APPS_DIR)/root/lib\"/**",
+					"/Users/joosep/Documents/gsl/libs/**",
+					"../lib/archive/**",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -441,7 +439,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 				SEPARATE_SYMBOL_EDIT = NO;
 				VALIDATE_PRODUCT = NO;
 			};
