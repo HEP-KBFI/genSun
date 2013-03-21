@@ -1,7 +1,7 @@
 #!/bin/bash
 #masses=( 1000 2500 5000 7500 10000 )
-masses=( 5000 )
-particles=( 1 5 6 11 12 13 15 22 23 24 25 )
+masses=( 10 100 1000 10000 100000 )
+particles=( 1 2 3 4 5 6 11 12 13 15 22 23 24 25 )
 #particles=( 6 15 )
 OFDIR=/home/joosep/solarNu/out
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
