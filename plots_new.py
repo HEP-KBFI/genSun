@@ -8,6 +8,7 @@ import rootpy.io
 import rootpy.plotting
 import matplotlib.pyplot as plt
 from collections import OrderedDict as dict
+import numpy
 
 import matplotlib
 import matplotlib.cm
@@ -107,13 +108,26 @@ class EnergyDistribution:
         self.dm_mass = float(kwargs["dm_mass"])
         self.decay_channel = kwargs["decay_channel"]
         self.n_events = kwargs["n_events"]
+        self.fstate = kwargs["fstate"]
         self.energy_loss = EnergyLoss(kwargs["h_had"], kwargs["l_had"], kwargs["ch_lep"])
 
         self.x = [x for x in hist.x()]
         self.y = [y for y in hist.y()]
 
+    def saveAs(self, ofdir):
+        ofile = open(
+            ofdir + "/mass_%d_decaychannel_%d_fstate_%s.txt" %
+                (int(self.dm_mass), int(self.decay_channel), str(self.fstate)
+            ),
+            "w"
+        )
+        datapoints = zip(self.x, self.y)
+        for dp in datapoints:
+            ofile.write("%.5E, %.5E\n" % (dp[0], dp[1]))
+        ofile.close()
+
 if __name__=="__main__":
-    f = rootpy.io.open("spec_Mar1.root")
+    f = rootpy.io.open("mergedOut/spec_Mar23.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
     interesting_hists = {"ele": "nuel", "mu": "numu", "tau":"nutau"}
@@ -134,19 +148,22 @@ if __name__=="__main__":
                 hists[name] = f.get(name)
                 event_status_hist = f.get(elem[0] + "/eventStatus")
                 successful_events = event_status_hist.GetBinContent(1)
-                hists[name].Sumw2()
-                hists[name].rebin(250)
-                hists[name].Scale(float(10**5)/float(successful_events))
-                energy_distributions[name] = EnergyDistribution(hists[name], dm_mass=mass, decay_channel=partId, h_had=hHadInstr, l_had=lHadInstr, ch_lep=chLepInstr, n_events=successful_events)
-
+                if successful_events>0.0:
+                    hists[name].Sumw2()
+                    hists[name].rebin(50)
+                    hists[name].Scale(float(10**5)/float(successful_events))
+                    energy_distributions[name] = EnergyDistribution(hists[name], dm_mass=mass, decay_channel=partId, h_had=hHadInstr, l_had=lHadInstr, ch_lep=chLepInstr, n_events=successful_events, fstate=hname)
         else:
             continue
+
+
     def drawHist(h, color, linestyle):
         bins = [x for x in h.x()]
         heights = [y for y in h.y()]
         errors = sqrt(heights)
         width = (max(bins) - min(bins))/float(len(bins))
-        plt.errorbar(bins, heights, yerr=errors, alpha=0.8, color=color, fmt="r.", linestyle=linestyle, linewidth=2)
+        if numpy.sum(heights)>0:
+            plt.errorbar(bins, heights, yerr=errors, alpha=0.8, color=color, fmt="r.", linestyle=linestyle, linewidth=2)
 
     def plot(s, fname, titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass})", legendFormat=r"{partname} {bc_had_loss}"):
         pat = re.compile(s)
@@ -190,33 +207,32 @@ if __name__=="__main__":
         plt.savefig("nuSpec_%s.pdf" % fname)
         plt.clf()
 
-    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/numu", "top_hhad_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
-
-    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nutau", "top_hhad_nutau",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
-
-    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nuel", "top_hhad_nuel",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
-
-    plot(".*/particle_6/energyLoss_hhad_0_lhad_([0-9])_chlep_0/numu", "top_lhad_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating light hadron E loss", legendFormat=r"{neutrino_flavour}; {l_had_loss}")
-
-    plot(".*/particle_6/energyLoss_hhad_0_lhad_0_chlep_([0-9])/numu", "top_chlep_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating charged lepton E loss", legendFormat=r"{neutrino_flavour}; {ch_lep_loss}")
-
-    plot(".*/particle_15/energyLoss_hhad_([0-9])_lhad_0_chlep_0/numu", "tau_hhad_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour}; {bc_had_loss}")
-
-    plot(".*/particle_15/energyLoss_hhad_0_lhad_([0-9])_chlep_0/numu", "tau_lhad_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating light hadron E loss", legendFormat=r"{neutrino_flavour}; {l_had_loss}")
-
-    plot(".*/particle_15/energyLoss_hhad_0_lhad_0_chlep_([0-9])/numu", "tau_chlep_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating charged lepton E loss", legendFormat=r"{neutrino_flavour}; {ch_lep_loss}")
-
-    plot(".*/particle_([0-9])+/energyLoss_hhad_0_lhad_0_chlep_0/numu", "all_no_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), no energy loss", legendFormat=r"{partname}")
-    plot(".*/particle_([0-9])+/energyLoss_hhad_2_lhad_1_chlep_2/numu", "all_mc_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), MC energy loss", legendFormat=r"{partname}")
-    plot(".*/particle_([0-9])+/energyLoss_hhad_1_lhad_1_chlep_1/numu", "all_avg_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), average energy loss", legendFormat=r"{partname}")
-
-
-
+#    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/numu", "top_hhad_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
+#
+#    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nutau", "top_hhad_nutau",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
+#
+#    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nuel", "top_hhad_nuel",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
+#
+#    plot(".*/particle_6/energyLoss_hhad_0_lhad_([0-9])_chlep_0/numu", "top_lhad_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating light hadron E loss", legendFormat=r"{neutrino_flavour}; {l_had_loss}")
+#
+#    plot(".*/particle_6/energyLoss_hhad_0_lhad_0_chlep_([0-9])/numu", "top_chlep_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating charged lepton E loss", legendFormat=r"{neutrino_flavour}; {ch_lep_loss}")
+#
+#    plot(".*/particle_15/energyLoss_hhad_([0-9])_lhad_0_chlep_0/numu", "tau_hhad_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour}; {bc_had_loss}")
+#
+#    plot(".*/particle_15/energyLoss_hhad_0_lhad_([0-9])_chlep_0/numu", "tau_lhad_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating light hadron E loss", legendFormat=r"{neutrino_flavour}; {l_had_loss}")
+#
+#    plot(".*/particle_15/energyLoss_hhad_0_lhad_0_chlep_([0-9])/numu", "tau_chlep_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating charged lepton E loss", legendFormat=r"{neutrino_flavour}; {ch_lep_loss}")
+#
+#    plot(".*/particle_([0-9])+/energyLoss_hhad_0_lhad_0_chlep_0/numu", "all_no_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), no energy loss", legendFormat=r"{partname}")
+#    plot(".*/particle_([0-9])+/energyLoss_hhad_2_lhad_1_chlep_2/numu", "all_mc_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), MC energy loss", legendFormat=r"{partname}")
+#    plot(".*/particle_([0-9])+/energyLoss_hhad_1_lhad_1_chlep_1/numu", "all_avg_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), average energy loss", legendFormat=r"{partname}")
+for (k, v) in energy_distributions.items():
+    v.saveAs("energy_distributions")
