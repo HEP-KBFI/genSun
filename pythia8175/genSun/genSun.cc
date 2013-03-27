@@ -299,7 +299,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     if (ELossHistMap.find(absId) == ELossHistMap.end()) {
         stringstream ss;
         ss << "ELossIdAbs" << absId;
-        ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 5000, 1000, 0, 5000);
+        //ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 5000, 1000, 0, 5000);
     }
     hELoss = ELossHistMap[absId];
     
@@ -307,7 +307,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     if (EScaleFactorHistMap.find(absId) == EScaleFactorHistMap.end()) {
         stringstream ss;
         ss << "ESFIdAbs" << absId;
-        EScaleFactorHistMap[absId] = new TH1D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 1);
+        //EScaleFactorHistMap[absId] = new TH1D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 1);
     }
     hESF = EScaleFactorHistMap[absId];
     
@@ -332,8 +332,8 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     mProd.push_back(0);
     pProd.push_back(p4-p4_out);
     
-    hELoss->Fill(p4.e(), p4_out.e());
-    hESF->Fill(p4_out.e()/p4.e());
+    //hELoss->Fill(p4.e(), p4_out.e());
+    //hESF->Fill(p4_out.e()/p4.e());
     
     //This particle decayed successfully externally
     return true;
@@ -460,7 +460,7 @@ TDirectory* subDir(TDirectory* f, const char* prefix, const int val) {
 
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
-    
+/*
     const std::vector<unsigned int> bHadrons({
         521,511,531,5122,5232,5132,5332
     });
@@ -471,10 +471,43 @@ int main(int argc, char **argv) {
     const std::vector<unsigned int> lHadrons({
         211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334
     });
+*/
+
+    std::vector<unsigned int> bHadrons;
+    bHadrons.push_back(512);
+    bHadrons.push_back(511);
+    bHadrons.push_back(531);
+    bHadrons.push_back(5122);
+    bHadrons.push_back(5232);
+    bHadrons.push_back(5132);
+    bHadrons.push_back(5332);
     
-    const std::vector<unsigned int> chLeptons({
-        13,15
-    });
+    std::vector<unsigned int> cHadrons;
+    cHadrons.push_back(411);
+    cHadrons.push_back(421);
+    cHadrons.push_back(431);
+    cHadrons.push_back(4122);
+    cHadrons.push_back(4232);
+    cHadrons.push_back(4132);
+    cHadrons.push_back(4332);
+    
+    std::vector<unsigned int> lHadrons;
+    lHadrons.push_back(211);
+    lHadrons.push_back(321);
+    lHadrons.push_back(310);
+    lHadrons.push_back(130);
+    lHadrons.push_back(311);
+    lHadrons.push_back(2112);
+    lHadrons.push_back(3122);
+    lHadrons.push_back(3222);
+    lHadrons.push_back(3112);
+    lHadrons.push_back(3322);
+    lHadrons.push_back(3312);
+    lHadrons.push_back(3334);
+
+    std::vector<unsigned int> chLeptons;
+    chLeptons.push_back(13);
+    chLeptons.push_back(15);
     
     //Set up the GSL random number generator from the environment variables
     //GSL_RNG_SEED=123
@@ -632,28 +665,31 @@ int main(int argc, char **argv) {
     if (showCS)  pythia.settings.listChanged();
     if (showCPD) pythia.particleData.listChanged();
     
-    const unsigned int nBins = 10000;
+    const unsigned int nBins = 300;
     
     TH1I *hEventStatus = new TH1I("eventStatus","Event status distribution",2,0,2);
     
-    TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,5);
-    TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,5);
-    TH2D *hantid = new TH2D("antid","Antideteron distribution",nBins,-9,0,400,0,0.4);
-    TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,5);
+    TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,0);
+    TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,0);
+    TH1D *hproton = new TH1D("proton","Proton distribution",nBins,-9,0);
+    TH1D *hneutron = new TH1D("neutron","Neutron distribution",nBins,-9,0);
     
-    TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,5);
-    TH1D *hnuelE = new TH1D("nuelE","Electron nu energy distribution",nBins,0,10000);
+    //TH2D *hantid = new TH2D("antid","Antideteron distribution",nBins,-9,0,400,0,0.4);
+    TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,0);
     
-    TH1D *hnumu = new TH1D("numu","Muon nu distribution",nBins,-9,5);
-    TH1D *hnumuE = new TH1D("numuE","Muon nu energy distribution",nBins,0,10000);
+    TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,0);
+    //TH1D *hnuelE = new TH1D("nuelE","Electron nu energy distribution",nBins,0,10000);
     
-    TH1D *hnutau = new TH1D("nutau","Tau nu distribution",nBins,-9,5);
-    TH1D *hnutauE = new TH1D("nutauE","Tau nu energy distribution",nBins,0,10000);
+    TH1D *hnumu = new TH1D("numu","Muon nu distribution",nBins,-9,0);
+    //TH1D *hnumuE = new TH1D("numuE","Muon nu energy distribution",nBins,0,10000);
     
-    TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,5);
-    TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",nBins,0,200);
-    TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",nBins,0,150);
-    TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",nBins,0,30);
+    TH1D *hnutau = new TH1D("nutau","Tau nu distribution",nBins,-9,0);
+    //TH1D *hnutauE = new TH1D("nutauE","Tau nu energy distribution",nBins,0,10000);
+    
+    TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,0);
+    //TH1D *hBHad = new TH1D("bHad","b Hadron energy distribution",nBins,0,200);
+    //TH1D *hCHad = new TH1D("cHad","c Hadron energy distribution",nBins,0,150);
+    //TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",nBins,0,30);
     //hEnergySF = new TH1D("ESF","Energy loss scale factor",nBins,0,1);
     
     vector<Particle> antip;
@@ -722,15 +758,22 @@ int main(int argc, char **argv) {
             if (pythia.event[i].isFinal()) {
                 int id = pythia.event[i].id();
                 //int idAbs = abs(id);
-                //double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
-                double x = 0;
+                double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
                 if (id == -2212) {
                     antip.push_back(pythia.event[i]);
                     hantip->Fill(x);
                 }
-                if (id == -2112) {
+                else if (id == 2212) {
+                    hproton->Fill(x);
+                }
+                
+                //antineutrons
+                else if (id == -2112) {
                     antin.push_back(pythia.event[i]);
                     hantin->Fill(x);
+                }
+                if (id == 2112) {
+                    hneutron->Fill(x);
                 }
             }
         }
@@ -753,15 +796,15 @@ int main(int argc, char **argv) {
                 }
                 if (idAbs == 12) {
                     hnuel->Fill(x);
-                    hnuelE->Fill(pythia.event[i].e());
+                    //hnuelE->Fill(pythia.event[i].e());
                 }
                 if (idAbs == 14) {
                     hnumu->Fill(x);
-                    hnumuE->Fill(pythia.event[i].e());
+                    //hnumuE->Fill(pythia.event[i].e());
                 }
                 if (idAbs == 16) {
                     hnutau->Fill(x);
-                    hnutauE->Fill(pythia.event[i].e());
+                    //hnutauE->Fill(pythia.event[i].e());
                 }
                 if (id == 22) {
                     hgam->Fill(x);
