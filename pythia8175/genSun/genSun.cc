@@ -14,21 +14,21 @@
 #include <gsl/gsl_randist.h>
 
 #include <vector>
-//#include <initializer_list>
-#include <Pythia.h>
-#include <TFile.h>
-#include <TH1.h>
-#include <TH2.h>
-
 #include <iostream>
 #include <cmath>
+//#include <initializer_list>
+#include <TFile.h>
+#include <TMath.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <Pythia.h>
+
 
 //#define NDEBUG
 
 //Set up the GSL random number generation
 const gsl_rng_type * randomGeneratorType = 0;
 const gsl_rng * rng = 0;
-TH1D* hEnergySF = 0;
 
 unsigned int gslErrCount = 0;
 unsigned int PythiaErrCount = 0;
@@ -119,7 +119,7 @@ namespace avgEnergyLoss {
         double Ec = (pdt->m0(idHad))*tstop/tdec;
         double _x = Ec/E0;
         
-        double _E = std::numeric_limits<double>::quiet_NaN();
+        double _E = TMath::QuietNaN();
         if(!std::isnan(_x)) {
             double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
             if (f != GSL_ERANGE) { //no over/underflow
@@ -207,23 +207,24 @@ protected:
 
 void SubDecayHandler::addHandler(DecayHandler* handler, const std::vector<int>& particles) {
     decayHandlers.push_back(handler);
-    for(auto& p : particles) {
-        (this->decayMap)[(const int)p] = handler;
+    //for(auto& p : particles) {
+    for(auto it=particles.begin(); it!=particles.end(); it++) {
+        (this->decayMap)[(const int)*it] = handler;
     }
     return;
 }
 
 bool SubDecayHandler::decay(vector<int>& idProd, vector<double>& mProd, vector<Vec4>& pProd, int iDec, const Event& event) {
-    if (this->decayMap.find(idProd[0]) == this->decayMap.end())
+    if (this->decayMap.find(idProd[iDec]) == this->decayMap.end())
         return false;
     
-    return (this->decayMap[idProd[0]])->decay(idProd, mProd, pProd, iDec, event);
+    return (this->decayMap[idProd[iDec]])->decay(idProd, mProd, pProd, iDec, event);
 }
 
 const std::vector<int> SubDecayHandler::getHandledParticles() {
     std::vector<int> out;
-    for (auto& elem : this->decayMap) {
-        out.push_back(elem.first);
+    for (auto it = this->decayMap.begin(); it != this->decayMap.end(); it++) {
+        out.push_back(it->first);
     }
     return out;
 }
@@ -251,8 +252,8 @@ protected:
     
     //TH1D* hEAfterLoss = 0;
     //TH1D* hEBeforeLoss = 0;
-    std::map<const unsigned int, TH2D*> ELossHistMap;
-    std::map<const unsigned int, TH1D*> EScaleFactorHistMap;
+    //std::map<const unsigned int, TH2D*> ELossHistMap;
+    //std::map<const unsigned int, TH1D*> EScaleFactorHistMap;
     
     ~EnergyLossDecay() {};
     
@@ -292,46 +293,49 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
      return true;
      }
      */
+     //std::cout << "Event size: " << event.size() << std::endl;
     
     const unsigned int absId = abs(idProd[0]);
     
-    TH2D* hELoss = 0;
-    if (ELossHistMap.find(absId) == ELossHistMap.end()) {
+    //TH2D* hELoss = 0;
+    /*if (ELossHistMap.find(absId) == ELossHistMap.end()) {
         stringstream ss;
         ss << "ELossIdAbs" << absId;
         //ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 5000, 1000, 0, 5000);
-    }
-    hELoss = ELossHistMap[absId];
+    }*/
+    //hELoss = ELossHistMap[absId];
     
-    TH1D* hESF = 0;
-    if (EScaleFactorHistMap.find(absId) == EScaleFactorHistMap.end()) {
+    //TH1D* hESF = 0;
+    /*if (EScaleFactorHistMap.find(absId) == EScaleFactorHistMap.end()) {
         stringstream ss;
         ss << "ESFIdAbs" << absId;
         //EScaleFactorHistMap[absId] = new TH1D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 1);
-    }
-    hESF = EScaleFactorHistMap[absId];
+    }*/
+    //hESF = EScaleFactorHistMap[absId];
     
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
-        return false;
+        return true;
     }
     int id = idProd[0];
     double m = mProd[0];
     Vec4 p4 = pProd[0];
-    idProd.push_back(id);
-    mProd.push_back(m);
     
     double tau = event[iDec].tau();
     double tau0 = event[iDec].tau0();
     
     Vec4 p4_out = energyLoss(p4, id, iDec, event);
+    //if (p4_out.pAbs2() > 0.99*p4.pAbs2()) {
+    //    return true;
+    //}
+    idProd.push_back(id);
+    mProd.push_back(m);
     pProd.push_back(p4_out);
     
     //Create fake graviton to respect energy conservation
     idProd.push_back(39);
     mProd.push_back(0);
     pProd.push_back(p4-p4_out);
-    
     //hELoss->Fill(p4.e(), p4_out.e());
     //hESF->Fill(p4_out.e()/p4.e());
     
@@ -350,7 +354,7 @@ public:
     }
     
 private:
-    TH1D* h_sf;
+    //TH1D* h_sf;
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
@@ -368,7 +372,7 @@ public:
     }
     
 private:
-    TH1D* h_sf;
+    //TH1D* h_sf;
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
@@ -418,7 +422,7 @@ public:
     }
     
 private:
-    TH1D* h_sf;
+    //TH1D* h_sf;
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
@@ -534,7 +538,8 @@ int main(int argc, char **argv) {
     int chLeptonELossInstruction = atoi(argv[7]);
     
     if (partId == 23 || partId == 25) apartId = partId; else apartId = -partId;
-    
+   
+    //must declare on heap not stack
     Pythia* _pythia = new Pythia();
     Pythia& pythia = *_pythia;
     
@@ -601,13 +606,13 @@ int main(int argc, char **argv) {
         }
         
         vector<int> handledBCHadrons;
-        for(auto& id : bHadrons) {
-            handledBCHadrons.push_back(id);
-            handledBCHadrons.push_back(-id);
+        for(auto it=bHadrons.begin(); it!=bHadrons.end(); it++) {
+            handledBCHadrons.push_back((const int)*it);
+            handledBCHadrons.push_back(-(const int)*it);
         }
-        for(auto& id : cHadrons) {
-            handledBCHadrons.push_back(id);
-            handledBCHadrons.push_back(-id);
+        for(auto it = cHadrons.begin(); it != cHadrons.end(); it++) {
+            handledBCHadrons.push_back((const int)*it);
+            handledBCHadrons.push_back(-(const int)*it);
         }
         mainDecayHandler->addHandler(handleBCHadDecays, handledBCHadrons);
     }
@@ -625,9 +630,9 @@ int main(int argc, char **argv) {
         }
         
         vector<int> handledLHadrons;
-        for(auto& id : lHadrons) {
-            handledLHadrons.push_back(id);
-            handledLHadrons.push_back(-id);
+        for(auto it=lHadrons.begin(); it!=lHadrons.end(); it++) {
+            handledLHadrons.push_back((const int)*it);
+            handledLHadrons.push_back(-(const int)*it);
         }
         mainDecayHandler->addHandler(handleLHadDecays, handledLHadrons);
     }
@@ -651,9 +656,9 @@ int main(int argc, char **argv) {
         }
         
         vector<int> handledChLeptons;
-        for(auto& id : chLeptons) {
-            handledChLeptons.push_back(id);
-            handledChLeptons.push_back(-id);
+        for(auto it=chLeptons.begin(); it!= chLeptons.end(); it++) {
+            handledChLeptons.push_back((const int)*it);
+            handledChLeptons.push_back(-(const int)*it);
         }
         mainDecayHandler->addHandler(handleChLepDecays, handledChLeptons);
     }
@@ -662,8 +667,8 @@ int main(int argc, char **argv) {
     
     pythia.init();
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
-    if (showCS)  pythia.settings.listChanged();
-    if (showCPD) pythia.particleData.listChanged();
+    //if (showCS)  pythia.settings.listChanged();
+    //if (showCPD) pythia.particleData.listChanged();
     
     const unsigned int nBins = 300;
     
@@ -692,10 +697,11 @@ int main(int argc, char **argv) {
     //TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",nBins,0,30);
     //hEnergySF = new TH1D("ESF","Energy loss scale factor",nBins,0,1);
     
-    vector<Particle> antip;
-    vector<Particle> antin;
+   // vector<Particle> antip;
+   // vector<Particle> antin;
     
     int iAbort = 0;
+    std::cout << "Starting event loop" << std::endl;
     for (int iEvent = 0; iEvent < nEvent; ++iEvent) {
         
         // Generate events. Quit if many failures.
@@ -717,8 +723,8 @@ int main(int argc, char **argv) {
         
         //List the events
         if (iEvent < nList) {
-            pythia.info.list();
-            pythia.event.list();
+            //pythia.info.list();
+            //pythia.event.list();
         }
         
         // FIXME: This decay hack is from the old method and probably can be done
@@ -760,7 +766,7 @@ int main(int argc, char **argv) {
                 //int idAbs = abs(id);
                 double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
                 if (id == -2212) {
-                    antip.push_back(pythia.event[i]);
+                    //antip.push_back(pythia.event[i]);
                     hantip->Fill(x);
                 }
                 else if (id == 2212) {
@@ -769,7 +775,7 @@ int main(int argc, char **argv) {
                 
                 //antineutrons
                 else if (id == -2112) {
-                    antin.push_back(pythia.event[i]);
+                    //antin.push_back(pythia.event[i]);
                     hantin->Fill(x);
                 }
                 if (id == 2112) {
@@ -849,8 +855,8 @@ int main(int argc, char **argv) {
             }
         */
         // clean up
-        antip.clear();
-        antin.clear();
+        //antip.clear();
+        //antin.clear();
         // End of event loop.
     }
     cout << "Writing output from " << nEvent << " events." << endl;

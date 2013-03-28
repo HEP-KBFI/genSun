@@ -20,9 +20,9 @@ cp -R /home/joosep/solarNu/pythia8175 $WD
 cd $WD
 cd genSun
 #LD_LIBRARY_PATH=/home/joosep/local/lib:/home/joosep/local/lib64:$LD_LIBRARY_PATH ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR &> log \
- ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR &> log \
+./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR \
 && cp output.root $OFDIR/output_$SLURM_JOB_ID.root
-mv log $OFDIR/log_$SLURM_JOB_ID.txt
+#mv log $OFDIR/log_$SLURM_JOB_ID.txt
 
 ls -al
 rm -Rf $WD
