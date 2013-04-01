@@ -29,8 +29,8 @@ decay_channel_names_Mathematica = {
     1: "q",
     2: "q",
     3: "q",
-    4: "q",
-    5: "c",
+    4: "c",
+    5: "b",
     6: "t",
     11: "e",
     #13: "\\[Mu]",
@@ -49,7 +49,7 @@ decay_channel_names_Mathematica = {
 
     23: "Z",
     24: "W",
-    25: "h"
+    25: "h125"
 }
 
 fstate_names_Mathematica = {
@@ -224,7 +224,7 @@ if __name__=="__main__":
         else:
             continue
 
-    channels = [1, 5, 6, 12, 13, 14, 15, 16, 22, 23, 24, 25]
+    channels = [1, 4, 5, 6, 11, 22, 23, 24, 25]
     for (part, distrs) in energy_distributions_part.items():
         if part not in channels:
             continue
@@ -310,6 +310,6 @@ if __name__=="__main__":
 #            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating charged lepton E loss", legendFormat=r"{neutrino_flavour}; {ch_lep_loss}")
 #
 #    plot(".*/particle_([0-9])+/energyLoss_hhad_0_lhad_0_chlep_0/numu", "all_no_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), no energy loss", legendFormat=r"{partname}")
-    plot("mass_1000/particle_([0-9])+/energyLoss_hhad_2_lhad_1_chlep_2/numu", "all_mc_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), MC energy loss", legendFormat=r"{partname}")
+#    plot("mass_1000/particle_([0-9])+/energyLoss_hhad_2_lhad_1_chlep_2/numu", "all_mc_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), MC energy loss", legendFormat=r"{partname}")
 #    plot(".*/particle_([0-9])+/energyLoss_hhad_1_lhad_1_chlep_1/numu", "all_avg_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), average energy loss", legendFormat=r"{partname}")
 #for (k, v) in energy_distributions.items():
