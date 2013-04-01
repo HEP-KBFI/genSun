@@ -25,6 +25,44 @@ lepNames = {"el": "Electron", "mu": "Muon", "tau": "Tau"}
 lepPretty={"el":"#nu_{e}", "mu":"#nu_{#mu}", "tau":"#nu_{#tau}"}
 flavour_names = {"nuel": r"$ \nu_e $", "numu": r"$ \nu_\mu $", "nutau": r"$ \nu_\tau $"}
 
+decay_channel_names_Mathematica = {
+    1: "q",
+    2: "q",
+    3: "q",
+    4: "q",
+    5: "c",
+    6: "t",
+    11: "e",
+    #13: "\\[Mu]",
+    #15: "\\[Tau]",
+    #12: "\\[Nu]e",
+    #14: "\\[Nu]\\[Mu]",
+    #16: "\\[Nu]\\[Tau]",
+    #22: "\\[Gamma]",
+    13: "mu",
+    15: "tau",
+
+    12: "nue",
+    14: "numu",
+    16: "nutau",
+    22: "g",
+
+    23: "Z",
+    24: "W",
+    25: "h"
+}
+
+fstate_names_Mathematica = {
+    #"deuterium": "d",
+    #"electron": "e",
+    #"proton": "p",
+    #"neutron": "n",
+    #"gamma": "\\[Gamma]",
+    "nuel": "\\[Nu]e",
+    "numu": "\\[Nu]\\[Mu]",
+    "nutau": "\\[Nu]\\[Tau]"
+}
+
 energyLossMechanisms = {
         "no": "0",
         "chHadAvg": "100",
@@ -33,6 +71,7 @@ energyLossMechanisms = {
         "chHadProb": "200",
         "chLepProb": "2",
 }
+
 colorsELoss = {
         "no": ROOT.kBlack,
         "chHadAvg": ROOT.kRed,
@@ -43,7 +82,7 @@ colorsELoss = {
 }
 
 colors = {1: ROOT.kBlue, 5: ROOT.kBlack, 6: ROOT.kRed, 22: ROOT.kOrange, 23: ROOT.kGreen, 24:ROOT.kTeal, 25: ROOT.kViolet, 11: ROOT.kPink+5, 12: ROOT.kViolet+5, 13: ROOT.kSpring+5, 15: ROOT.kBlue+5}
-partNames = {1: r"$l\bar{l}$", 5: r"$c\bar{c}$", 6: r"$t\bar{t}$", 22: r"$\gamma\gamma$", 23: r"$Z_{0}$", 24: r"$W_{\pm}$", 25: r"$h_{0}$", 11:r"$e^{\pm}$", 13:r"$\mu^{\pm}$", 15:r"$\tau^{\pm}$", 12: r"$\nu_{e}$", }
+partNames = {1: r"$l\bar{l}$", 2:"l", 3:"l", 4: "l", 5: r"$c\bar{c}$", 6: r"$t\bar{t}$", 22: r"$\gamma\gamma$", 23: r"$Z_{0}$", 24: r"$W_{\pm}$", 25: r"$h_{0}$", 11:r"$e^{\pm}$", 13:r"$\mu^{\pm}$", 15:r"$\tau^{\pm}$", 12: r"$\nu_{e}$", }
 
 hists = dict()
 
@@ -103,7 +142,7 @@ class EnergyLoss:
 
 class EnergyDistribution:
     def __init__(self, *args, **kwargs):
-        hist = args[0]
+        self.hist = args[0]
 
         self.dm_mass = float(kwargs["dm_mass"])
         self.decay_channel = kwargs["decay_channel"]
@@ -111,8 +150,10 @@ class EnergyDistribution:
         self.fstate = kwargs["fstate"]
         self.energy_loss = EnergyLoss(kwargs["h_had"], kwargs["l_had"], kwargs["ch_lep"])
 
-        self.x = [x for x in hist.x()]
-        self.y = [y for y in hist.y()]
+        self.x = [x for x in self.hist.x()]
+        self.y = [y for y in self.hist.y()]
+        self.bin_width = 0.03
+        self.hist.Scale(1.0/(self.n_events*self.bin_width))
 
     def saveAs(self, ofdir):
         ofile = open(
@@ -126,35 +167,72 @@ class EnergyDistribution:
             ofile.write("%.5E, %.5E\n" % (dp[0], dp[1]))
         ofile.close()
 
+    def printArray(self):
+        decay_channel_str = decay_channel_names_Mathematica[int(self.decay_channel)]
+        ostr = 'lxbins[\"{0}\"->\"{1}\",{2},Pythia]={{'.format(decay_channel_str, fstate_names_Mathematica[self.fstate], int(self.dm_mass))
+        n_bins = self.hist.GetNbinsX()
+        for n in range(1, n_bins):
+            ostr += ("%.9f" % self.hist.GetBinContent(n)) + ","
+        ostr += ("%.9f" % (self.hist.GetBinContent(n_bins) + self.hist.GetBinContent(n_bins+1))) + "};"
+        return ostr
+
+    def __repr__(self):
+        return "<EnergyDistribution(%s -> %s, %d)>" % (self.decay_channel, self.fstate, int(self.dm_mass))
+
 if __name__=="__main__":
-    f = rootpy.io.open("mergedOut/spec_Mar23.root")
+    f = rootpy.io.open("mergedOut/spec_Mar28.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
-    interesting_hists = {"ele": "nuel", "mu": "numu", "tau":"nutau"}
+    interesting_hists = ["nuel", "numu", "nutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
     hists = dict()
     energy_distributions = dict()
+
+    energy_distributions_part = dict()
+
 
     for elem in f.walk():
         m = pat.match(elem[0])
         if m is not None:
-            mass = m.group(1)
-            partId = m.group(2)
-            hHadInstr = m.group(3)
-            lHadInstr = m.group(4)
-            chLepInstr = m.group(5)
+            mass = int(m.group(1))
+            partId = int(m.group(2))
+            hHadInstr = int(m.group(3))
+            lHadInstr = int(m.group(4))
+            chLepInstr = int(m.group(5))
 
-            for htitle, hname in interesting_hists.items():
+            for hname in interesting_hists:
                 name = elem[0] + "/" + hname
                 hists[name] = f.get(name)
                 event_status_hist = f.get(elem[0] + "/eventStatus")
                 successful_events = event_status_hist.GetBinContent(1)
                 if successful_events>0.0:
                     hists[name].Sumw2()
-                    hists[name].rebin(50)
                     hists[name].Scale(float(10**5)/float(successful_events))
-                    energy_distributions[name] = EnergyDistribution(hists[name], dm_mass=mass, decay_channel=partId, h_had=hHadInstr, l_had=lHadInstr, ch_lep=chLepInstr, n_events=successful_events, fstate=hname)
+                    energy_distributions[name] = EnergyDistribution(
+                        hists[name],
+                        dm_mass=mass,
+                        decay_channel=partId,
+                        h_had=hHadInstr,
+                        l_had=lHadInstr,
+                        ch_lep=chLepInstr,
+                        n_events=successful_events,
+                        fstate=hname
+                    )
+                    if hHadInstr==2 and lHadInstr==1 and chLepInstr==2:
+                        if partId not in energy_distributions_part.keys():
+                            energy_distributions_part[partId] = []
+                        energy_distributions_part[partId].append(energy_distributions[name])
         else:
             continue
+
+    channels = [1, 5, 6, 12, 13, 14, 15, 16, 22, 23, 24, 25]
+    for (part, distrs) in energy_distributions_part.items():
+        if part not in channels:
+            continue
+        ofname = "DM%s.nb" % decay_channel_names_Mathematica[part]
+        ofile = open(ofname, "w")
+        for dist in distrs:
+            ofile.write(dist.printArray() + "\n")
+        ofile.close()
 
 
     def drawHist(h, color, linestyle):
@@ -172,7 +250,7 @@ if __name__=="__main__":
 
         #colors = cmap_discretize(matplotlib.cm.jet, len(hns_to_plot))
         colors=('k','y','m','c','b','g','r','#aaaaaa')
-        linestyles=('-','--','-.',':')
+        linestyles=('-','--','-.',':', '.')
         styles=[(color,linestyle) for linestyle in linestyles for color in colors]
 
         i = 0
@@ -232,7 +310,6 @@ if __name__=="__main__":
 #            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating charged lepton E loss", legendFormat=r"{neutrino_flavour}; {ch_lep_loss}")
 #
 #    plot(".*/particle_([0-9])+/energyLoss_hhad_0_lhad_0_chlep_0/numu", "all_no_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), no energy loss", legendFormat=r"{partname}")
-#    plot(".*/particle_([0-9])+/energyLoss_hhad_2_lhad_1_chlep_2/numu", "all_mc_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), MC energy loss", legendFormat=r"{partname}")
+    plot("mass_1000/particle_([0-9])+/energyLoss_hhad_2_lhad_1_chlep_2/numu", "all_mc_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), MC energy loss", legendFormat=r"{partname}")
 #    plot(".*/particle_([0-9])+/energyLoss_hhad_1_lhad_1_chlep_1/numu", "all_avg_loss", titleFormat=r"spectrum of E({neutrino_flavour}) for DM({mass}), average energy loss", legendFormat=r"{partname}")
-for (k, v) in energy_distributions.items():
-    v.saveAs("energy_distributions")
+#for (k, v) in energy_distributions.items():

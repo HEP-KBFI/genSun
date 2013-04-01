@@ -23,7 +23,7 @@ void printArray2(char* ch, int m, TH1D* h, char *fs) {
 
 int main(int argc, char **argv) {
   if (argc < 6) { 
-	printf("Usage: ./conv8 rootfile finalstate N NMeV shapeMeV");
+	printf("Usage: ./conv8 rootfile finalstate N NMeV shapeMeV\n");
 	exit(1);
   }
   TFile f(argv[1]);
