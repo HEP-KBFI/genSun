@@ -15,10 +15,11 @@ class G4Event;
 class DMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	public:
 		DMPrimaryGeneratorAction(
-		const G4String& particleName = "geantino",
-		G4double energy = 1.*CLHEP::MeV,
-		G4ThreeVector position= G4ThreeVector(0,0,0),
-		G4ThreeVector momentumDirection = G4ThreeVector(0,0,1));    
+			const G4String& particleName = "geantino",
+			G4double energy = 1.*CLHEP::MeV,
+			G4ThreeVector position= G4ThreeVector(0,0,0),
+			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
+		);    
 		~DMPrimaryGeneratorAction();
 
 		// methods
