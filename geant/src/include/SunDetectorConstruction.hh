@@ -32,5 +32,10 @@ class SunDetectorConstruction : public G4VUserDetectorConstruction {
 
 		G4Material * getSunMaterial();
 };
+
+struct ElementFraction {
+	G4String name;
+	G4double fraction;
+};
 #endif
 

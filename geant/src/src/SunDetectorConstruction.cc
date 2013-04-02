@@ -1,10 +1,21 @@
 #include "SunDetectorConstruction.hh"
 
-#include "G4Material.hh"
-#include "G4NistManager.hh"
+#include "globals.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4Material.hh"
+#include "G4UnitsTable.hh"
+#include "G4NistManager.hh"
+
+// Parameters of the sun
+G4double density     = 1.41*g/cm3;
+G4double pressure    = 1e9*atmosphere;
+G4double temperature = 15e6*kelvin;
+ElementFraction sunfractions[] = {
+	{"G4_H", 73.46},
+	{"G4_He", 24.85}
+};
 
 SunDetectorConstruction::SunDetectorConstruction(
 	const G4String& materialName,
@@ -45,13 +56,40 @@ G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 }
 
 G4Material * SunDetectorConstruction::getSunMaterial() {
-	// TODO: Implement the real sun material!
-
 	// Define materials via NIST manager
-	G4NistManager* nistManager = G4NistManager::Instance();
-	G4bool fromIsotopes = false;
+	G4NistManager* nm = G4NistManager::Instance();
+	nm->SetVerbose(1);
+	/*G4bool fromIsotopes = false;
 	G4Material* material = nistManager->FindOrBuildMaterial(fMaterialName, fromIsotopes);
-	return material;
+	return material;*/
+	
+	// Calculate the total fraction. Used for normalization.
+	double totalfraction = 0.0;
+	for(size_t i=0; i < sizeof(sunfractions)/sizeof(sunfractions[0]); i++) {
+		totalfraction += sunfractions[i].fraction;
+	}
+	G4cout << "Total fraction: " << totalfraction << G4endl;
+	
+	G4Material* solarmaterial = new G4Material(
+		"Sun", density, // name, density
+		2, kStateGas, // ncomponents, state
+		temperature, pressure // temperature, pressure
+	);
+	for(size_t i=0; i < sizeof(sunfractions)/sizeof(sunfractions[0]); i++) {
+		solarmaterial->AddMaterial(
+			nm->FindOrBuildMaterial(sunfractions[i].name),
+			sunfractions[i].fraction/totalfraction
+		);
+	}
+	/*#define FOB(s) (nm->FindOrBuildMaterial(s))
+	solarmaterial->AddMaterial(FOB("G4_H"), 0.7346); // material, fractionmass
+	solarmaterial->AddMaterial(FOB("G4_He"), 0.2485);
+	#undef FOB*/
+	
+	G4cout << "Solar material:" << G4endl;
+	G4cout << *solarmaterial << G4endl;
+	
+	return solarmaterial;
 }
 
 /*void SunDetectorConstruction::SetMaterial(const G4String& materialName) {
