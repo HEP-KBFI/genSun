@@ -65,14 +65,20 @@ target_link_libraries(solnugeant ${Geant4_LIBRARIES})
 # build B1. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 # ---
-set(SCRIPTS)
+set(SCRIPTS
+	default.mac
+	vis.mac
+)
 
+message(" > Copying scripts...")
 foreach(_script ${SCRIPTS})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_script}
-    COPYONLY
-    )
+	set(script_from ${PROJECT_SOURCE_DIR}/scripts/${_script})
+	configure_file(
+		${script_from}
+		${PROJECT_BINARY_DIR}/${_script}
+		COPYONLY
+	)
+	message(" > - ${script_from}")
 endforeach()
 
 #----------------------------------------------------------------------------
