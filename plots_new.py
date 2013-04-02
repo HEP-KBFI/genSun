@@ -45,11 +45,11 @@ decay_channel_names_Mathematica = {
     12: "nue",
     14: "numu",
     16: "nutau",
-    22: "g",
+    22: "\[Gamma]",
 
     23: "Z",
     24: "W",
-    25: "h125"
+    25: "h"
 }
 
 fstate_names_Mathematica = {
