@@ -9,7 +9,7 @@
 #include "G4NistManager.hh"
 
 // Parameters of the sun
-G4double density     = 1.41*g/cm3;
+G4double density     = 160*g/cm3;
 G4double pressure    = 1e9*atmosphere;
 G4double temperature = 15e6*kelvin;
 ElementFraction sunfractions[] = {
