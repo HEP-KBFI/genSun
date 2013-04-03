@@ -2,6 +2,7 @@
 
 #include "globals.hh"
 #include "G4Box.hh"
+#include "G4Orb.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4Material.hh"
@@ -32,12 +33,13 @@ G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 	G4Material* material = this->getSunMaterial();
 
 	// World
-	G4Box* sWorld = new G4Box("World", // name
+	/*G4Box* sWorld = new G4Box("World", // name
 		// dimensions (half-lentghs)
 		fDimensions.x(),
 		fDimensions.y(), 
 		fDimensions.z()
-	);
+	);*/
+	G4CSGSolid* sWorld = new G4Orb("World", fDimensions.mag());
 
 	// Logical World Volume. Arguments: // shape, material, name
 	fWorldVolume = new G4LogicalVolume(sWorld, material, "World");
