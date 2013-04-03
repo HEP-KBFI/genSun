@@ -31,11 +31,13 @@ set(source_files
 	SunDetectorConstruction.cc
 	DMPhysicsList.cc
 	DMPrimaryGeneratorAction.cc
+	NeutrinoStackingAction.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
 	DMPhysicsList.hh
 	DMPrimaryGeneratorAction.hh
+	NeutrinoStackingAction.hh
 )
 
 message(" > Sources...")

@@ -6,6 +6,7 @@
 #include "SunDetectorConstruction.hh"
 //#include "DMPhysicsList.hh"
 #include "DMPrimaryGeneratorAction.hh"
+#include "NeutrinoStackingAction.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -25,6 +26,7 @@ int main(int argc, char * argv[]) {
 	// set mandatory user action class
 	//runManager->SetUserAction(new DMPrimaryGeneratorAction);
 	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV));
+	runManager->SetUserAction(new NeutrinoStackingAction());
 
 	// initialize G4 kernel
 	runManager->Initialize();
