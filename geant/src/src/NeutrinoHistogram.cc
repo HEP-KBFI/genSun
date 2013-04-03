@@ -1,5 +1,6 @@
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4RootAnalysisManager.hh"
 
 #include "NeutrinoHistogram.hh"
 
@@ -11,10 +12,20 @@
 #include "G4AntiNeutrinoTau.hh"
 
 NeutrinoHistogram::NeutrinoHistogram() {
-	//
+	anm = new G4RootAnalysisManager();
+	anm->OpenFile("test.root");
+	
+	h = anm->CreateH1(
+		"energy", "Wohoo!", // name, title
+		100, 0.0, 100.0, // nbins, xmin, xmax
+		"MeV", "Neutrino count" //unitName="none", fcnName="none"
+	);
 }
 
-NeutrinoHistogram::~NeutrinoHistogram() {}
+NeutrinoHistogram::~NeutrinoHistogram() {
+	anm->Write();
+	anm->CloseFile();
+}
 
 void NeutrinoHistogram::addParticle(const G4Track* tr) {
 	nu type = NeutrinoHistogram::getNeutrinoType(tr->GetParticleDefinition());
@@ -22,7 +33,9 @@ void NeutrinoHistogram::addParticle(const G4Track* tr) {
 	if(type != nuNot) {
 		G4String pname = tr->GetParticleDefinition()->GetParticleName();
 		G4double energy = tr->GetTotalEnergy();
-		G4cout << " >>> Found: " << energy << " (" << pname << ")" << G4endl;
+		//G4cout << " >>> Found: " << energy << " (" << pname << ")" << G4endl;
+		
+		anm->FillH1(h, energy); // id, value, weight=1.0
 	}
 }
 
