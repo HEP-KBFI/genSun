@@ -4,8 +4,11 @@
 #include "G4VisExecutive.hh"
 
 #include "SunDetectorConstruction.hh"
-#include "DMPhysicsList.hh"
+//#include "DMPhysicsList.hh"
 #include "DMPrimaryGeneratorAction.hh"
+
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
 
 int main(int argc, char * argv[]) {
 	// construct the default run manager
@@ -13,10 +16,15 @@ int main(int argc, char * argv[]) {
 
 	// set mandatory initialization classes
 	runManager->SetUserInitialization(new SunDetectorConstruction);
-	runManager->SetUserInitialization(new DMPhysicsList);
+	//runManager->SetUserInitialization(new DMPhysicsList);
+	G4PhysListFactory factory;
+	G4VModularPhysicsList* physlist = factory.GetReferencePhysList("QGSP_BERT");
+	physlist->SetVerboseLevel(3);
+	runManager->SetUserInitialization(physlist);
 
 	// set mandatory user action class
-	runManager->SetUserAction(new DMPrimaryGeneratorAction);
+	//runManager->SetUserAction(new DMPrimaryGeneratorAction);
+	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV));
 
 	// initialize G4 kernel
 	runManager->Initialize();
