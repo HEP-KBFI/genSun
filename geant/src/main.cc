@@ -7,6 +7,7 @@
 //#include "DMPhysicsList.hh"
 #include "DMPrimaryGeneratorAction.hh"
 #include "NeutrinoStackingAction.hh"
+#include "NeutrinoHistogram.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -26,7 +27,11 @@ int main(int argc, char * argv[]) {
 	// set mandatory user action class
 	//runManager->SetUserAction(new DMPrimaryGeneratorAction);
 	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV));
-	runManager->SetUserAction(new NeutrinoStackingAction());
+	
+	// Getting the neutrinos
+	NeutrinoHistogram h;
+	NeutrinoHistogram* h_ptr = &h;
+	runManager->SetUserAction(new NeutrinoStackingAction(&h));
 
 	// initialize G4 kernel
 	runManager->Initialize();

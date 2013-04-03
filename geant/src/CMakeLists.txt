@@ -32,12 +32,14 @@ set(source_files
 	DMPhysicsList.cc
 	DMPrimaryGeneratorAction.cc
 	NeutrinoStackingAction.cc
+	NeutrinoHistogram.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
 	DMPhysicsList.hh
 	DMPrimaryGeneratorAction.hh
 	NeutrinoStackingAction.hh
+	NeutrinoHistogram.hh
 )
 
 message(" > Sources...")
