@@ -41,7 +41,7 @@ int main(int argc, char * argv[]) {
 	physlist->SetVerboseLevel(3);
 	
 	runManager->SetUserInitialization(physlist); // physics
-	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV)); // particle gun
+	runManager->SetUserAction(new DMPrimaryGeneratorAction(13, -13, 1*GeV)); // particle gun
 	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
 	runManager->SetUserAction(new MyUserRunAction);
 	runManager->Initialize(); // initialize G4 kernel

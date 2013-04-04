@@ -15,8 +15,8 @@ class G4Event;
 class DMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	public:
 		DMPrimaryGeneratorAction(
-			const G4String& particleName = "geantino",
-			G4double energy = 1.*CLHEP::MeV,
+			G4int p1id, G4int p2id,
+			G4double dm_mass = 1.*CLHEP::MeV,
 			G4ThreeVector position= G4ThreeVector(0,0,0),
 			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
 		);    
@@ -27,7 +27,7 @@ class DMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
 	private:
 		// data members
-		G4ParticleGun*  fParticleGun; //pointer a to G4 service class
+		G4ParticleGun *fPGun1, *fPGun2; //pointer a to G4 service class
 };
 
 #endif
