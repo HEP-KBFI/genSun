@@ -48,6 +48,7 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case 'v':
 			p_vis = true;
 			G4cout << "Enabling visual mode!" << G4endl;
+			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
 			return ARGP_ERR_UNKNOWN;
