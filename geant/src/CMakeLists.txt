@@ -22,6 +22,23 @@ endif()
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
+#----------------------------------------------------------------------------
+# Check for PYTHIA8
+# ---
+if(DEFINED ENV{PYTHIA8})
+	message("$PYTHIA8 value: " $ENV{PYTHIA8})
+else()
+	message(FATAL_ERROR
+		"ERROR: Variable $PYTHIA8 not defined!" "\n"
+		"Make sure it points to PYTHIA install directory."
+	)
+	exit()
+endif()
+include_directories($ENV{PYTHIA8}/include)
+FIND_LIBRARY(PYTHIA8_LIBRARY pythia8 $ENV{PYTHIA8}/lib/archive)
+FIND_LIBRARY(HAPDFDUMMY_LIBRARY lhapdfdummy  $ENV{PYTHIA8}/lib/archive)
+message("pythia lib" ${PYTHIA8_LIBRARY})
+#TARGET_LINK_LIBRARIES(pythia8 $ENV{PYTHIA8}/lib)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -33,6 +50,7 @@ set(source_files
 	DMPrimaryGeneratorAction.cc
 	NeutrinoStackingAction.cc
 	NeutrinoHistogram.cc
+	DMPythiaPGA.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
@@ -40,6 +58,7 @@ set(include_files
 	DMPrimaryGeneratorAction.hh
 	NeutrinoStackingAction.hh
 	NeutrinoHistogram.hh
+	DMPythiaPGA.hh
 )
 
 message(" > Sources...")
@@ -62,7 +81,16 @@ endforeach(include)
 # Add the executable, and link it to the Geant4 libraries
 # ---
 add_executable(solnugeant main.cc ${sources} ${headers})
-target_link_libraries(solnugeant ${Geant4_LIBRARIES})
+target_link_libraries(solnugeant
+	${Geant4_LIBRARIES}
+	${PYTHIA8_LIBRARY} ${HAPDFDUMMY_LIBRARY}
+)
+
+add_executable(test_dmpythia test/dmpythia.cc ${sources} ${headers})
+target_link_libraries(test_dmpythia
+	${Geant4_LIBRARIES}
+	${PYTHIA8_LIBRARY} ${HAPDFDUMMY_LIBRARY}
+)
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -72,6 +100,7 @@ target_link_libraries(solnugeant ${Geant4_LIBRARIES})
 set(SCRIPTS
 	default.mac
 	vis.mac
+	pythia.card
 )
 
 message(" > Copying scripts...")
