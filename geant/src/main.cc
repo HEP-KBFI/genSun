@@ -2,6 +2,8 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
+#include "G4UserRunAction.hh"
+#include "G4Run.hh"
 
 #include "SunDetectorConstruction.hh"
 //#include "DMPhysicsList.hh"
@@ -11,6 +13,17 @@
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
+
+class MyUserRunAction : public G4UserRunAction {
+	public:
+		//G4Run* GenerateRun();
+		void BeginOfRunAction(const G4Run* run);
+		//void EndOfRunAction(const G4Run*);
+};
+
+void MyUserRunAction::BeginOfRunAction(const G4Run* run) {
+	G4cout << "Starting run. RunID=" << run->GetRunID() << G4endl;
+}
 
 int main(int argc, char * argv[]) {
 	// Start setting up Geant4
@@ -30,6 +43,7 @@ int main(int argc, char * argv[]) {
 	runManager->SetUserInitialization(physlist); // physics
 	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV)); // particle gun
 	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
+	runManager->SetUserAction(new MyUserRunAction);
 	runManager->Initialize(); // initialize G4 kernel
 
 	// get the pointer to the UI manager and set verbosities
