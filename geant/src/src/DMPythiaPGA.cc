@@ -95,3 +95,7 @@ void Pythia8Interface::next() {
 		G4cout << particle->GetParticleName() << G4endl;
 	}
 }
+
+void Pythia8Interface::statistics() {
+	pythia->statistics();
+}

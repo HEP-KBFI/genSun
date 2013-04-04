@@ -7,6 +7,7 @@ int main(int argc, char* argv[]) {
 	for(int i=0; i<3; i++) {
 		p.next();
 	}
+	p.statistics();
 	
 	return 0;
 }

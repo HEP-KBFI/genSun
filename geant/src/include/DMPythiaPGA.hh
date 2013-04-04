@@ -23,6 +23,7 @@ class Pythia8Interface {
 		
 		// testing
 		void next();
+		void statistics();
 	
 	private:
 		Pythia8::Pythia* pythia;
