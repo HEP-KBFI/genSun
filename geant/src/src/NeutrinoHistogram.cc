@@ -16,9 +16,9 @@ NeutrinoHistogram::NeutrinoHistogram() {
 	anm->OpenFile("test.root");
 	
 	h = anm->CreateH1(
-		"energy", "Wohoo!", // name, title
+		"energy", "Neutrinos!", // name, title
 		100, 0.0, 100.0, // nbins, xmin, xmax
-		"MeV", "Neutrino count" //unitName="none", fcnName="none"
+		"MeV", "none" //unitName="none", fcnName="none"
 	);
 }
 
