@@ -13,36 +13,24 @@
 #include "G4VModularPhysicsList.hh"
 
 int main(int argc, char * argv[]) {
-	// construct the default run manager
-	G4RunManager* runManager = new G4RunManager;
-
-	// set mandatory initialization classes
-	runManager->SetUserInitialization(new SunDetectorConstruction);
-	//runManager->SetUserInitialization(new DMPhysicsList);
-	G4PhysListFactory factory;
-	G4VModularPhysicsList* physlist = factory.GetReferencePhysList("QGSP_BERT");
-	physlist->SetVerboseLevel(3);
-	runManager->SetUserInitialization(physlist);
-
-	// set mandatory user action class
-	//runManager->SetUserAction(new DMPrimaryGeneratorAction);
-	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV));
+	// Start setting up Geant4
+	NeutrinoHistogram h; // create the histogrammer
 	
-	// Getting the neutrinos
-	NeutrinoHistogram h;
-	NeutrinoHistogram* h_ptr = &h;
-	runManager->SetUserAction(new NeutrinoStackingAction(&h));
-
-	// initialize G4 kernel
-	runManager->Initialize();
-
-#ifdef G4VIS_USE
-	// Initialize visualization
-	G4VisManager* visManager = new G4VisExecutive;
-	// G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-	// G4VisManager* visManager = new G4VisExecutive("Quiet");
-	visManager->Initialize();
-#endif
+	// Start constructing the run manager
+	G4RunManager* runManager = new G4RunManager;
+	runManager->SetUserInitialization(new SunDetectorConstruction); // detector
+	
+	// create the physics list (using a factory)
+	G4VModularPhysicsList* physlist;
+	//physlist = new DMPhysicsList;
+	G4PhysListFactory factory;
+	physlist = factory.GetReferencePhysList("QGSP_BERT");
+	physlist->SetVerboseLevel(3);
+	
+	runManager->SetUserInitialization(physlist); // physics
+	runManager->SetUserAction(new DMPrimaryGeneratorAction("pi+", 5*MeV)); // particle gun
+	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
+	runManager->Initialize(); // initialize G4 kernel
 
 	// get the pointer to the UI manager and set verbosities
 	G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -52,19 +40,26 @@ int main(int argc, char * argv[]) {
 		G4String fileName = argv[1];
 		UI->ApplyCommand(command+fileName);
 	} else {
+#ifdef G4VIS_USE
+		// Initialize visualization
+		G4VisManager* visManager = new G4VisExecutive;
+		// G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+		// G4VisManager* visManager = new G4VisExecutive("Quiet");
+		visManager->Initialize();
 		// interactive mode : define UI session
 		G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
+
 		UI->ApplyCommand("/control/execute vis.mac"); 
-#endif
+
 		ui->SessionStart();
 		delete ui;
+		delete visManager;
+#else
+		G4err << "No visalization compiled!" << G4endl;
+#endif
 	}
 
 	// job termination
-#ifdef G4VIS_USE
-	delete visManager;
-#endif
 	delete runManager;
 	return 0;
 }
