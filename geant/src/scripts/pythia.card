@@ -52,10 +52,10 @@ Random:setSeed = on
 999999:addChannel = 1 0.1 101 22 25  !  -> gamma h0
 
 ! 4) Tell that also long-lived should decay.
-13:mayDecay   = true                 ! mu+-
-211:mayDecay  = true                 ! pi+-
-321:mayDecay  = true                 ! K+-
-130:mayDecay  = true                 ! K0_L
+!13:mayDecay   = true                 ! mu+-
+!211:mayDecay  = true                 ! pi+-
+!321:mayDecay  = true                 ! K+-
+!130:mayDecay  = true                 ! K0_L
 !2112:mayDecay = true                 ! n 
 
 ! 5) Set alphaS to LEP measured value
