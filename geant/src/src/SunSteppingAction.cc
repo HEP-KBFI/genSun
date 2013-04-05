@@ -10,7 +10,7 @@
 #include "G4NeutrinoTau.hh"
 #include "G4AntiNeutrinoTau.hh"
 
-SunSteppingAction::SunSteppingAction() {}
+SunSteppingAction::SunSteppingAction(bool verbose) : verbose(verbose) {}
 
 void SunSteppingAction::UserSteppingAction(const G4Step* step) {
 	G4double r0 = step->GetPreStepPoint()->GetPosition().mag();
@@ -18,8 +18,9 @@ void SunSteppingAction::UserSteppingAction(const G4Step* step) {
 	G4String pname = step->GetTrack()->GetParticleDefinition()->GetParticleName();
 	G4double E = step->GetTrack()->GetKineticEnergy();
 	
-	G4cout << "Step at r0,r = (" << r0/m << ", " << r/m << ") m, P:" << pname << " (" << E/MeV << " MeV)" << G4endl;
+	//G4cout << "Step at r0,r = (" << r0/m << ", " << r/m << ") m, P:" << pname << " (" << E/MeV << " MeV)" << G4endl;
 	if(step->GetPostStepPoint()->GetStepStatus() == fWorldBoundary) {
-		G4cout << " > World boundary!" << G4endl;
+		if(verbose) G4cout << "World boundary step at r1>r2 = (" << r0/m << " > " << r/m << ") m, P:" << pname << " (" << E/MeV << " MeV)" << G4endl;
+		
 	}
 }

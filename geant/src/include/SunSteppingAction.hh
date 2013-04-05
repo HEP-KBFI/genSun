@@ -6,10 +6,10 @@
 class G4Step;
 
 class SunSteppingAction : public G4UserSteppingAction {
-	SunSteppingAction* histogram;
+	bool verbose;
 	
 	public:
-		SunSteppingAction();
+		SunSteppingAction(bool verbose=true);
 		void UserSteppingAction(const G4Step* step);
 };
 
