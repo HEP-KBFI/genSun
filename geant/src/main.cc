@@ -153,7 +153,8 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 		
 		case 12: case 14: case 18: G4cout << "Simulating neutrinos" << G4endl;
 		case -12: case -14: case -18: G4cout << "Simulating antineutrinos" << G4endl;
-			G4cout << "Neutrinos not implemented." << G4endl;
+			G4cout << "Standard particle generation (particle+antiparticle)" << G4endl;
+			generatorAction = new DMPrimaryGeneratorAction(channel, -channel, dm_mass);
 			break;
 		
 		default:
