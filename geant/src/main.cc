@@ -58,6 +58,7 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case 'q':
 			p_quiet = true;
 			G4cout << "Silence! I kill you!" << G4endl;
+			break;
 		case 'o':
 			p_ofile = arg;
 			G4cout << "Setting ofile to " << p_ofile << G4endl;
