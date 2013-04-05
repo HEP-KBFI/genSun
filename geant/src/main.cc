@@ -119,7 +119,7 @@ int main(int argc, char * argv[]) {
 	
 	// create and add actions
 	StatisticsRunAction stat_run_action;
-	NeutrinoHistogram h(p_ofile, channel, dm_mass); // create the histogrammer
+	NeutrinoHistogram h(channel, dm_mass); // create the histogrammer
 	NeutrinoStackingAction neutrino_stacking_action(&h);
 	SunSteppingAction sun_stepping_action(!p_quiet);
 	
@@ -136,6 +136,7 @@ int main(int argc, char * argv[]) {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
 	}
+	h.write(p_ofile);
 
 	// job terminationi
 	G4cout << "Closing program!" << G4endl;

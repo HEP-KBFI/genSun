@@ -14,7 +14,6 @@ enum nu_t {
 class NeutrinoHistogram {
 	public:
 		NeutrinoHistogram(
-			G4String ofile,
 			G4int pid, G4double dm_mass,
 			G4double xmin=0*MeV, G4double xmax=100*MeV,
 			G4int nbins=300,
@@ -23,6 +22,7 @@ class NeutrinoHistogram {
 		~NeutrinoHistogram();
 		
 		void addParticle(const G4Track* tr);
+		void write(G4String ofile);
 	
 	private:
 		G4RootAnalysisManager * anm;

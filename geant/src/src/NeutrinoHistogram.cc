@@ -23,9 +23,7 @@ neutrino_info neutrinos[] = {
 	{nuTau, "nu_tau"}, {nuTauBar, "anti_nu_tau"}
 };
 
-
 NeutrinoHistogram::NeutrinoHistogram(
-	G4String ofile,
 	G4int pid, G4double dm_mass,
 	G4double xmin, G4double xmax,
 	G4int nbins,
@@ -35,8 +33,6 @@ NeutrinoHistogram::NeutrinoHistogram(
 	G4int nucount = sizeof(neutrinos)/sizeof(neutrinos[0]);
 	
 	anm = new G4RootAnalysisManager();
-	anm->OpenFile(ofile);
-	if(!p_quiet){G4cout << "Opening root file: " << ofile << G4endl;}
 	
 	hs = new G4int[nucount];
 	for(int i=0; i < nucount; i++) {
@@ -52,9 +48,14 @@ NeutrinoHistogram::NeutrinoHistogram(
 }
 
 NeutrinoHistogram::~NeutrinoHistogram() {
+	delete[] hs;
+}
+
+void NeutrinoHistogram::write(G4String ofile) {
+	if(!p_quiet){G4cout << "Writing histograms to root file: " << ofile << G4endl;}
+	anm->OpenFile(ofile);
 	anm->Write();
 	anm->CloseFile();
-	delete[] hs;
 }
 
 void NeutrinoHistogram::addParticle(const G4Track* tr) {
