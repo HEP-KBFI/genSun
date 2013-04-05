@@ -6,6 +6,7 @@
 #include "G4Run.hh"
 
 #include "SunDetectorConstruction.hh"
+#include "SunSteppingAction.hh"
 //#include "DMPhysicsList.hh"
 #include "DMPrimaryGeneratorAction.hh"
 #include "DMPythiaPGA.hh"
@@ -117,6 +118,7 @@ int main(int argc, char * argv[]) {
 	
 	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
 	runManager->SetUserAction(new MyUserRunAction);
+	runManager->SetUserAction(new SunSteppingAction);
 	runManager->Initialize(); // initialize G4 kernel
 
 	if(p_vis) go_visual(argc, argv);
