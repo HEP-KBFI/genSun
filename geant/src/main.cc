@@ -115,7 +115,7 @@ int main(int argc, char * argv[]) {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
 	
-	//runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
+	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
 	runManager->SetUserAction(new MyUserRunAction);
 	runManager->Initialize(); // initialize G4 kernel
 
