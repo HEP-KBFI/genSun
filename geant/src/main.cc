@@ -36,11 +36,13 @@ const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
 	{"runs",     'n',    "runs",      0,   "Number of runs.", 0},
 	{"vis",      'v',         0,      0,   "Enable visual mode.", 0},
+	{"quiet",    'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
 int  p_runs = 1; // number of runs. Default: 1
 bool p_vis  = false; // go to visual mode. Default: false
+bool p_quiet = false; // reduce verbosity. Default: false
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
 		case 'n':
@@ -50,6 +52,10 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case 'v':
 			p_vis = true;
 			G4cout << "Enabling visual mode!" << G4endl;
+			break;
+		case 'q':
+			p_quiet = true;
+			G4cout << "Silence! I kill you!" << G4endl;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -103,7 +109,7 @@ int main(int argc, char * argv[]) {
 	//physlist = new DMPhysicsList;
 	G4PhysListFactory factory;
 	physlist = factory.GetReferencePhysList("QGSP_BERT");
-	physlist->SetVerboseLevel(3);
+	physlist->SetVerboseLevel( p_quiet ? 0 : 3 );
 	
 	runManager->SetUserInitialization(physlist); // physics
 	
@@ -118,7 +124,7 @@ int main(int argc, char * argv[]) {
 	
 	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
 	runManager->SetUserAction(new MyUserRunAction);
-	runManager->SetUserAction(new SunSteppingAction);
+	runManager->SetUserAction(new SunSteppingAction(!p_quiet));
 	runManager->Initialize(); // initialize G4 kernel
 
 	if(p_vis) go_visual(argc, argv);
