@@ -118,14 +118,14 @@ int main(int argc, char * argv[]) {
 	}
 	
 	// create and add actions
-	StatisticsRunAction stat_run_action;
-	NeutrinoHistogram h(channel, dm_mass); // create the histogrammer
-	NeutrinoStackingAction neutrino_stacking_action(&h);
-	SunSteppingAction sun_stepping_action(!p_quiet);
+	StatisticsRunAction* stat_run_action = new StatisticsRunAction();
+	NeutrinoHistogram* h = new NeutrinoHistogram(channel, dm_mass);
+	NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
+	SunSteppingAction* sun_stepping_action = new SunSteppingAction(!p_quiet);
 	
-	runManager->SetUserAction(&stat_run_action);
-	runManager->SetUserAction(&neutrino_stacking_action); // hook for histogramming
-	runManager->SetUserAction(&sun_stepping_action);
+	runManager->SetUserAction(stat_run_action);
+	runManager->SetUserAction(neutrino_stacking_action); // hook for histogramming
+	runManager->SetUserAction(sun_stepping_action);
 	
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel
@@ -136,11 +136,12 @@ int main(int argc, char * argv[]) {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
 	}
-	h.write(p_ofile);
+	h->write(p_ofile);
 
 	// job terminationi
-	G4cout << "Closing program!" << G4endl;
+	if(!p_quiet){G4cout << "Deconstructing..." << G4endl;}
 	delete runManager;
+	G4cout << "Closing program!" << G4endl;
 	return 0;
 }
 
