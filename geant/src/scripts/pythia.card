@@ -3,11 +3,21 @@
 
 ! 1) Settings used in the main program.
 !Main:numberOfEvents = 1000000      ! number of events to generate
+!Main:timesAllowErrors = 100      ! allow a few failures before quitting
+
 !Main:numberToList = 0              ! number of events to print
 !Main:timesToShow = 0              ! show how far along run is
-!Main:timesAllowErrors = 100      ! allow a few failures before quitting
 !Main:showChangedSettings = off      ! print changed flags/modes/parameters
 !Main:showChangedParticleData = off  ! print changed particle and decay data
+
+!Init:showProcesses = off
+!Init:Init:showMultipartonInteractions = off
+!Init:showChangedSettings = off
+!Next:numberShowInfo = 0
+!Next:numberShowEvent = 0
+!Main:numberToList = 0
+!Stat:showProcessLevel = off
+Print:quiet = on
 
 ! 2) Beam parameter settings. Incoming beams do not radiate.
 Beams:idA = -11                    ! ficititious incoming e+ 
