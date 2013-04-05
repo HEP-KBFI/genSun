@@ -16,7 +16,6 @@ NeutrinoStackingAction::NeutrinoStackingAction(NeutrinoHistogram* hist) {
 }
 
 G4ClassificationOfNewTrack NeutrinoStackingAction::ClassifyNewTrack(const G4Track* aTrack) {
-	nu type = NeutrinoHistogram::getNeutrinoType(aTrack->GetParticleDefinition());
 	histogram->addParticle(aTrack);
 	return fUrgent;
 }

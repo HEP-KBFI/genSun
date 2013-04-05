@@ -127,7 +127,7 @@ int main(int argc, char * argv[]) {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
 	
-	NeutrinoHistogram h(channel, dm_mass, p_ofile); // create the histogrammer
+	NeutrinoHistogram h(p_ofile, channel, dm_mass); // create the histogrammer
 	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
 	
 	runManager->SetUserAction(new MyUserRunAction);

@@ -5,7 +5,7 @@ class G4Track;
 class G4ParticleDefinition;
 class G4RootAnalysisManager;
 
-enum nu {
+enum nu_t {
 	nuE, nuMu, nuTau,
 	nuEBar, nuMuBar, nuTauBar,
 	nuNot
@@ -13,18 +13,24 @@ enum nu {
 
 class NeutrinoHistogram {
 	public:
-		NeutrinoHistogram(G4int pid, G4double dm_mass, G4String ofile);
+		NeutrinoHistogram(
+			G4String ofile,
+			G4int pid, G4double dm_mass,
+			G4double xmin=0*MeV, G4double xmax=100*MeV,
+			G4int nbins=300,
+			bool logstyle=true
+		);
 		~NeutrinoHistogram();
 		
 		void addParticle(const G4Track* tr);
 	
 	private:
 		G4RootAnalysisManager * anm;
-		G4int h;
+		G4int * hs;
 		
 	// Static helpers
 	public:
-		static nu getNeutrinoType(const G4ParticleDefinition* g4def);
+		static nu_t getNeutrinoType(const G4ParticleDefinition* g4def);
 };
 
 #endif
