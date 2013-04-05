@@ -13,7 +13,7 @@ enum nu {
 
 class NeutrinoHistogram {
 	public:
-		NeutrinoHistogram(G4String ofile="default.root");
+		NeutrinoHistogram(G4int pid, G4double dm_mass, G4String ofile);
 		~NeutrinoHistogram();
 		
 		void addParticle(const G4Track* tr);
