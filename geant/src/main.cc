@@ -12,20 +12,10 @@
 #include "DMPythiaPGA.hh"
 #include "NeutrinoStackingAction.hh"
 #include "NeutrinoHistogram.hh"
+#include "StatisticsRunAction.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
-
-class MyUserRunAction : public G4UserRunAction {
-	public:
-		//G4Run* GenerateRun();
-		void BeginOfRunAction(const G4Run* run);
-		//void EndOfRunAction(const G4Run*);
-};
-
-void MyUserRunAction::BeginOfRunAction(const G4Run* run) {
-	G4cout << "Starting run: ID = " << run->GetRunID() << G4endl;
-}
 
 // ---------------------------------------------------------------------
 //                    Argument parser settings
@@ -127,11 +117,15 @@ int main(int argc, char * argv[]) {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
 	
+	// create and add actions
+	StatisticsRunAction stat_run_action;
 	NeutrinoHistogram h(p_ofile, channel, dm_mass); // create the histogrammer
-	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
+	NeutrinoStackingAction neutrino_stacking_action(&h);
+	SunSteppingAction sun_stepping_action(!p_quiet);
 	
-	runManager->SetUserAction(new MyUserRunAction);
-	runManager->SetUserAction(new SunSteppingAction(!p_quiet));
+	runManager->SetUserAction(&stat_run_action);
+	runManager->SetUserAction(&neutrino_stacking_action); // hook for histogramming
+	runManager->SetUserAction(&sun_stepping_action);
 	
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel

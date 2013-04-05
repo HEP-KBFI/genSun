@@ -52,6 +52,7 @@ set(source_files
 	NeutrinoHistogram.cc
 	DMPythiaPGA.cc
 	SunSteppingAction.cc
+	StatisticsRunAction.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
@@ -61,6 +62,7 @@ set(include_files
 	NeutrinoHistogram.hh
 	DMPythiaPGA.hh
 	SunSteppingAction.hh
+	StatisticsRunAction.hh
 )
 
 message(" > Sources...")
