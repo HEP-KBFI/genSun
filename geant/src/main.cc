@@ -37,12 +37,14 @@ const argp_option argp_options[] = {
 	{"runs",     'n',    "runs",      0,   "Number of runs.", 0},
 	{"vis",      'v',         0,      0,   "Enable visual mode.", 0},
 	{"quiet",    'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
+	{"ofile",    'o',   "ofile",      0,   "Output root file.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
 int  p_runs = 1; // number of runs. Default: 1
 bool p_vis  = false; // go to visual mode. Default: false
 bool p_quiet = false; // reduce verbosity. Default: false
+G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
 		case 'n':
@@ -56,6 +58,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case 'q':
 			p_quiet = true;
 			G4cout << "Silence! I kill you!" << G4endl;
+		case 'o':
+			p_ofile = arg;
+			G4cout << "Setting ofile to " << p_ofile << G4endl;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -97,8 +102,6 @@ int main(int argc, char * argv[]) {
 	G4cout << "Simulating " << channel << " with E=" << dm_mass/GeV << " GeV for " << p_runs << " runs." << G4endl;
 	
 	// Start setting up Geant4
-	NeutrinoHistogram h; // create the histogrammer
-	
 	// Start constructing the run manager
 	G4RunManager* runManager = new G4RunManager;
 	
@@ -122,7 +125,9 @@ int main(int argc, char * argv[]) {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
 	
+	NeutrinoHistogram h(p_ofile); // create the histogrammer
 	runManager->SetUserAction(new NeutrinoStackingAction(&h)); // hook for histogramming
+	
 	runManager->SetUserAction(new MyUserRunAction);
 	runManager->SetUserAction(new SunSteppingAction(!p_quiet));
 	runManager->Initialize(); // initialize G4 kernel

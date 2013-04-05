@@ -11,9 +11,9 @@
 #include "G4NeutrinoTau.hh"
 #include "G4AntiNeutrinoTau.hh"
 
-NeutrinoHistogram::NeutrinoHistogram() {
+NeutrinoHistogram::NeutrinoHistogram(G4String ofile) {
 	anm = new G4RootAnalysisManager();
-	anm->OpenFile("test.root");
+	anm->OpenFile(ofile);
 	
 	h = anm->CreateH1(
 		"energy", "Neutrinos!", // name, title
