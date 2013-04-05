@@ -1,5 +1,5 @@
-#ifndef DMPrimaryGeneratorAction_h
-#define DMPrimaryGeneratorAction_h
+#ifndef DMPythiaPGA_h
+#define DMPythiaPGA_h
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
