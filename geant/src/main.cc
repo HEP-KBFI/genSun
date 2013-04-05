@@ -138,6 +138,7 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 		case 15: case -15: G4cout << "Simulating taus" << G4endl;
 		case 23: case 25: G4cout << "Simulating Z or Higgs (" << channel << ")" << G4endl;
 		case 24: case -24: G4cout << "Simulating W" << G4endl;
+		case 12: case -12: G4cout << "Simulating nu_e" << G4endl;
 			G4cout << "Going for Pythia8!" << G4endl;
 			generatorAction = new DMPythiaPGA(channel, dm_mass);
 			break;
@@ -155,8 +156,9 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 			generatorAction = new DMPrimaryGeneratorAction(channel, channel, dm_mass);
 			break;
 		
-		case 12: case 14: case 18: G4cout << "Simulating neutrinos" << G4endl;
-		case -12: case -14: case -18: G4cout << "Simulating antineutrinos" << G4endl;
+		//case 12: case -12: G4cout << "Simulating nu_e" << G4endl;
+		case 14: case -14: G4cout << "Simulating nu_mu" << G4endl;
+		case 16: case -16: G4cout << "Simulating nu_tau" << G4endl;
 			G4cout << "Standard particle generation (particle+antiparticle)" << G4endl;
 			generatorAction = new DMPrimaryGeneratorAction(channel, -channel, dm_mass);
 			break;
