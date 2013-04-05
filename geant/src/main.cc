@@ -139,7 +139,8 @@ int main(int argc, char * argv[]) {
 		runManager->BeamOn(p_runs);
 	}
 
-	// job termination
+	// job terminationi
+	G4cout << "Closing program!" << G4endl;
 	delete runManager;
 	return 0;
 }
