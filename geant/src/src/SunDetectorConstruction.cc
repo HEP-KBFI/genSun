@@ -9,6 +9,8 @@
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 
+extern bool p_quiet;
+
 // Parameters of the sun
 G4double density     = 160*g/cm3;
 G4double pressure    = 1e9*atmosphere;
@@ -55,7 +57,6 @@ G4Material * SunDetectorConstruction::getSunMaterial() {
 	for(size_t i=0; i < sizeof(sunfractions)/sizeof(sunfractions[0]); i++) {
 		totalfraction += sunfractions[i].fraction;
 	}
-	G4cout << "Total fraction: " << totalfraction << G4endl;
 	
 	G4Material* solarmaterial = new G4Material(
 		"Sun", density, // name, density
@@ -67,8 +68,13 @@ G4Material * SunDetectorConstruction::getSunMaterial() {
 			nm->FindOrBuildMaterial(sunfractions[i].name),
 			sunfractions[i].fraction/totalfraction
 		);
-	}G4cout << "Solar material:" << G4endl;
-	G4cout << *solarmaterial << G4endl;
+	}
+	
+	if(!p_quiet) {
+		G4cout << "==================  Solar material  ==================" << G4endl;
+		G4cout << "Total fraction: " << totalfraction << G4endl;
+		G4cout << *solarmaterial << G4endl;
+	}
 	
 	return solarmaterial;
 }

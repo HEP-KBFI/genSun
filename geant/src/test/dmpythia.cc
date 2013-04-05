@@ -4,6 +4,8 @@
 #include "G4VModularPhysicsList.hh"
 #include "G4PhysListFactory.hh"
 
+bool p_quiet = false;
+
 int main(int argc, char* argv[]) {
 	G4cout << "DMPythiaPGA test" << G4endl;
 	
