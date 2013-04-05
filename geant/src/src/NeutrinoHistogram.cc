@@ -33,7 +33,7 @@ void NeutrinoHistogram::addParticle(const G4Track* tr) {
 	if(type != nuNot) {
 		G4String pname = tr->GetParticleDefinition()->GetParticleName();
 		G4double energy = tr->GetTotalEnergy();
-		//G4cout << " >>> Found: " << energy << " (" << pname << ")" << G4endl;
+		G4cout << " >>> Found: " << energy << " (" << pname << ")" << G4endl;
 		
 		anm->FillH1(h, energy); // id, value, weight=1.0
 	}
