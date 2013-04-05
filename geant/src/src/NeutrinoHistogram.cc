@@ -16,10 +16,10 @@ NeutrinoHistogram::NeutrinoHistogram(G4int pid, G4double dm_mass, G4String ofile
 	anm->OpenFile(ofile);
 	
 	char hname[100];
-	sprintf(hname, "p%i_m%i", pid, (int)(dm_mass/GeV));
+	sprintf(hname, "energy_p%i_m%i", pid, (int)(dm_mass/GeV));
 	
 	h = anm->CreateH1(
-		"energy", "Neutrinos!", // name, title
+		hname, "Neutrino energy spectrum", // name, title
 		100, 0.0, 100.0, // nbins, xmin, xmax
 		"MeV", "none" //unitName="none", fcnName="none"
 	);
