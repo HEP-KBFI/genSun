@@ -18,14 +18,8 @@ ElementFraction sunfractions[] = {
 	{"G4_He", 24.85}
 };
 
-SunDetectorConstruction::SunDetectorConstruction(
-	const G4String& materialName,
-	G4double hx, G4double hy, G4double hz
-) : G4VUserDetectorConstruction(),
-	fMaterialName(materialName),
-	fDimensions(hx, hy, hz),
-	fWorldVolume(0)
-{}
+SunDetectorConstruction::SunDetectorConstruction(G4double radius)
+	: G4VUserDetectorConstruction(),fRadius(radius) {}
 
 SunDetectorConstruction::~SunDetectorConstruction() {}
 
@@ -33,13 +27,7 @@ G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 	G4Material* material = this->getSunMaterial();
 
 	// World
-	/*G4Box* sWorld = new G4Box("World", // name
-		// dimensions (half-lentghs)
-		fDimensions.x(),
-		fDimensions.y(), 
-		fDimensions.z()
-	);*/
-	G4CSGSolid* sWorld = new G4Orb("World", fDimensions.mag());
+	G4CSGSolid* sWorld = new G4Orb("World", fRadius);
 
 	// Logical World Volume. Arguments: // shape, material, name
 	fWorldVolume = new G4LogicalVolume(sWorld, material, "World");
@@ -60,10 +48,7 @@ G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 G4Material * SunDetectorConstruction::getSunMaterial() {
 	// Define materials via NIST manager
 	G4NistManager* nm = G4NistManager::Instance();
-	nm->SetVerbose(1);
-	/*G4bool fromIsotopes = false;
-	G4Material* material = nistManager->FindOrBuildMaterial(fMaterialName, fromIsotopes);
-	return material;*/
+	//nm->SetVerbose(1);
 	
 	// Calculate the total fraction. Used for normalization.
 	double totalfraction = 0.0;
@@ -82,39 +67,8 @@ G4Material * SunDetectorConstruction::getSunMaterial() {
 			nm->FindOrBuildMaterial(sunfractions[i].name),
 			sunfractions[i].fraction/totalfraction
 		);
-	}
-	/*#define FOB(s) (nm->FindOrBuildMaterial(s))
-	solarmaterial->AddMaterial(FOB("G4_H"), 0.7346); // material, fractionmass
-	solarmaterial->AddMaterial(FOB("G4_He"), 0.2485);
-	#undef FOB*/
-	
-	G4cout << "Solar material:" << G4endl;
+	}G4cout << "Solar material:" << G4endl;
 	G4cout << *solarmaterial << G4endl;
 	
 	return solarmaterial;
 }
-
-/*void SunDetectorConstruction::SetMaterial(const G4String& materialName) {
-  G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-
-  G4Material* newMaterial
-    = nistManager->FindOrBuildMaterial(materialName, fromIsotopes);
-
-  if ( ! newMaterial ) {
-    G4cerr << "Material " << materialName << " not found." << G4endl;
-    G4cerr << "The box material was not changed." << G4endl;
-    return;
-  }  
-   
-  if ( fWorldVolume ) fWorldVolume->SetMaterial(newMaterial);
-  G4cout << "Material of box changed to " << materialName << G4endl;
-}
- 
-void SunDetectorConstruction::SetDimensions(
-	G4double hx, G4double hy, G4double hz
-) {
-	/// Set world dimension (in half lengths).
-	/// This setting has effect only if called in PreInit> phase
-	fDimensions = G4ThreeVector(hx, hy, hz);
-}*/
