@@ -24,7 +24,7 @@ class MyUserRunAction : public G4UserRunAction {
 };
 
 void MyUserRunAction::BeginOfRunAction(const G4Run* run) {
-	G4cout << "Starting run. RunID=" << run->GetRunID() << G4endl;
+	G4cout << "Starting run: ID = " << run->GetRunID() << G4endl;
 }
 
 // ---------------------------------------------------------------------
@@ -49,19 +49,19 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
 		case 'n':
 			p_runs = std::atoi(arg);
-			G4cout << "Setting number of runs to " << p_runs << G4endl;
+			//G4cout << "Setting number of runs to " << p_runs << G4endl;
 			break;
 		case 'v':
 			p_vis = true;
-			G4cout << "Enabling visual mode!" << G4endl;
+			//G4cout << "Enabling visual mode!" << G4endl;
 			break;
 		case 'q':
 			p_quiet = true;
-			G4cout << "Silence! I kill you!" << G4endl;
+			//G4cout << "Silence! I kill you!" << G4endl;
 			break;
 		case 'o':
 			p_ofile = arg;
-			G4cout << "Setting ofile to " << p_ofile << G4endl;
+			//G4cout << "Setting ofile to " << p_ofile << G4endl;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -100,11 +100,13 @@ int main(int argc, char * argv[]) {
 	}
 	G4int channel = atoi(argv[argp_index+0]);
 	G4double dm_mass = atof(argv[argp_index+1]) * GeV;
-	G4cout << "Simulating " << channel << " with E=" << dm_mass/GeV << " GeV for " << p_runs << " runs." << G4endl;
+	
+	G4cout << "G4 simulation: " << channel << " / " << p_runs << " / " << dm_mass/GeV << " (channel/runs/energy)" << G4endl;
 	
 	// Start setting up Geant4
 	// Start constructing the run manager
 	G4RunManager* runManager = new G4RunManager;
+	runManager->SetVerboseLevel( p_quiet ? 0 : 1 );
 	
 	runManager->SetUserInitialization(new SunDetectorConstruction); // detector
 	
@@ -113,11 +115,10 @@ int main(int argc, char * argv[]) {
 	//physlist = new DMPhysicsList;
 	G4PhysListFactory factory;
 	physlist = factory.GetReferencePhysList("QGSP_BERT");
-	physlist->SetVerboseLevel( p_quiet ? 0 : 3 );
+	physlist->SetVerboseLevel( p_quiet ? 0 : 1 );
 	
 	runManager->SetUserInitialization(physlist); // physics
 	
-	//runManager->SetUserAction(new DMPrimaryGeneratorAction(13, -13, 1*GeV)); // particle gun
 	G4VUserPrimaryGeneratorAction* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass);
 	if(primaryGeneratorAction == NULL) {
 		G4cerr << "No generator!" << G4endl;
@@ -131,11 +132,14 @@ int main(int argc, char * argv[]) {
 	
 	runManager->SetUserAction(new MyUserRunAction);
 	runManager->SetUserAction(new SunSteppingAction(!p_quiet));
+	
+	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel
+	if(!p_quiet){G4cout << "===========================    END   INIT   ===========================" << G4endl;}
 
 	if(p_vis) go_visual(argc, argv);
 	else {
-		G4cout << "Running for " << p_runs << G4endl;
+		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
 	}
 
@@ -145,44 +149,62 @@ int main(int argc, char * argv[]) {
 	return 0;
 }
 
+enum generator_mode {m_pythia, m_ppbar, m_2p};
 G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4double dm_mass) {
-	G4VUserPrimaryGeneratorAction* generatorAction = NULL;
-	
+	generator_mode mode;
 	switch(channel) {
-		// Pythia8
-		case 15: case -15: G4cout << "Simulating taus" << G4endl;
-		case 23: case 25: G4cout << "Simulating Z or Higgs (" << channel << ")" << G4endl;
-		case 24: case -24: G4cout << "Simulating W" << G4endl;
-		case 12: case -12: G4cout << "Simulating nu_e" << G4endl;
-			G4cout << "Going for Pythia8!" << G4endl;
-			generatorAction = new DMPythiaPGA(channel, dm_mass);
-			break;
+		// Quarks and gluons
+		case 1: case -1: case 2: case -2:
+		case 3: case -3: case 4: case -4:
+		case 5: case -5: case 6: case -6:
+			if(!p_quiet){G4cout << "Particle: quark/antiquark" << G4endl;} mode = m_pythia; break;
 		
-		// Geant4 only, particle + antiparticle
-		case 11: case -11: G4cout << "Simulating electrons" << G4endl;
-		case 13: case -13: G4cout << "Simulating muons" << G4endl;
-			G4cout << "Standard particle generation (particle+antiparticle)" << G4endl;
-			generatorAction = new DMPrimaryGeneratorAction(channel, -channel, dm_mass);
-			break;
+		// Gamma
+		case 22:
+			if(!p_quiet){G4cout << "Particle: gamma" << G4endl;} mode = m_2p; break;
 		
-		// Geant4 only, particle = antiparticle
-		case 22: G4cout << "Simulating gammas" << G4endl;
-			G4cout << "Standard particle generation (same particle)" << G4endl;
-			generatorAction = new DMPrimaryGeneratorAction(channel, channel, dm_mass);
-			break;
+		// W, Z and H bosons
+		case 23:
+			if(!p_quiet){G4cout << "Particle: Z boson" << G4endl;} mode = m_pythia; break;
+		case 24: case -24:
+			if(!p_quiet){G4cout << "Particle: W +/- boson" << G4endl;} mode = m_pythia; break;
+		case 25:
+			if(!p_quiet){G4cout << "Particle: H boson" << G4endl;} mode = m_pythia; break;
 		
-		//case 12: case -12: G4cout << "Simulating nu_e" << G4endl;
-		case 14: case -14: G4cout << "Simulating nu_mu" << G4endl;
-		case 16: case -16: G4cout << "Simulating nu_tau" << G4endl;
-			G4cout << "Standard particle generation (particle+antiparticle)" << G4endl;
-			generatorAction = new DMPrimaryGeneratorAction(channel, -channel, dm_mass);
-			break;
+		// Leptons
+		case 11: case -11:
+			if(!p_quiet){G4cout << "Particle: electron/positron" << G4endl;} mode = m_ppbar; break;
+		case 13: case -13:
+			if(!p_quiet){G4cout << "Particle: muon/antimuon" << G4endl;} mode = m_ppbar; break;
+		case 15: case -15:
+			if(!p_quiet){G4cout << "Particle: tau/antitau" << G4endl;} mode = m_pythia; break;
+		
+		// Neutrinos
+		case 12: case -12: case 14: case -14: case 16: case -16:
+			if(!p_quiet){G4cout << "Particle: neutrino" << G4endl;} mode = m_ppbar; break;
 		
 		default:
 			G4cout << "Bad channel: " << channel << G4endl;
 			break;
 	}
 	
+	G4VUserPrimaryGeneratorAction* generatorAction = NULL;
+	switch(mode) {
+		case m_pythia:
+			if(!p_quiet){G4cout << "Going for Pythia8!" << G4endl;}
+			generatorAction = new DMPythiaPGA(channel, dm_mass);
+			break;
+		
+		case m_ppbar:
+			if(!p_quiet){G4cout << "Standard particle generation (particle+antiparticle)" << G4endl;}
+			generatorAction = new DMPrimaryGeneratorAction(channel, -channel, dm_mass);
+			break;
+		
+		case m_2p:
+			if(!p_quiet){G4cout << "Standard particle generation (two identical particles)" << G4endl;}
+			generatorAction = new DMPrimaryGeneratorAction(channel, channel, dm_mass);
+			break;
+	}
 	return generatorAction;
 }
 
