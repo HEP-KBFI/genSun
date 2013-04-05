@@ -1,6 +1,8 @@
 #ifndef DMPythiaPGA_h
 #define DMPythiaPGA_h
 
+#include <vector>
+
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
@@ -10,19 +12,19 @@ class G4Event;
 class G4ParticleDefinition;
 namespace Pythia8 { class Pythia; }
 
-struct PhyiscalParticle {
-	G4ParticleDefinition* particle;
-	G4double energy;
-	G4ThreeVector position, momentumDirection;
+struct PhysicalParticle {
+	G4ParticleDefinition* pdef;
+	G4double E; // energy
+	G4ThreeVector r, p; // position, momentum
 };
+typedef std::vector<PhysicalParticle> PhysicalParticleList;
 
 class Pythia8Interface {
 	public:
 		Pythia8Interface(int pid, G4double dm_mass);
 		~Pythia8Interface();
 		
-		// testing
-		void next();
+		PhysicalParticleList generate();
 		void statistics();
 	
 	private:
@@ -44,8 +46,8 @@ class DMPythiaPGA : public G4VUserPrimaryGeneratorAction {
 
 	private:
 		// data members
-		G4ParticleGun*  fParticleGun; //pointer a to G4 service class
 		Pythia8Interface pythia;
+		G4ThreeVector init_position, init_momentum;
 };
 
 #endif

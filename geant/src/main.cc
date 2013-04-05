@@ -8,6 +8,7 @@
 #include "SunDetectorConstruction.hh"
 //#include "DMPhysicsList.hh"
 #include "DMPrimaryGeneratorAction.hh"
+#include "DMPythiaPGA.hh"
 #include "NeutrinoStackingAction.hh"
 #include "NeutrinoHistogram.hh"
 
@@ -134,8 +135,11 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 	
 	switch(channel) {
 		// Pythia8
-		case 17: case -17: G4cout << "Simulating taus" << G4endl;
-			G4cout << "Pythia not implemented!" << G4endl;
+		case 15: case -15: G4cout << "Simulating taus" << G4endl;
+		case 23: case 25: G4cout << "Simulating Z or Higgs (" << channel << ")" << G4endl;
+		case 24: case -24: G4cout << "Simulating W" << G4endl;
+			G4cout << "Going for Pythia8!" << G4endl;
+			generatorAction = new DMPythiaPGA(channel, dm_mass);
 			break;
 		
 		// Geant4 only, particle + antiparticle

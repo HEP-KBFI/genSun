@@ -13,27 +13,22 @@ DMPythiaPGA::DMPythiaPGA(
 	G4double dm_mass,
 	G4ThreeVector position, 
 	G4ThreeVector momentumDirection
-) : G4VUserPrimaryGeneratorAction(), fParticleGun(0), pythia(channel, dm_mass) {
-	G4int nofParticles = 1;
-	fParticleGun  = new G4ParticleGun(nofParticles);
+) : G4VUserPrimaryGeneratorAction(), pythia(channel, dm_mass),
+    init_position(position), init_momentum(momentumDirection) {}
 
-	// default particle kinematic
-	
-	G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("mu-");
-
-	fParticleGun->SetParticleDefinition(particle);
-	fParticleGun->SetParticleEnergy(dm_mass);
-	fParticleGun->SetParticlePosition(position);
-	fParticleGun->SetParticleMomentumDirection(momentumDirection);
-}
-
-DMPythiaPGA::~DMPythiaPGA() {
-	delete fParticleGun;
-}
+DMPythiaPGA::~DMPythiaPGA() {}
 
 void DMPythiaPGA::GeneratePrimaries(G4Event* anEvent) {
-	// this function is called at the begining of event
-	fParticleGun->GeneratePrimaryVertex(anEvent);
+	PhysicalParticleList ps = pythia.generate();
+	for(PhysicalParticleList::iterator it = ps.begin(); it != ps.end(); it++) {
+		PhysicalParticle p = *it;
+		
+		G4ParticleGun gun(p.pdef, 1); //pointer a to G4 service class
+		gun.SetParticleEnergy(p.E);
+		gun.SetParticlePosition(init_position);
+		gun.SetParticleMomentumDirection(init_momentum);
+		gun.GeneratePrimaryVertex(anEvent);
+	}
 }
 
 // ---------------------------------------------------------------------
@@ -61,6 +56,8 @@ Pythia8Interface::Pythia8Interface(
 	int pid,
 	G4double dm_mass
 ) {
+	G4cout << "Initializing PYTHIA: " << pid << " at " << dm_mass/GeV << " GeV" << G4endl;
+	
 	char ch[1000];
 	
 	this->pythia = new Pythia8::Pythia();
@@ -85,15 +82,38 @@ Pythia8Interface::~Pythia8Interface() {
 	delete pythia;
 }
 
-void Pythia8Interface::next() {
-	Pythia8::Event ev = pythia->next();
-	
-	G4cout << "next() called - " << ev.size() << " events." << G4endl;
-	
-	for(int i=0; i<ev.size(); i++) {
-		G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle(ev[i].id());
-		G4cout << particle->GetParticleName() << G4endl;
+PhysicalParticleList Pythia8Interface::generate() {
+	if(!pythia->next()) {
+		G4cerr << "No next() !" << G4endl;
 	}
+	Pythia8::Event ev = pythia->event;
+	G4cout << "pythia->next() called: " << ev.size() << " events." << G4endl;
+	
+	PhysicalParticleList ps;
+	for(int i=0; i<ev.size(); i++) {
+		G4cout << " > [" << (ev[i].isFinal()?'x':' ') << "] "
+		       << ev[i].name() << "(" << ev[i].id() << "): "
+		       << "p(" << ev[i].e() << ", "
+		       << ev[i].px() << ", " << ev[i].py() << ", " << ev[i].pz() << "); "
+		       << "m(" << ev[i].m() << ")"
+		       << G4endl;
+		
+		if(ev[i].isFinal()) {
+			PhysicalParticle p;
+			
+			p.pdef = G4ParticleTable::GetParticleTable()->FindParticle(ev[i].id());
+			p.E = ev[i].e();
+			p.p = G4ThreeVector(ev[i].px(), ev[i].py(), ev[i].pz());
+			p.r = G4ThreeVector(ev[i].xDec(), ev[i].yDec(), ev[i].zDec());
+			
+			if(p.pdef == NULL) {
+				G4cerr << "Null pointer in a final particle!" << G4endl;
+			}
+			
+			ps.push_back(p);
+		}
+	}
+	return ps;
 }
 
 void Pythia8Interface::statistics() {
