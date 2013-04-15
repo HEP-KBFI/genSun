@@ -17,10 +17,6 @@ from numpy import *
 from matplotlib import rc
 rc('text', usetex=True)
 
-def norm(h):
-    h.Sumw2()
-    h.Scale(1.0/h.Integral())
-
 lepNames = {"el": "Electron", "mu": "Muon", "tau": "Tau"}
 lepPretty={"el":"#nu_{e}", "mu":"#nu_{#mu}", "tau":"#nu_{#tau}"}
 flavour_names = {"nuel": r"$ \nu_e $", "numu": r"$ \nu_\mu $", "nutau": r"$ \nu_\tau $"}
@@ -146,38 +142,39 @@ class EnergyDistribution:
 
         self.dm_mass = float(kwargs["dm_mass"])
         self.decay_channel = kwargs["decay_channel"]
-        self.n_events = kwargs["n_events"]
+        self.n_events = float(kwargs["n_events"])
         self.fstate = kwargs["fstate"]
         self.energy_loss = EnergyLoss(kwargs["h_had"], kwargs["l_had"], kwargs["ch_lep"])
 
+        self.bin_width = 0.03
+        if self.fstate in ["nuel", "numu", "nutau"]:
+            mult = 0.5
+        else:
+            mult = 1.0
+        sf = mult/(self.n_events*self.bin_width)
+        pre_scale = self.hist.Integral()
+        self.hist.Scale(sf)
+        print "%s: pre-scale=%.3E, sf=%.3E, post-scale=%.3E" % (self, pre_scale, sf, self.hist.Integral())
         self.x = [x for x in self.hist.x()]
         self.y = [y for y in self.hist.y()]
-        self.bin_width = 0.03
-        self.hist.Scale(1.0/(self.n_events*self.bin_width))
-
-    def saveAs(self, ofdir):
-        ofile = open(
-            ofdir + "/mass_%d_decaychannel_%d_fstate_%s.txt" %
-                (int(self.dm_mass), int(self.decay_channel), str(self.fstate)
-            ),
-            "w"
-        )
-        datapoints = zip(self.x, self.y)
-        for dp in datapoints:
-            ofile.write("%.5E, %.5E\n" % (dp[0], dp[1]))
-        ofile.close()
 
     def printArray(self):
         decay_channel_str = decay_channel_names_Mathematica[int(self.decay_channel)]
         ostr = 'lxbins[\"{0}\"->\"{1}\",{2},Pythia]={{'.format(decay_channel_str, fstate_names_Mathematica[self.fstate], int(self.dm_mass))
         n_bins = self.hist.GetNbinsX()
+        lxtab = numpy.linspace(-9, 0, 300)
+        tot = sum([0.03*(10**lxtab[i - 1])*self.hist.GetBinContent(i) for i in range (1,301)])
+        print "%s: %.2E" % (self, tot)
         for n in range(1, n_bins):
-            ostr += ("%.9f" % self.hist.GetBinContent(n)) + ","
+            ostr += ("%.9f" % float(self.hist.GetBinContent(n))) + ","
         ostr += ("%.9f" % (self.hist.GetBinContent(n_bins) + self.hist.GetBinContent(n_bins+1))) + "};"
         return ostr
 
     def __repr__(self):
         return "<EnergyDistribution(%s -> %s, %d)>" % (self.decay_channel, self.fstate, int(self.dm_mass))
+
+    def __str__(self):
+        return self.__repr__()
 
 if __name__=="__main__":
     f = rootpy.io.open("mergedOut/spec_Mar28.root")
@@ -203,10 +200,10 @@ if __name__=="__main__":
                 name = elem[0] + "/" + hname
                 hists[name] = f.get(name)
                 event_status_hist = f.get(elem[0] + "/eventStatus")
-                successful_events = event_status_hist.GetBinContent(1)
+                successful_events = float(event_status_hist.GetBinContent(1))
                 if successful_events>0.0:
                     hists[name].Sumw2()
-                    hists[name].Scale(float(10**5)/float(successful_events))
+#                    hists[name].Scale(float(10**5)/float(successful_events))
                     energy_distributions[name] = EnergyDistribution(
                         hists[name],
                         dm_mass=mass,
@@ -224,7 +221,7 @@ if __name__=="__main__":
         else:
             continue
 
-    channels = [1, 4, 5, 6, 11, 22, 23, 24, 25]
+    channels = [1, 4, 5, 6, 11, 13, 15, 22, 23, 24, 25]
     for (part, distrs) in energy_distributions_part.items():
         if part not in channels:
             continue
