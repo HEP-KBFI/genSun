@@ -29,19 +29,20 @@ decay_channel_names_Mathematica = {
     5: "b",
     6: "t",
     11: "e",
-    #13: "\\[Mu]",
-    #15: "\\[Tau]",
+    13: "\\[Mu]",
+    15: "\\[Tau]",
     #12: "\\[Nu]e",
     #14: "\\[Nu]\\[Mu]",
     #16: "\\[Nu]\\[Tau]",
     #22: "\\[Gamma]",
-    13: "mu",
-    15: "tau",
+    #13: "mu",
+    #15: "tau",
 
     12: "nue",
     14: "numu",
     16: "nutau",
-    22: "\[Gamma]",
+    21: "g",
+    22: "\\[Gamma]",
 
     23: "Z",
     24: "W",
@@ -225,7 +226,9 @@ if __name__=="__main__":
     for (part, distrs) in energy_distributions_part.items():
         if part not in channels:
             continue
-        ofname = "DM%s.nb" % decay_channel_names_Mathematica[part]
+        chan_name = decay_channel_names_Mathematica[part]
+        #chan_name.replace("\\", r'\\\')
+        ofname = "DM%s.nb" % chan_name
         ofile = open(ofname, "w")
         for dist in distrs:
             ofile.write(dist.printArray() + "\n")
