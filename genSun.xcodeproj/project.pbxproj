@@ -217,7 +217,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -254,12 +254,11 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_MASTER_OBJECT_FILE = YES;
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/root/include/**",
 					"/Users/joosep/Documents/gsl/**",
-					"../include/**",
+					"pythia8175/include/**",
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = YES;
@@ -268,7 +267,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SYSTEM_APPS_DIR)/root/lib\"/**",
 					"/Users/joosep/Documents/gsl/libs/**",
-					"../lib/archive/**",
+					"pythia8175/lib/archive/**",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -278,7 +277,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OSACOMPILE_EXECUTE_ONLY = YES;
 				OTHER_CFLAGS = "";
-				OTHER_CPLUSPLUSFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-I/Applications/root/include";
 				OTHER_LDFLAGS = (
 					"-lpthread",
 					"-lm",
@@ -305,17 +304,19 @@
 					"-lMatrix",
 					"-lPhysics",
 					"-lMathCore",
-					../lib/archive/liblhapdfdummy.a,
-					../lib/archive/libpythia8.a,
+					pythia8175/lib/archive/liblhapdfdummy.a,
+					pythia8175/lib/archive/libpythia8.a,
 					"-lThread",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = macosx;
 				SEPARATE_SYMBOL_EDIT = NO;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = NO;
 			};
 			name = Debug;
@@ -345,7 +346,7 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -380,12 +381,11 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_MASTER_OBJECT_FILE = YES;
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/root/include/**",
 					"/Users/joosep/Documents/gsl/**",
-					"../include/**",
+					"pythia8175/include/**",
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = YES;
@@ -393,7 +393,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SYSTEM_APPS_DIR)/root/lib\"/**",
 					"/Users/joosep/Documents/gsl/libs/**",
-					"../lib/archive/**",
+					"pythia8175/lib/archive/**",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -403,7 +403,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OSACOMPILE_EXECUTE_ONLY = YES;
 				OTHER_CFLAGS = "";
-				OTHER_CPLUSPLUSFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-I/Applications/root/include";
 				OTHER_LDFLAGS = (
 					"-lpthread",
 					"-lm",
@@ -430,17 +430,19 @@
 					"-lMatrix",
 					"-lPhysics",
 					"-lMathCore",
-					../lib/archive/liblhapdfdummy.a,
-					../lib/archive/libpythia8.a,
+					pythia8175/lib/archive/liblhapdfdummy.a,
+					pythia8175/lib/archive/libpythia8.a,
 					"-lThread",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = macosx;
 				SEPARATE_SYMBOL_EDIT = NO;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = NO;
 			};
 			name = Release;
