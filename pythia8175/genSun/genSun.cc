@@ -23,6 +23,7 @@
 #include <TH2.h>
 #include <Pythia.h>
 
+Pythia8::Pythia* gPythia=0;
 
 //#define NDEBUG
 
@@ -157,7 +158,7 @@ namespace energyLossDistributions {
     }
     
     double chLeptonExponent(const int idLep, Pythia8::ParticleData* pdt) {
-        const double& E = chLeptonELossRate;
+        double E = chLeptonELossRate;
         return (timeConv*pdt->tau0(idLep)) * E / pdt->m0(idLep);
     }
     
@@ -215,10 +216,14 @@ void SubDecayHandler::addHandler(DecayHandler* handler, const std::vector<int>& 
 }
 
 bool SubDecayHandler::decay(vector<int>& idProd, vector<double>& mProd, vector<Vec4>& pProd, int iDec, const Event& event) {
-    if (this->decayMap.find(idProd[iDec]) == this->decayMap.end())
-        return false;
+    int id = event[iDec].id();
     
-    return (this->decayMap[idProd[iDec]])->decay(idProd, mProd, pProd, iDec, event);
+    if (this->decayMap.find(id) == this->decayMap.end())
+        return false;
+    //cout << "Decaying n=" << iDec << endl;
+    bool ret = (this->decayMap[id])->decay(idProd, mProd, pProd, iDec, event);
+    //if (gPythia!=0) gPythia->event.list();
+    return ret;
 }
 
 const std::vector<int> SubDecayHandler::getHandledParticles() {
@@ -315,7 +320,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
-        return true;
+        return false;
     }
     int id = idProd[0];
     double m = mProd[0];
@@ -541,6 +546,7 @@ int main(int argc, char **argv) {
    
     //must declare on heap not stack
     Pythia* _pythia = new Pythia();
+    gPythia = _pythia;
     Pythia& pythia = *_pythia;
     
     // A class to generate the fictitious resonance initial state.
@@ -709,6 +715,8 @@ int main(int argc, char **argv) {
             if (++iAbort < nAbort) {
                 hEventStatus->Fill(1);
                 PythiaErrCount++;
+                pythia.event.list();
+                
                 continue;
             }
             cout << " Event generation aborted prematurely, owing to error!\n";
