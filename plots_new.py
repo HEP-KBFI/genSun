@@ -285,8 +285,8 @@ if __name__=="__main__":
         plt.savefig("nuSpec_%s.pdf" % fname)
         plt.clf()
 
-#    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/numu", "top_hhad_numu",
-#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
+    plot("mass_10000/particle_6/energyLoss_hhad_2_lhad_1_chlep_2/numu", "top_hhad_numu",
+            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
 #
 #    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nutau", "top_hhad_nutau",
 #            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
