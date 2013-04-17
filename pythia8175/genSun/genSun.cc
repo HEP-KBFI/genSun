@@ -211,6 +211,7 @@ void SubDecayHandler::addHandler(DecayHandler* handler, const std::vector<int>& 
     //for(auto& p : particles) {
     for(auto it=particles.begin(); it!=particles.end(); it++) {
         (this->decayMap)[(const int)*it] = handler;
+        std::cout << "Adding " << *it << " to decay list." << std::endl;
     }
     return;
 }
@@ -322,6 +323,10 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
         return false;
     }
+    #ifdef NDEBUG
+    std::cout << "Decaying " << idProd[iDec] << std::endl;
+    #endif
+
     int id = idProd[0];
     double m = mProd[0];
     Vec4 p4 = pProd[0];
