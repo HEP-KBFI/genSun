@@ -178,7 +178,8 @@ class EnergyDistribution:
         return self.__repr__()
 
 if __name__=="__main__":
-    f = rootpy.io.open("mergedOut/spec_Mar28.root")
+    #f = rootpy.io.open("mergedOut/spec_Mar28.root")
+    f = rootpy.io.open("spec_W_Apr18.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
     interesting_hists = ["nuel", "numu", "nutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
@@ -215,7 +216,7 @@ if __name__=="__main__":
                         n_events=successful_events,
                         fstate=hname
                     )
-                    if hHadInstr==2 and lHadInstr==1 and chLepInstr==2:
+                    if hHadInstr==0 and lHadInstr==0 and chLepInstr==0:
                         if partId not in energy_distributions_part.keys():
                             energy_distributions_part[partId] = []
                         energy_distributions_part[partId].append(energy_distributions[name])
@@ -285,7 +286,7 @@ if __name__=="__main__":
         plt.savefig("nuSpec_%s.pdf" % fname)
         plt.clf()
 
-    plot("mass_10000/particle_6/energyLoss_hhad_2_lhad_1_chlep_2/numu", "top_hhad_numu",
+    plot("mass_1000/particle_24/energyLoss_hhad_(.)*_lhad_(.)*_chlep_(.)*/numu", "W_numu",
             titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
 #
 #    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nutau", "top_hhad_nutau",
