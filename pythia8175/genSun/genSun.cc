@@ -489,12 +489,12 @@ int main(int argc, char **argv) {
 
     std::vector<unsigned int> bHadrons;
     bHadrons.push_back(512);
-    bHadrons.push_back(511);
-    bHadrons.push_back(531);
-    bHadrons.push_back(5122);
-    bHadrons.push_back(5232);
-    bHadrons.push_back(5132);
-    bHadrons.push_back(5332);
+    bHadrons.push_back(511); //B0
+    bHadrons.push_back(531); //B_s0
+    bHadrons.push_back(5122); //Lambda_b0
+    bHadrons.push_back(5232); //Xi_b0
+    bHadrons.push_back(5132); //Xi_b-
+    bHadrons.push_back(5332); //Omega_b-
     
     std::vector<unsigned int> cHadrons;
     cHadrons.push_back(411);
@@ -506,13 +506,13 @@ int main(int argc, char **argv) {
     cHadrons.push_back(4332);
     
     std::vector<unsigned int> lHadrons;
-    lHadrons.push_back(211);
-    lHadrons.push_back(321);
-    lHadrons.push_back(310);
-    lHadrons.push_back(130);
-    lHadrons.push_back(311);
-    lHadrons.push_back(2112);
-    lHadrons.push_back(3122);
+    lHadrons.push_back(211); //pi+
+    lHadrons.push_back(321); //K+
+    lHadrons.push_back(310); //K_S0
+    lHadrons.push_back(130); //K_L0 
+    lHadrons.push_back(311); //K0
+    lHadrons.push_back(2112); //n0
+    lHadrons.push_back(3122); //Lambda0
     lHadrons.push_back(3222);
     lHadrons.push_back(3112);
     lHadrons.push_back(3322);
