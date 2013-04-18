@@ -33,7 +33,8 @@ int main(int argc, char **argv) {
   TFile f(argv[1]);
   //char * channel = argv[2];
   const char* channel = "e"; 
-  float Nev = (float)atoi(argv[2]);
+  float Nev = ((TH1I*)f.Get("mass_1000/particle_24/energyLoss_hhad_2_lhad_1_chlep_2/eventStatus"))->GetBinContent(1);
+  std::cout << "N_ev = " << Nev << std::endl;
   //int MeV = atoi(argv[4]);
   //int MeV2 = atoi(argv[5]);
   int mass = 1000;
@@ -44,9 +45,9 @@ int main(int argc, char **argv) {
 //  TH1D *e = (TH1D*)f.Get("el");
 //  TH1D *g = (TH1D*)f.Get("gam");
 //  TH1D *an = (TH1D*)f.Get("antin");
-  TH1D *nue = (TH1D*)f.Get("mass_1000/particle_11/energyLoss_hhad_2_lhad_1_chlep_2/nuel");
-  TH1D *num = (TH1D*)f.Get("mass_1000/particle_11/energyLoss_hhad_2_lhad_1_chlep_2/numu");
-  TH1D *nut = (TH1D*)f.Get("mass_1000/particle_11/energyLoss_hhad_2_lhad_1_chlep_2/nutau");
+  TH1D *nue = (TH1D*)f.Get("mass_1000/particle_24/energyLoss_hhad_2_lhad_1_chlep_2/nuel");
+  TH1D *num = (TH1D*)f.Get("mass_1000/particle_24/energyLoss_hhad_2_lhad_1_chlep_2/numu");
+  TH1D *nut = (TH1D*)f.Get("mass_1000/particle_24/energyLoss_hhad_2_lhad_1_chlep_2/nutau");
   cout << "numu = " << num->Integral() << endl;
   // Use the shape of 400 MeV distribution, but the count of the 80 MeV one
  // double sc = double(n->Integral()) / double(p->Integral()) / (double(Nev) * 0.03);
