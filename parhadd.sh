@@ -6,3 +6,4 @@ source /home/software/root/bin/thisroot.sh
 cd $SLURM_SUBMIT_DIR
 OUTNAME="out_"$SLURM_JOB_ID".root"
 hadd $OUTNAME $@
+echo "done hadding"

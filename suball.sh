@@ -1,10 +1,15 @@
 #!/bin/bash
 #masses=( 1000 2500 5000 7500 10000 )
-#masses=( 10 100 1000 10000 100000 )
-masses=( 10000 )
-#particles=( 1 4 5 6 11 12 13 15 21 22 23 24 25 )
-particles=( 13 ) 
-OFDIR=/home/joosep/solarNu/out
+masses=( 10 100 1000 10000 100000 )
+#masses=( 1000 )
+particles=( 1 4 5 6 11 12 13 15 21 22 23 24 25 )
+#particles=( 13 )
+timestamp=`date +%F`
+OFDIR=/home/joosep/solarNu/spec_out_$timestamp
+if [ ! -d $OFDIR ]; then
+    mkdir $OFDIR
+fi
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 for m in "${masses[@]}"
     do
