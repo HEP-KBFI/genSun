@@ -9,10 +9,11 @@ import rootpy.plotting
 import matplotlib.pyplot as plt
 from collections import OrderedDict as dict
 import numpy
-
+import os
 import matplotlib
 import matplotlib.cm
 from numpy import *
+from time import gmtime, strftime
 
 from matplotlib import rc
 rc('text', usetex=True)
@@ -124,6 +125,14 @@ class EnergyLoss:
         else:
             raise ValueError("Loss {0} not recognized".format(loss))
 
+    def lossType(self):
+        if self.h_had==2 and self.l_had==1 and self.ch_lep==2:
+            return 1
+        elif self.h_had==0 and self.l_had==0 and self.ch_lep==0:
+            return 0
+        else:
+            return -1
+
     def bchad(self):
         return "b/c hadron: {0}".format(EnergyLoss.lossName(self.h_had))
 
@@ -179,7 +188,7 @@ class EnergyDistribution:
 
 if __name__=="__main__":
     #f = rootpy.io.open("mergedOut/spec_Mar28.root")
-    f = rootpy.io.open("spec_W_Apr18.root")
+    f = rootpy.io.open("spec_Apr19_merged.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
     interesting_hists = ["nuel", "numu", "nutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
@@ -216,24 +225,38 @@ if __name__=="__main__":
                         n_events=successful_events,
                         fstate=hname
                     )
-                    if hHadInstr==0 and lHadInstr==0 and chLepInstr==0:
-                        if partId not in energy_distributions_part.keys():
-                            energy_distributions_part[partId] = []
-                        energy_distributions_part[partId].append(energy_distributions[name])
+                    if partId not in energy_distributions_part.keys():
+                        energy_distributions_part[partId] = []
+                    energy_distributions_part[partId].append(energy_distributions[name])
         else:
             continue
 
     channels = [1, 4, 5, 6, 11, 13, 15, 22, 23, 24, 25]
+
+    timestamp = strftime("%m_%d", gmtime())
+    dir_no_loss = "spec_loss_off_%s"%timestamp
+    dir_with_loss = "spec_loss_on_%s"%timestamp
+    os.mkdir(dir_no_loss)
+    os.mkdir(dir_with_loss)
+
     for (part, distrs) in energy_distributions_part.items():
         if part not in channels:
             continue
         chan_name = decay_channel_names_Mathematica[part]
         #chan_name.replace("\\", r'\\\')
-        ofname = "DM%s.nb" % chan_name
-        ofile = open(ofname, "w")
+
+
+        ofname_no_loss = dir_no_loss + "/DM%s.nb" % chan_name
+        ofname_with_loss = dir_with_loss + "/DM%s.nb" % chan_name
+        ofile_no_loss = open(ofname_no_loss, "w")
+        ofile_with_loss = open(ofname_with_loss, "w")
         for dist in distrs:
-            ofile.write(dist.printArray() + "\n")
-        ofile.close()
+            if dist.energy_loss.lossType()==0:
+                ofile_no_loss.write(dist.printArray() + "\n")
+            elif dist.energy_loss.lossType()==1:
+                ofile_with_loss.write(dist.printArray() + "\n")
+        ofile_no_loss.close()
+        ofile_with_loss.close()
 
 
     def drawHist(h, color, linestyle):
@@ -286,8 +309,8 @@ if __name__=="__main__":
         plt.savefig("nuSpec_%s.pdf" % fname)
         plt.clf()
 
-    plot("mass_1000/particle_24/energyLoss_hhad_(.)*_lhad_(.)*_chlep_(.)*/numu", "W_numu",
-            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
+#    plot("mass_1000/particle_24/energyLoss_hhad_(.)*_lhad_(.)*_chlep_(.)*/numu", "W_numu",
+#            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
 #
 #    plot(".*/particle_6/energyLoss_hhad_([0-9])_lhad_0_chlep_0/nutau", "top_hhad_nutau",
 #            titleFormat=r"spectrum of $E(\nu)$ for DM({mass}) $\rightarrow$ {partname}, variating b/c hadron E loss", legendFormat=r"{neutrino_flavour} {bc_had_loss}")
