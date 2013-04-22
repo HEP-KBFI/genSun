@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A768B07916E125D90076ADB3 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A768B07316E125D90076ADB3 /* genSun.cc */; };
+		A7C372861725484A0081DDF5 /* loader.C in Sources */ = {isa = PBXBuildFile; fileRef = A7C372841725484A0081DDF5 /* loader.C */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,8 @@
 		A768B07616E125D90076ADB3 /* Makefile-lxplus */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-lxplus"; sourceTree = "<group>"; };
 		A768B07716E125D90076ADB3 /* Makefile-wn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-wn"; sourceTree = "<group>"; };
 		A768B07816E125D90076ADB3 /* runSpectra.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = runSpectra.sh; sourceTree = "<group>"; };
+		A7C372841725484A0081DDF5 /* loader.C */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = loader.C; sourceTree = "<group>"; };
+		A7C372851725484A0081DDF5 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +67,8 @@
 		A768B07016E125D90076ADB3 /* genSun */ = {
 			isa = PBXGroup;
 			children = (
+				A7C372841725484A0081DDF5 /* loader.C */,
+				A7C372851725484A0081DDF5 /* particle.h */,
 				A768B07116E125D90076ADB3 /* cardSunBatch.card */,
 				A768B07216E125D90076ADB3 /* cardSunTest.card */,
 				A768B07316E125D90076ADB3 /* genSun.cc */,
@@ -128,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A768B07916E125D90076ADB3 /* genSun.cc in Sources */,
+				A7C372861725484A0081DDF5 /* loader.C in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

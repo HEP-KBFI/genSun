@@ -16,16 +16,20 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-//#include <initializer_list>
 #include <TFile.h>
 #include <TMath.h>
+#include <TTree.h>
 #include <TH1.h>
 #include <TH2.h>
 #include <Pythia.h>
+#include <particle.h>
+#include "TROOT.h"
 
 Pythia8::Pythia* gPythia=0;
 
-//#define NDEBUG
+
+//Enable this to switch on event particle list generation
+#define NDEBUG
 
 //Set up the GSL random number generation
 const gsl_rng_type * randomGeneratorType = 0;
@@ -34,6 +38,7 @@ const gsl_rng * rng = 0;
 unsigned int gslErrCount = 0;
 unsigned int PythiaErrCount = 0;
 
+void seedRandom();
 void seedRandom() {
     ifstream f("/dev/urandom");
     unsigned short seed=0;
@@ -52,6 +57,7 @@ void seedRandom() {
 
 //Returns the pdgId of the primary quark in the hadron by getting the first digit
 // of the absolute value.
+int idQuark(int idHad);
 int idQuark(int idHad) {
     
     std::ostringstream os;
@@ -62,6 +68,7 @@ int idQuark(int idHad) {
     return first;
 }
 
+void gslErrorHandler(const char* reason, const char* file, int line, int gsl_errno);
 void gslErrorHandler(const char* reason, const char* file, int line, int gsl_errno) {
     gslErrCount++;
     cerr << "GSL error: " << gsl_errno << " in file " << file << " with reason '" << reason << "'\n";
@@ -299,34 +306,31 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
      return true;
      }
      */
-     //std::cout << "Event size: " << event.size() << std::endl;
+    //std::cout << "Event size: " << event.size() << std::endl;
     
     const unsigned int absId = abs(idProd[0]);
     
     //TH2D* hELoss = 0;
     /*if (ELossHistMap.find(absId) == ELossHistMap.end()) {
-        stringstream ss;
-        ss << "ELossIdAbs" << absId;
-        //ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 5000, 1000, 0, 5000);
-    }*/
+     stringstream ss;
+     ss << "ELossIdAbs" << absId;
+     //ELossHistMap[absId] = new TH2D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 5000, 1000, 0, 5000);
+     }*/
     //hELoss = ELossHistMap[absId];
     
     //TH1D* hESF = 0;
     /*if (EScaleFactorHistMap.find(absId) == EScaleFactorHistMap.end()) {
-        stringstream ss;
-        ss << "ESFIdAbs" << absId;
-        //EScaleFactorHistMap[absId] = new TH1D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 1);
-    }*/
+     stringstream ss;
+     ss << "ESFIdAbs" << absId;
+     //EScaleFactorHistMap[absId] = new TH1D(ss.str().c_str(), ss.str().c_str(), 1000, 0, 1);
+     }*/
     //hESF = EScaleFactorHistMap[absId];
     
     //Already decayed by external handler
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
         return false;
     }
-    #ifdef NDEBUG
-    std::cout << "Decaying " << idProd[iDec] << std::endl;
-    #endif
-
+    
     int id = idProd[0];
     double m = mProd[0];
     Vec4 p4 = pProd[0];
@@ -442,6 +446,8 @@ protected:
     }
 };
 
+
+
 // A derived class for (e+ e- ->) GenericResonance -> various final states.
 class Sigma1GenRes : public Sigma1Process {
     
@@ -474,19 +480,20 @@ TDirectory* subDir(TDirectory* f, const char* prefix, const int val) {
 
 int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
-/*
-    const std::vector<unsigned int> bHadrons({
-        521,511,531,5122,5232,5132,5332
-    });
-    //{211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334}
-    const std::vector<unsigned int> cHadrons({
-        411,421,431,4122,4232,4132,4332
-    });
-    const std::vector<unsigned int> lHadrons({
-        211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334
-    });
-*/
-
+    gROOT->ProcessLine(".L loader.C+");
+    /*
+     const std::vector<unsigned int> bHadrons({
+     521,511,531,5122,5232,5132,5332
+     });
+     //{211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334}
+     const std::vector<unsigned int> cHadrons({
+     411,421,431,4122,4232,4132,4332
+     });
+     const std::vector<unsigned int> lHadrons({
+     211,321,310,130,311,2112,3122,3222,3112,3322,3312,3334
+     });
+     */
+    
     std::vector<unsigned int> bHadrons;
     bHadrons.push_back(512);
     bHadrons.push_back(511); //B0
@@ -509,7 +516,7 @@ int main(int argc, char **argv) {
     lHadrons.push_back(211); //pi+
     lHadrons.push_back(321); //K+
     lHadrons.push_back(310); //K_S0
-    lHadrons.push_back(130); //K_L0 
+    lHadrons.push_back(130); //K_L0
     lHadrons.push_back(311); //K0
     lHadrons.push_back(2112); //n0
     lHadrons.push_back(3122); //Lambda0
@@ -518,7 +525,7 @@ int main(int argc, char **argv) {
     lHadrons.push_back(3322);
     lHadrons.push_back(3312);
     lHadrons.push_back(3334);
-
+    
     std::vector<unsigned int> chLeptons;
     chLeptons.push_back(13);
     chLeptons.push_back(15);
@@ -548,7 +555,7 @@ int main(int argc, char **argv) {
     int chLeptonELossInstruction = atoi(argv[7]);
     
     if (partId == 23 || partId == 25) apartId = partId; else apartId = -partId;
-   
+    
     //must declare on heap not stack
     Pythia* _pythia = new Pythia();
     gPythia = _pythia;
@@ -708,12 +715,38 @@ int main(int argc, char **argv) {
     //TH1D *hLHad = new TH1D("lHad","l Hadron energy distribution",nBins,0,30);
     //hEnergySF = new TH1D("ESF","Energy loss scale factor",nBins,0,1);
     
-   // vector<Particle> antip;
-   // vector<Particle> antin;
+    // vector<Particle> antip;
+    // vector<Particle> antin;
+    
+    //std::vector<Neutrino> neutrinos;
+    //std::vector<SolarNu::Particle*> * p_neutrinos = new std::vector<SolarNu::Particle*>();
+    
+    #ifdef NDEBUG
+    TTree* tree = new TTree("events", "events");
+    std::vector<float> *p_energy = new std::vector<float>();
+    std::vector<int> *p_id = new std::vector<int>();
+    std::vector<int> *p_parent = new std::vector<int>();
+    TBranch* br1 = tree->Branch("particles_E", "std::vector<float>", &p_energy);
+    TBranch* br2 = tree->Branch("particles_id", "std::vector<int>", &p_id);
+    TBranch* br3 = tree->Branch("particles_parent", "std::vector<int>", &p_parent);
+    
+    //TBranch* br = tree->Branch("neutrinos", "std::vector<Particle>", &p_neutrinos);
+    if (br1==0 || br2==0 || br3==0) {
+        std::cerr << "Could not create branch, exiting" << std::endl;;
+        exit(1);
+    }
+    #endif
+
     
     int iAbort = 0;
     std::cout << "Starting event loop" << std::endl;
     for (int iEvent = 0; iEvent < nEvent; ++iEvent) {
+    
+        #ifdef NDEBUG
+        p_energy->clear();
+        p_id->clear();
+        p_parent->clear();
+        #endif
         
         // Generate events. Quit if many failures.
         if (!pythia.next()) {
@@ -816,17 +849,42 @@ int main(int argc, char **argv) {
                 if (idAbs == 12) {
                     hnuel->Fill(x);
                     //hnuelE->Fill(pythia.event[i].e());
+                    //p_neutrinos->push_back(new SolarNu::Particle(pythia.event[i].e(), pythia.event[i].id() , pythia.event[i].mother1()));
+                    
+                    #ifdef NDEBUG
+                    p_energy->push_back(pythia.event[i].e());
+                    p_id->push_back(pythia.event[i].id());
+                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+                    #endif
                 }
                 if (idAbs == 14) {
                     hnumu->Fill(x);
+                    
+                    #ifdef NDEBUG
+                    p_energy->push_back(pythia.event[i].e());
+                    p_id->push_back(pythia.event[i].id());
+                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+                    #endif
                     //hnumuE->Fill(pythia.event[i].e());
                 }
                 if (idAbs == 16) {
                     hnutau->Fill(x);
+                    
+                    #ifdef NDEBUG
+                    p_energy->push_back(pythia.event[i].e());
+                    p_id->push_back(pythia.event[i].id());
+                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+                    #endif
                     //hnutauE->Fill(pythia.event[i].e());
                 }
                 if (id == 22) {
                     hgam->Fill(x);
+                    
+                    #ifdef NDEBUG
+                    p_energy->push_back(pythia.event[i].e());
+                    p_id->push_back(pythia.event[i].id());
+                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+                    #endif
                 }
                 if (id == -2212) {
                     hantip->Fill(x);
@@ -834,43 +892,47 @@ int main(int argc, char **argv) {
             }
             
             /*
-            //Fill histograms for particles that have been decayed by pythia
-            //even if they are not "final" particles
-            if(pythia.event[i].statusAbs()==91) {
-                if(std::find(bHadrons.begin(), bHadrons.end(), idAbs) != bHadrons.end()) {
-                    hBHad->Fill(pythia.event[i].e());
-                }
-                if(std::find(cHadrons.begin(), cHadrons.end(), idAbs) != cHadrons.end()) {
-                    hCHad->Fill(pythia.event[i].e());
-                }
-                if(std::find(lHadrons.begin(), lHadrons.end(), idAbs) != lHadrons.end()) {
-                    hLHad->Fill(pythia.event[i].e());
-                }
-            }
-            */
+             //Fill histograms for particles that have been decayed by pythia
+             //even if they are not "final" particles
+             if(pythia.event[i].statusAbs()==91) {
+             if(std::find(bHadrons.begin(), bHadrons.end(), idAbs) != bHadrons.end()) {
+             hBHad->Fill(pythia.event[i].e());
+             }
+             if(std::find(cHadrons.begin(), cHadrons.end(), idAbs) != cHadrons.end()) {
+             hCHad->Fill(pythia.event[i].e());
+             }
+             if(std::find(lHadrons.begin(), lHadrons.end(), idAbs) != lHadrons.end()) {
+             hLHad->Fill(pythia.event[i].e());
+             }
+             }
+             */
             
         }
         
         /*
-        // Loop over anti-partons and fill histograms
-        for (vector<Particle>::iterator ap = antip.begin(); ap != antip.end(); ap++)
-            for (vector<Particle>::iterator an = antin.begin(); an != antin.end(); an++) {
-                Vec4 d = ap->p() - an->p();
-                Vec4 d2 = ap->p() + an->p();
-                double y = sqrt(pow(d.px(),2)+pow(d.py(),2)+pow(d.pz(),2)-pow(ap->e()-an->e(),2));
-                //double x = log10((d2.e()-ap->m()-an->m())/dmMass);
-                double x = 0;
-                if (y < 0.16 && ap->status() > 0 && an->status() > 0) {
-                    hantid->Fill(x,y);
-                    ap->statusNeg();
-                    an->statusNeg();
-                }
-            }
-        */
+         // Loop over anti-partons and fill histograms
+         for (vector<Particle>::iterator ap = antip.begin(); ap != antip.end(); ap++)
+         for (vector<Particle>::iterator an = antin.begin(); an != antin.end(); an++) {
+         Vec4 d = ap->p() - an->p();
+         Vec4 d2 = ap->p() + an->p();
+         double y = sqrt(pow(d.px(),2)+pow(d.py(),2)+pow(d.pz(),2)-pow(ap->e()-an->e(),2));
+         //double x = log10((d2.e()-ap->m()-an->m())/dmMass);
+         double x = 0;
+         if (y < 0.16 && ap->status() > 0 && an->status() > 0) {
+         hantid->Fill(x,y);
+         ap->statusNeg();
+         an->statusNeg();
+         }
+         }
+         */
         // clean up
         //antip.clear();
         //antin.clear();
         // End of event loop.
+        //br->Fill();
+        #ifdef NDEBUG
+        tree->Fill();
+        #endif
     }
     cout << "Writing output from " << nEvent << " events." << endl;
     cout << "GSL error count: " << gslErrCount << endl;
