@@ -22,7 +22,7 @@
 #include <TH1.h>
 #include <TH2.h>
 #include <Pythia.h>
-#include <particle.h>
+#include "particle.h"
 #include "TROOT.h"
 
 Pythia8::Pythia* gPythia=0;
