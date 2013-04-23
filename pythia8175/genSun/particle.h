@@ -1,8 +1,9 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
+#include <TObject.h>
 
 namespace SolarNu {
-struct Particle {
+class Particle : public TObject {
     float energy;
     int id;
     int parent_id;
