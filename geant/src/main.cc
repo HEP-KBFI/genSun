@@ -104,7 +104,13 @@ int main(int argc, char * argv[]) {
 	G4int channel = atoi(argv[argp_index+0]);
 	G4double dm_mass = atof(argv[argp_index+1]) * GeV;
 	
-	G4cout << "G4 simulation: " << channel << " / " << p_runs << " / " << dm_mass/GeV << " (channel/runs/energy)" << G4endl;
+	G4cout << "G4-sim: "
+	       <<    "ch:" << channel
+	       << " | runs:" << p_runs
+	       << " | m_dm[GeV]:" << dm_mass/GeV
+	       << " | mat:" << (p_vacuum ? "VAC" : "SUN")
+	       << " | phys:" << (p_trans ? "TRANS" : "QGSP_BERT")
+	       << G4endl;
 	
 	// Start setting up Geant4
 	// Start constructing the run manager
