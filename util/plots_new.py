@@ -58,7 +58,10 @@ fstate_names_Mathematica = {
     #"gamma": "\\[Gamma]",
     "nuel": "\\[Nu]e",
     "numu": "\\[Nu]\\[Mu]",
-    "nutau": "\\[Nu]\\[Tau]"
+    "nutau": "\\[Nu]\\[Tau]",
+    "anuel": "OverBar[\\[Nu]e]",
+    "anumu": "OverBar[\\[Nu]\\[Mu]]",
+    "anutau": "OverBar[\\[Nu]\\[Tau]]"
 }
 
 energyLossMechanisms = {
@@ -188,10 +191,10 @@ class EnergyDistribution:
 
 if __name__=="__main__":
     #f = rootpy.io.open("mergedOut/spec_Mar28.root")
-    f = rootpy.io.open("spec_Apr19_merged.root")
+    f = rootpy.io.open("pythia8175/genSun/output.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
-    interesting_hists = ["nuel", "numu", "nutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
+    interesting_hists = ["nuel", "numu", "nutau", "anuel", "anumu", "anutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
     hists = dict()
     energy_distributions = dict()
 
