@@ -27,8 +27,8 @@ NeutrinoHistogram::NeutrinoHistogram(
 	G4int pid, G4double dm_mass,
 	G4double xmin, G4double xmax,
 	G4int nbins,
-	bool logstyle
-) {
+	bool logy
+) : dm_mass(dm_mass) {
 	char hname[100];
 	G4int nucount = sizeof(neutrinos)/sizeof(neutrinos[0]);
 	
@@ -41,8 +41,8 @@ NeutrinoHistogram::NeutrinoHistogram(
 		if(!p_quiet){G4cout << " > H: " << hname << G4endl;}
 		hs[nu.type] = anm->CreateH1(
 			hname, "Neutrino energy spectrum", // name, title
-			nbins, xmin/MeV, xmax/MeV, // nbins, xmin, xmax
-			"MeV", "none" //unitName="none", fcnName="none"
+			nbins, xmin, xmax, // nbins, xmin, xmax
+			"log(E/Eres)", "none" //unitName="none", fcnName="none"
 		);
 	}
 }
@@ -64,10 +64,11 @@ void NeutrinoHistogram::addParticle(const G4Track* tr) {
 	if(type != nuNot) {
 		G4String pname = tr->GetParticleDefinition()->GetParticleName();
 		G4double energy = tr->GetTotalEnergy();
+		G4double logE = log10(energy/dm_mass);
 		
-		if(!p_quiet){G4cout << " > Adding neutrino: " << energy << " (" << pname << ")" << G4endl;}
+		if(!p_quiet){G4cout << " > Adding neutrino: " << energy << " (" << pname << ") -- logE = " << logE << G4endl;}
 		
-		anm->FillH1(hs[type], energy); // id, value, weight=1.0
+		anm->FillH1(hs[type], logE); // id, value, weight=1.0
 	}
 }
 

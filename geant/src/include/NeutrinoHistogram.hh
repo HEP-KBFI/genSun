@@ -15,9 +15,9 @@ class NeutrinoHistogram {
 	public:
 		NeutrinoHistogram(
 			G4int pid, G4double dm_mass,
-			G4double xmin=0*MeV, G4double xmax=100*MeV,
+			G4double xmin=-9, G4double xmax=0,
 			G4int nbins=300,
-			bool logstyle=true
+			bool logy=false
 		);
 		~NeutrinoHistogram();
 		
@@ -27,6 +27,7 @@ class NeutrinoHistogram {
 	private:
 		G4RootAnalysisManager * anm;
 		G4int * hs;
+		G4double dm_mass;
 		
 	// Static helpers
 	public:
