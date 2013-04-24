@@ -117,7 +117,11 @@ int main(int argc, char * argv[]) {
 	G4RunManager* runManager = new G4RunManager;
 	runManager->SetVerboseLevel( p_quiet ? 0 : 1 );
 	
-	runManager->SetUserInitialization(new SunDetectorConstruction(1*m, p_vacuum)); // detector
+	// detector
+	runManager->SetUserInitialization(new SunDetectorConstruction(
+		p_vacuum ? 10*km : 1*m,
+		p_vacuum
+	));
 	
 	// create the physics list (using a factory)
 	//G4VModularPhysicsList* physlist;
