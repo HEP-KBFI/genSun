@@ -1,4 +1,6 @@
 #!/bin/bash
+#SBATCH -J "solnuG4"
+
 # Parse arguments
 GETOPT=$(getopt -n "batch" -o r: -- "$@")
 runs=1 # default number of runs
