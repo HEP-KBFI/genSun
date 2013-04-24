@@ -10,6 +10,6 @@ ofname=working/${prefix}/${prefix}_${SLURM_PROCID}.root
 
 echo "Run ${SLURM_PROCID} start:" `date` " -- fout:" ${ofname}
 time ./../build/solnugeant -q -n${runs} -p${physics} --ofile=${ofname} ${particle} ${energy}
-echo "Run ${SLURM PROCID} stop:" `date`
+echo "Run ${SLURM_PROCID} stop:" `date`
 
 #echo procid:$SLURM_PROCID localid:$SLURM_LOCALID
