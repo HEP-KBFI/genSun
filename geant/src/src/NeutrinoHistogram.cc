@@ -42,7 +42,7 @@ NeutrinoHistogram::NeutrinoHistogram(
 		hs[nu.type] = anm->CreateH1(
 			hname, "Neutrino energy spectrum", // name, title
 			nbins, xmin, xmax, // nbins, xmin, xmax
-			"log(E/Eres)", "none" //unitName="none", fcnName="none"
+			"none", "none" //unitName="none", fcnName="none"
 		);
 	}
 }
