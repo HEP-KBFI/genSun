@@ -2,14 +2,20 @@
 #SBATCH -J "solnuG4"
 
 # Parse arguments
-GETOPT=$(getopt -n "batch" -o r: -- "$@")
+GETOPT=$(getopt -n "batch" -o r:p: -- "$@")
 runs=1 # default number of runs
+physics="FULL" # default physics
 eval set -- "$GETOPT"
 while true; do
 	case $1 in
 		-r)
 			runs=$2
 			echo "Number of runs:" $runs
+			shift 2; continue
+		;;
+		-p)
+			physics=$2
+			echo "Physics:" $physics
 			shift 2; continue
 		;;
 		--)
@@ -39,7 +45,7 @@ date
 mkdir working/$prefix
 
 echo "Starting Geant4 runs"
-srun -l ./run.sh ${prefix} ${particle} ${energy} $runs
+srun -l ./run.sh ${prefix} ${particle} ${energy} ${runs} ${physics}
 echo "Geant simulations done"
 
 echo "hadding histograms"
