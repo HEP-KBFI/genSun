@@ -244,9 +244,6 @@ bool SubDecayHandler::decay(vector<int>& idProd, vector<double>& mProd, vector<V
     if (this->decayMap.find(id) == this->decayMap.end())
         return false;
     
-    #ifdef NDEBUG
-    cout << "Decaying n=" << iDec << endl;
-    #endif
     bool ret = (this->decayMap[id])->decay(idProd, mProd, pProd, iDec, event);
     //if (gPythia!=0) gPythia->event.list();
     return ret;
@@ -659,8 +656,10 @@ int main(int argc, char **argv) {
     }
     pythia.setDecayPtr((DecayHandler*)mainDecayHandler, mainDecayHandler->getHandledParticles());
     
-    
+    pythia.readString("211:onMode = 2"); //This is the way to switch off decay of anti-211(pi-) but keep the decay of 211(pi+)
+
     pythia.init();
+    
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
     if (showCS)  pythia.settings.listChanged();
     if (showCPD) pythia.particleData.listChanged();
@@ -674,9 +673,17 @@ int main(int argc, char **argv) {
     TH1D *hproton = new TH1D("proton","Proton distribution",nBins,-9,0);
     TH1D *hneutron = new TH1D("neutron","Neutron distribution",nBins,-9,0);
     TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,0);
+    
+    //neutrino fluxes per energy
     TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,0);
     TH1D *hnumu = new TH1D("numu","Muon nu distribution",nBins,-9,0);
     TH1D *hnutau = new TH1D("nutau","Tau nu distribution",nBins,-9,0);
+    
+    //anti-neutrino fluxes per energy
+    TH1D *hanuel = new TH1D("anuel","Electron anti-nu distribution",nBins,-9,0);
+    TH1D *hanumu = new TH1D("anumu","Muon anti-nu distribution",nBins,-9,0);
+    TH1D *hanutau = new TH1D("anutau","Tau anti-nu distribution",nBins,-9,0);
+    
     TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,0);
     
     #ifdef NDEBUG
@@ -808,57 +815,75 @@ int main(int argc, char **argv) {
             if (pythia.event[i].isFinal()) {
                 double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
                 
-                //electron/positron
-                if (idAbs == 11) {
-                    hel->Fill(x);
-                }
+                if(id == 12) hnuel->Fill(x);
+                else if(id == -12) hanuel->Fill(x);
+                else if(id == 14) hnumu->Fill(x);
+                else if(id == -14) hanumu->Fill(x);
+                else if(id == 16) hnutau->Fill(x);
+                else if(id == -16) hanutau->Fill(x);
                 
-                //nu_el
-                if (idAbs == 12) {
-                    hnuel->Fill(x);
-                    
-                    #ifdef NDEBUG
+                //Put into event table
+                if(idAbs==12 || idAbs==14 || idAbs==16) {
+#ifdef NDEBUG
                     p_energy->push_back(pythia.event[i].e());
                     p_id->push_back(pythia.event[i].id());
                     p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
                     //p_particles->push_back(SolarNu::Particle(pythia.event[i].e(), pythia.event[i].id(), pythia.event[pythia.event[i].mother1()].id()));
-                    #endif
+#endif
                 }
-                
-                //nu_mu
-                if (idAbs == 14) {
-                    hnumu->Fill(x);
-                    
-                    #ifdef NDEBUG
-                    p_energy->push_back(pythia.event[i].e());
-                    p_id->push_back(pythia.event[i].id());
-                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-                    #endif
-                }
-                
-                //nu_tau
-                if (idAbs == 16) {
-                    hnutau->Fill(x);
-                    
-                    #ifdef NDEBUG
-                    p_energy->push_back(pythia.event[i].e());
-                    p_id->push_back(pythia.event[i].id());
-                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-                    #endif
-                }
-                //gamma
-                if (id == 22) {
-                    hgam->Fill(x);
-                    
-                    #ifdef NDEBUG
-                    p_energy->push_back(pythia.event[i].e());
-                    p_id->push_back(pythia.event[i].id());
-                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-                    #endif
-                }
-                if (id == -2212) {
-                    hantip->Fill(x);
-                }
+
+//                
+//                //electron/positron
+//                if (idAbs == 11) {
+//                    hel->Fill(x);
+//                }
+//                
+//                //nu_el
+//                if (idAbs == 12) {
+//                    hnuel->Fill(x);
+//                    
+//                    #ifdef NDEBUG
+//                    p_energy->push_back(pythia.event[i].e());
+//                    p_id->push_back(pythia.event[i].id());
+//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+//                    //p_particles->push_back(SolarNu::Particle(pythia.event[i].e(), pythia.event[i].id(), pythia.event[pythia.event[i].mother1()].id()));
+//                    #endif
+//                }
+//                
+//                //nu_mu
+//                if (idAbs == 14) {
+//                    hnumu->Fill(x);
+//                    
+//                    #ifdef NDEBUG
+//                    p_energy->push_back(pythia.event[i].e());
+//                    p_id->push_back(pythia.event[i].id());
+//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+//                    #endif
+//                }
+//                
+//                //nu_tau
+//                if (idAbs == 16) {
+//                    hnutau->Fill(x);
+//                    
+//                    #ifdef NDEBUG
+//                    p_energy->push_back(pythia.event[i].e());
+//                    p_id->push_back(pythia.event[i].id());
+//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+//                    #endif
+//                }
+//                //gamma
+//                if (id == 22) {
+//                    hgam->Fill(x);
+//                    
+//                    #ifdef NDEBUG
+//                    p_energy->push_back(pythia.event[i].e());
+//                    p_id->push_back(pythia.event[i].id());
+//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
+//                    #endif
+//                }
+//                if (id == -2212) {
+//                    hantip->Fill(x);
+//                }
             }
         }
         

@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A768B07916E125D90076ADB3 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A768B07316E125D90076ADB3 /* genSun.cc */; };
-		A7911D82172666A90021D61F /* conv8.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7911D7D172666A90021D61F /* conv8.cc */; };
-		A7C372861725484A0081DDF5 /* loader.C in Sources */ = {isa = PBXBuildFile; fileRef = A7C372841725484A0081DDF5 /* loader.C */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -154,8 +152,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A768B07916E125D90076ADB3 /* genSun.cc in Sources */,
-				A7C372861725484A0081DDF5 /* loader.C in Sources */,
-				A7911D82172666A90021D61F /* conv8.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
