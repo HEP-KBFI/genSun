@@ -7,6 +7,8 @@
 
 #include "Pythia.h"
 
+extern bool p_quiet;
+
 DMPythiaPGA::DMPythiaPGA(      
 	//const G4String& channel, 
 	int channel,
@@ -56,7 +58,7 @@ Pythia8Interface::Pythia8Interface(
 	int pid,
 	G4double dm_mass
 ) {
-	G4cout << "Initializing PYTHIA: " << pid << " at " << dm_mass/GeV << " GeV" << G4endl;
+	if(!p_quiet){G4cout << "Initializing PYTHIA: " << pid << " at " << dm_mass/GeV << " GeV" << G4endl;}
 	
 	char ch[1000];
 	
@@ -87,16 +89,18 @@ PhysicalParticleList Pythia8Interface::generate() {
 		G4cerr << "No next() !" << G4endl;
 	}
 	Pythia8::Event ev = pythia->event;
-	G4cout << "pythia->next() called: " << ev.size() << " events." << G4endl;
+	if(!p_quiet){G4cout << "pythia->next() called: " << ev.size() << " events." << G4endl;}
 	
 	PhysicalParticleList ps;
 	for(int i=0; i<ev.size(); i++) {
-		G4cout << " > [" << (ev[i].isFinal()?'x':' ') << "] "
-		       << ev[i].name() << "(" << ev[i].id() << "): "
-		       << "p(" << ev[i].e() << ", "
-		       << ev[i].px() << ", " << ev[i].py() << ", " << ev[i].pz() << "); "
-		       << "m(" << ev[i].m() << ")"
-		       << G4endl;
+		if(!p_quiet) {
+			G4cout << " > [" << (ev[i].isFinal()?'x':' ') << "] "
+			       << ev[i].name() << "(" << ev[i].id() << "): "
+			       << "p(" << ev[i].e() << ", "
+			       << ev[i].px() << ", " << ev[i].py() << ", " << ev[i].pz() << "); "
+			       << "m(" << ev[i].m() << ")"
+			       << G4endl;
+		}
 		
 		if(ev[i].isFinal()) {
 			PhysicalParticle p;
