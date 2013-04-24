@@ -10,7 +10,7 @@ class G4Material;
 
 class SunDetectorConstruction : public G4VUserDetectorConstruction {
 	public:
-		SunDetectorConstruction(G4double radius = 1*m);
+		SunDetectorConstruction(G4double radius = 1*m, bool vacuum=false);
 		~SunDetectorConstruction();
 
 		// methods from base class 
@@ -19,8 +19,10 @@ class SunDetectorConstruction : public G4VUserDetectorConstruction {
 	private:
 		G4double fRadius;
 		G4LogicalVolume* fWorldVolume;
+		bool useVacuum;
 
 		G4Material * getSunMaterial();
+		G4Material * getVacuumMaterial();
 };
 
 struct ElementFraction {

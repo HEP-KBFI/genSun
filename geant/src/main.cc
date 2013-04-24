@@ -7,7 +7,7 @@
 
 #include "SunDetectorConstruction.hh"
 #include "SunSteppingAction.hh"
-//#include "DMPhysicsList.hh"
+#include "DMPhysicsList.hh"
 #include "DMPrimaryGeneratorAction.hh"
 #include "DMPythiaPGA.hh"
 #include "NeutrinoStackingAction.hh"
@@ -28,12 +28,15 @@ const argp_option argp_options[] = {
 	{"vis",      'v',         0,      0,   "Enable visual mode.", 0},
 	{"quiet",    'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
 	{"ofile",    'o',   "ofile",      0,   "Output root file.", 0},
+	{"physics",  'p', "physics",      0, "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
 int  p_runs = 1; // number of runs. Default: 1
 bool p_vis  = false; // go to visual mode. Default: false
 bool p_quiet = false; // reduce verbosity. Default: false
+bool p_vacuum = false; // use vacuum instead of sun. Default: false
+bool p_trans = false; // use only translation physics. Default: false
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
@@ -52,6 +55,16 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case 'o':
 			p_ofile = arg;
 			//G4cout << "Setting ofile to " << p_ofile << G4endl;
+			break;
+		case 'p':
+			if(strcmp(arg, "VAC") == 0) {
+				p_vacuum = true;
+			} else if(strcmp(arg, "TRANS") == 0) {
+				p_trans = true;
+			} else if(strcmp(arg, "VACTRANS") == 0) {
+				p_vacuum = true;
+				p_trans = true;
+			}
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -98,15 +111,18 @@ int main(int argc, char * argv[]) {
 	G4RunManager* runManager = new G4RunManager;
 	runManager->SetVerboseLevel( p_quiet ? 0 : 1 );
 	
-	runManager->SetUserInitialization(new SunDetectorConstruction); // detector
+	runManager->SetUserInitialization(new SunDetectorConstruction(1*m, p_vacuum)); // detector
 	
 	// create the physics list (using a factory)
-	G4VModularPhysicsList* physlist;
-	//physlist = new DMPhysicsList;
-	G4PhysListFactory factory;
-	physlist = factory.GetReferencePhysList("QGSP_BERT");
-	physlist->SetVerboseLevel( p_quiet ? 0 : 1 );
-	
+	//G4VModularPhysicsList* physlist;
+	G4VUserPhysicsList * physlist;
+	if(!p_trans) {
+		G4PhysListFactory factory;
+		physlist = factory.GetReferencePhysList("QGSP_BERT");
+		physlist->SetVerboseLevel( p_quiet ? 0 : 1 );
+	} else {
+		physlist = new DMPhysicsList;
+	}
 	runManager->SetUserInitialization(physlist); // physics
 	
 	G4VUserPrimaryGeneratorAction* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass);
