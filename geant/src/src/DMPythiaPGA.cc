@@ -106,9 +106,9 @@ PhysicalParticleList Pythia8Interface::generate() {
 			PhysicalParticle p;
 			
 			p.pdef = G4ParticleTable::GetParticleTable()->FindParticle(ev[i].id());
-			p.E = ev[i].e();
-			p.p = G4ThreeVector(ev[i].px(), ev[i].py(), ev[i].pz());
-			p.r = G4ThreeVector(ev[i].xDec(), ev[i].yDec(), ev[i].zDec());
+			p.E = ev[i].e() * GeV;
+			p.p = G4ThreeVector(ev[i].px(), ev[i].py(), ev[i].pz()); // TODO: Fix units
+			p.r = G4ThreeVector(ev[i].xDec(), ev[i].yDec(), ev[i].zDec()); // TODO: Fix units
 			
 			if(p.pdef == NULL) {
 				G4cerr << "Null pointer in a final particle!" << G4endl;
