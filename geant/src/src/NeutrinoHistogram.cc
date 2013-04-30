@@ -45,6 +45,14 @@ NeutrinoHistogram::NeutrinoHistogram(
 			"none", "none" //unitName="none", fcnName="none"
 		);
 	}
+	
+	sprintf(hname, "evcount_p%i_m%i", abs(pid), (int)(dm_mass/GeV));
+	if(!p_quiet){G4cout << " > H[c]: " << hname << G4endl;}
+	ch = anm->CreateH1(
+		hname, "Event count", // name, title
+		2, -0.5, 1.5, // nbins, xmin, xmax
+		"none", "none" //unitName="none", fcnName="none"
+	);
 }
 
 NeutrinoHistogram::~NeutrinoHistogram() {
@@ -88,4 +96,9 @@ nu_t NeutrinoHistogram::getNeutrinoType(const G4ParticleDefinition* g4def) {
 	}
 	
 	return nuNot;
+}
+
+void NeutrinoHistogram::countRuns(G4double runs) {
+	if(!p_quiet){G4cout << "Number of runs: " << runs << G4endl;}
+	anm->FillH1(ch, 0, runs);
 }

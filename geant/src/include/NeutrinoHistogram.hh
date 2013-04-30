@@ -23,10 +23,12 @@ class NeutrinoHistogram {
 		
 		void addParticle(const G4Track* tr);
 		void write(G4String ofile);
+		
+		void countRuns(G4double runs);
 	
 	private:
 		G4RootAnalysisManager * anm;
-		G4int * hs;
+		G4int * hs, ch;
 		G4double dm_mass;
 		
 	// Static helpers

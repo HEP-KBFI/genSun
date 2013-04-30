@@ -164,6 +164,7 @@ int main(int argc, char * argv[]) {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
 	}
+	h->countRuns(p_runs);
 	h->write(p_ofile);
 	
 	if(!p_quiet){sun_stepping_action->statistics();}
