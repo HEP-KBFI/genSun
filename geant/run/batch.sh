@@ -10,12 +10,10 @@ while true; do
 	case $1 in
 		-r)
 			runs=$2
-			echo "Number of runs:" $runs
 			shift 2; continue
 		;;
 		-p)
 			physics=$2
-			echo "Physics:" $physics
 			shift 2; continue
 		;;
 		--)
@@ -36,11 +34,19 @@ if [ ! -d ready ]; then mkdir ready; fi
 particle=$1
 energy=$2
 
-prefix=hist_p${particle}_e${energy}_job${SLURM_JOB_ID}
+prefix=hist_job${SLURM_JOB_ID}_p${particle}_e${energy}_P${physics}
 
 echo "Starting batch job" ${SLURM_JOB_ID} "on" ${SLURM_JOB_NUM_NODES} "nodes"
-echo "Using prefix:" $prefix
 date
+echo "Prefix:" $prefix
+
+echo "date="`date`
+echo "runs="$runs
+echo "physics="$physics
+echo "particle="$particle
+echo "energy="$energy
+echo "prefix="$prefix
+
 
 mkdir working/$prefix
 
