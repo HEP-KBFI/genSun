@@ -59,9 +59,9 @@ fstate_names_Mathematica = {
     "nuel": "\\[Nu]e",
     "numu": "\\[Nu]\\[Mu]",
     "nutau": "\\[Nu]\\[Tau]",
-    "anuel": "OverBar[\\[Nu]e]",
-    "anumu": "OverBar[\\[Nu]\\[Mu]]",
-    "anutau": "OverBar[\\[Nu]\\[Tau]]"
+    "anuel": "\\[Nu]eb",
+    "anumu": "\\[Nu]\\[Mu]b",
+    "anutau": "\[Nu]\\[Tau]b"
 }
 
 energyLossMechanisms = {
@@ -190,8 +190,8 @@ class EnergyDistribution:
         return self.__repr__()
 
 if __name__=="__main__":
-    #f = rootpy.io.open("mergedOut/spec_Mar28.root")
-    f = rootpy.io.open("pythia8175/genSun/output.root")
+    f = rootpy.io.open("mergedOut/spec_Apr28.root")
+    #f = rootpy.io.open("output.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
     interesting_hists = ["nuel", "numu", "nutau", "anuel", "anumu", "anutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
@@ -234,7 +234,8 @@ if __name__=="__main__":
         else:
             continue
 
-    channels = [1, 4, 5, 6, 11, 13, 15, 22, 23, 24, 25]
+    #Create .nb files for these particles
+    channels = [1, 4, 5, 6, 11, 13, 15, 21, 22, 23, 24, 25]
 
     timestamp = strftime("%m_%d", gmtime())
     dir_no_loss = "spec_loss_off_%s"%timestamp
