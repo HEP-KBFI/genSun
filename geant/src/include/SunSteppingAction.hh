@@ -2,13 +2,13 @@
 #define SunSteppingAction_h
 
 #include "G4UserSteppingAction.hh"
-#include "StatisticsRunAction.hh"
+#include "G4UserRunAction.hh"
 
 class G4Step;
 
 class SunSteppingAction :
 	public G4UserSteppingAction,
-	public StatisticsRunActionTarget {
+	public G4UserRunAction {
 	
 	bool verbose;
 	
@@ -19,8 +19,8 @@ class SunSteppingAction :
 		SunSteppingAction(bool verbose=true);
 		void UserSteppingAction(const G4Step* step);
 		
-		void onBeginRun(const G4Run* run);
-		void onEndRun(const G4Run* run);
+		void BeginOfRunAction(const G4Run* run);
+		void EndOfRunAction(const G4Run* run);
 		void statistics();
 };
 

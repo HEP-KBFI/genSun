@@ -40,12 +40,12 @@ void SunSteppingAction::UserSteppingAction(const G4Step* step) {
 	}
 }
 
-void SunSteppingAction::onBeginRun(const G4Run* run) {
+void SunSteppingAction::BeginOfRunAction(const G4Run* run) {
 	borderParticlesCounter = 0;
 	borderNeutrinosCounter = 0;
 }
 
-void SunSteppingAction::onEndRun(const G4Run* run) {
+void SunSteppingAction::EndOfRunAction(const G4Run* run) {
 	borderParticles.push_back(borderParticlesCounter);
 	borderNeutrinos.push_back(borderNeutrinosCounter);
 }

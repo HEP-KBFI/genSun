@@ -145,19 +145,15 @@ int main(int argc, char * argv[]) {
 	}
 	
 	// create and add actions
-	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
-	
 	NeutrinoHistogram* h = new NeutrinoHistogram(channel, dm_mass);
 	NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(!p_quiet);
 	
-	StatisticsRunAction* stat_run_action = new StatisticsRunAction();
-	stat_run_action->addTarget(sun_stepping_action);
+	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
+	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);
 	
-	actionManager->addUserAction(stat_run_action);
-	//runManager->SetUserAction(stat_run_action);
 	runManager->SetUserAction(neutrino_stacking_action); // hook for histogramming
-	runManager->SetUserAction(sun_stepping_action);
+	runManager->SetUserAction((G4UserSteppingAction*)sun_stepping_action);
 	
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel
