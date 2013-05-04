@@ -4,6 +4,8 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(SOLNUGEANT)
 
+add_definitions(-std=c++0x)
+
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -61,6 +63,7 @@ set(source_files
 	DMPythiaPGA.cc
 	SunSteppingAction.cc
 	StatisticsRunAction.cc
+	G4UserActionManager.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
@@ -71,6 +74,7 @@ set(include_files
 	DMPythiaPGA.hh
 	SunSteppingAction.hh
 	StatisticsRunAction.hh
+	G4UserActionManager.hh
 )
 
 message(" > Sources...")

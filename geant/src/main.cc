@@ -13,6 +13,7 @@
 #include "NeutrinoStackingAction.hh"
 #include "NeutrinoHistogram.hh"
 #include "StatisticsRunAction.hh"
+#include "G4UserActionManager.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -144,6 +145,8 @@ int main(int argc, char * argv[]) {
 	}
 	
 	// create and add actions
+	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
+	
 	NeutrinoHistogram* h = new NeutrinoHistogram(channel, dm_mass);
 	NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(!p_quiet);
@@ -151,7 +154,8 @@ int main(int argc, char * argv[]) {
 	StatisticsRunAction* stat_run_action = new StatisticsRunAction();
 	stat_run_action->addTarget(sun_stepping_action);
 	
-	runManager->SetUserAction(stat_run_action);
+	actionManager->addUserAction(stat_run_action);
+	//runManager->SetUserAction(stat_run_action);
 	runManager->SetUserAction(neutrino_stacking_action); // hook for histogramming
 	runManager->SetUserAction(sun_stepping_action);
 	
