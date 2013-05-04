@@ -2,9 +2,10 @@
 #SBATCH -J "solnuG4"
 
 # Parse arguments
-GETOPT=$(getopt -n "batch" -o r:p: -- "$@")
+GETOPT=$(getopt -n "batch" -o r:p:u: -- "$@")
 runs=1 # default number of runs
 physics="FULL" # default physics
+units="G" # default GeV units
 eval set -- "$GETOPT"
 while true; do
 	case $1 in
@@ -14,6 +15,10 @@ while true; do
 		;;
 		-p)
 			physics=$2
+			shift 2; continue
+		;;
+		-u)
+			units=$2
 			shift 2; continue
 		;;
 		--)
@@ -34,7 +39,7 @@ if [ ! -d ready ]; then mkdir ready; fi
 particle=$1
 energy=$2
 
-prefix=hist_job${SLURM_JOB_ID}_p${particle}_e${energy}_P${physics}
+prefix=hist_job${SLURM_JOB_ID}_p${particle}_e${energy}${units}_P${physics}
 
 echo "Starting batch job" ${SLURM_JOB_ID} "on" ${SLURM_JOB_NUM_NODES} "nodes"
 date
@@ -51,7 +56,7 @@ echo "prefix="$prefix
 mkdir working/$prefix
 
 echo "Starting Geant4 runs"
-srun -l ./run.sh ${prefix} ${particle} ${energy} ${runs} ${physics}
+srun -l ./run.sh ${prefix} ${particle} ${energy} ${units} ${runs} ${physics}
 echo "Geant simulations done"
 
 echo "hadding histograms"
