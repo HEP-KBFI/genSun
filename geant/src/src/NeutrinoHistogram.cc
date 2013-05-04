@@ -37,8 +37,8 @@ NeutrinoHistogram::NeutrinoHistogram(
 	hs = new G4int[nucount];
 	for(int i=0; i < nucount; i++) {
 		neutrino_info nu = neutrinos[i];
-		sprintf(hname, "energy_%s_p%i_m%i", nu.name.data(), abs(pid), (int)(dm_mass/GeV));
-		if(!p_quiet){G4cout << " > H: " << hname << G4endl;}
+		sprintf(hname, "energy_%s_p%i_m%i%s", nu.name.data(), abs(pid), (dm_mass<GeV) ? (int)(dm_mass/MeV) : (int)(dm_mass/GeV), (dm_mass<GeV)?"M":"");
+		if(!p_quiet){G4cout << " > H[E]: " << hname << G4endl;}
 		hs[nu.type] = anm->CreateH1(
 			hname, "Neutrino energy spectrum", // name, title
 			nbins, xmin, xmax, // nbins, xmin, xmax

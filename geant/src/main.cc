@@ -29,6 +29,7 @@ const argp_option argp_options[] = {
 	{"quiet",    'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
 	{"ofile",    'o',   "ofile",      0,   "Output root file.", 0},
 	{"physics",  'p', "physics",      0, "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
+	{"unit",     'u',    "unit",      0, "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -37,6 +38,7 @@ bool p_vis  = false; // go to visual mode. Default: false
 bool p_quiet = false; // reduce verbosity. Default: false
 bool p_vacuum = false; // use vacuum instead of sun. Default: false
 bool p_trans = false; // use only translation physics. Default: false
+G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
@@ -66,6 +68,16 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				p_trans = true;
 			}
 			break;
+		case 'u':
+			if(arg[0] == 'M') {
+				p_unit = MeV;
+			} else if(arg[0] == 'G') {
+				p_unit = GeV;
+			} else {
+				G4cout << "Bad units: " << arg << G4endl;
+				return ARGP_ERR_UNKNOWN;
+			}
+			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
 			return ARGP_ERR_UNKNOWN;
@@ -76,7 +88,7 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 const argp argp_argp = {
 	argp_options,
 	&argp_parser,
-	"<channel id> <DM mass [GeV]>",
+	"<channel id> <DM mass>",
 	"DM annihilation simulation",
 	0, 0, 0
 };
@@ -102,7 +114,7 @@ int main(int argc, char * argv[]) {
 		return 0;
 	}
 	G4int channel = atoi(argv[argp_index+0]);
-	G4double dm_mass = atof(argv[argp_index+1]) * GeV;
+	G4double dm_mass = atof(argv[argp_index+1]) * p_unit;
 	
 	G4cout << "G4-sim: "
 	       <<    "ch:" << channel
@@ -110,6 +122,7 @@ int main(int argc, char * argv[]) {
 	       << " | m_dm[GeV]:" << dm_mass/GeV
 	       << " | mat:" << (p_vacuum ? "VAC" : "SUN")
 	       << " | phys:" << (p_trans ? "TRANS" : "QGSP_BERT")
+	       << " | unit[eV]:" << p_unit/eV
 	       << G4endl;
 	
 	// Start setting up Geant4
