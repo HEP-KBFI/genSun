@@ -41,6 +41,13 @@ FIND_LIBRARY(HAPDFDUMMY_LIBRARY lhapdfdummy  $ENV{PYTHIA8}/lib/archive)
 message("pythia lib" ${PYTHIA8_LIBRARY})
 #TARGET_LINK_LIBRARIES(pythia8 $ENV{PYTHIA8}/lib)
 
+##----------------------------------------------------------------------------
+# Find ROOT
+# ---
+include(FindROOT.cmake)
+include_directories(${ROOT_INCLUDE_DIR})
+link_directories(${ROOT_LIBRARY_DIR})
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
@@ -95,6 +102,11 @@ add_executable(test_dmpythia test/dmpythia.cc ${sources} ${headers})
 target_link_libraries(test_dmpythia
 	${Geant4_LIBRARIES}
 	${PYTHIA8_LIBRARY} ${HAPDFDUMMY_LIBRARY}
+)
+
+add_executable(test_root test/root.cc)
+target_link_libraries(test_root
+	${ROOT_LIBRARIES}
 )
 
 #----------------------------------------------------------------------------
