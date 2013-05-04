@@ -12,7 +12,6 @@
 #include "DMPythiaPGA.hh"
 #include "NeutrinoStackingAction.hh"
 #include "NeutrinoHistogram.hh"
-#include "StatisticsRunAction.hh"
 #include "G4UserActionManager.hh"
 
 #include "G4PhysListFactory.hh"

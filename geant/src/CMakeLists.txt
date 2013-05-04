@@ -62,7 +62,6 @@ set(source_files
 	NeutrinoHistogram.cc
 	DMPythiaPGA.cc
 	SunSteppingAction.cc
-	StatisticsRunAction.cc
 	G4UserActionManager.cc
 )
 set(include_files
@@ -73,7 +72,6 @@ set(include_files
 	NeutrinoHistogram.hh
 	DMPythiaPGA.hh
 	SunSteppingAction.hh
-	StatisticsRunAction.hh
 	G4UserActionManager.hh
 )
 
