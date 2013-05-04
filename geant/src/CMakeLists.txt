@@ -92,22 +92,20 @@ endforeach(include)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 # ---
-add_executable(solnugeant main.cc ${sources} ${headers})
-target_link_libraries(solnugeant
+set(LIBRARIES
 	${Geant4_LIBRARIES}
 	${PYTHIA8_LIBRARY} ${HAPDFDUMMY_LIBRARY}
-)
-
-add_executable(test_dmpythia test/dmpythia.cc ${sources} ${headers})
-target_link_libraries(test_dmpythia
-	${Geant4_LIBRARIES}
-	${PYTHIA8_LIBRARY} ${HAPDFDUMMY_LIBRARY}
-)
-
-add_executable(test_root test/root.cc)
-target_link_libraries(test_root
 	${ROOT_LIBRARIES}
 )
+
+add_executable(solnugeant main.cc ${sources} ${headers})
+target_link_libraries(solnugeant ${LIBRARIES})
+
+add_executable(test_dmpythia test/dmpythia.cc ${sources} ${headers})
+target_link_libraries(test_dmpythia ${LIBRARIES})
+
+add_executable(test_root test/root.cc ${sources} ${headers})
+target_link_libraries(test_root ${LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
