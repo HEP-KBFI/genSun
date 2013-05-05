@@ -22,15 +22,17 @@
 //                    Argument parser settings
 // ---------------------------------------------------------------------
 #include <argp.h>
+#define PC_OH 1000
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
-	{"runs",     'n',    "runs",      0,   "Number of runs.", 0},
-	{"vis",      'v',         0,      0,   "Enable visual mode.", 0},
-	{"quiet",    'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
-	{"ofile",    'o',   "ofile",      0,   "Output root file.", 0},
-	{"physics",  'p', "physics",      0, "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
-	{"unit",     'u',    "unit",      0, "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
+	{"runs",      'n',    "runs",      0,   "Number of runs.", 0},
+	{"vis",       'v',         0,      0,   "Enable visual mode.", 0},
+	{"quiet",     'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
+	{"ofile",     'o',   "ofile",      0,   "Output root file.", 0},
+	{"physics",   'p', "physics",      0,   "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
+	{"unit",      'u',    "unit",      0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
+	{"oldhist", PC_OH,         0,      0,   "Also create old-styles histograms.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -39,6 +41,7 @@ bool p_vis  = false; // go to visual mode. Default: false
 bool p_quiet = false; // reduce verbosity. Default: false
 bool p_vacuum = false; // use vacuum instead of sun. Default: false
 bool p_trans = false; // use only translation physics. Default: false
+bool p_oldhisto = false; // also create old histograms. Default: false
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -78,6 +81,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				G4cout << "Bad units: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
 			}
+			break;
+		case PC_OH:
+			p_oldhisto = true;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -162,15 +168,17 @@ int main(int argc, char * argv[]) {
 	}
 	
 	// create and add actions
-	NeutrinoHistogram* h = new NeutrinoHistogram(channel, dm_mass);
-	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
-	NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
-	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
+	NeutrinoHistogram* h;
+	if(p_oldhisto) {
+		h= new NeutrinoHistogram(channel, dm_mass);
+		NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
+		runManager->SetUserAction(neutrino_stacking_action); // hook for histogramming
+	}
 	
+	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
+	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);
-	
-	runManager->SetUserAction(neutrino_stacking_action); // hook for histogramming
 	runManager->SetUserAction((G4UserSteppingAction*)sun_stepping_action);
 	
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
@@ -182,13 +190,14 @@ int main(int argc, char * argv[]) {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
 	}
-	h->countRuns(p_runs);
 	hgr->countEvent(p_runs);
-	
-	char p_ofile_old[50]; sprintf(p_ofile_old, "oldhists_%s", p_ofile.c_str());
-	h->write(p_ofile_old);
-	
 	hgr->save(p_ofile);
+	
+	if(p_oldhisto) {
+		h->countRuns(p_runs);
+		char p_ofile_old[50]; sprintf(p_ofile_old, "oldhists_%s", p_ofile.c_str());
+		h->write(p_ofile_old);
+	}
 	
 	if(!p_quiet){sun_stepping_action->statistics();}
 
