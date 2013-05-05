@@ -52,6 +52,8 @@ echo "particle="$particle
 echo "energy="$energy
 echo "prefix="$prefix
 
+echo "Nodelist:" ${SLURM_NODELIST}
+echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
 
 mkdir working/$prefix
 
