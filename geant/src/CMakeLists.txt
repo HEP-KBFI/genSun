@@ -62,6 +62,7 @@ set(source_files
 	NeutrinoHistogram.cc
 	DMPythiaPGA.cc
 	SunSteppingAction.cc
+	DMRootHistogrammer.cc
 	G4UserActionManager.cc
 )
 set(include_files
@@ -72,6 +73,7 @@ set(include_files
 	NeutrinoHistogram.hh
 	DMPythiaPGA.hh
 	SunSteppingAction.hh
+	DMRootHistogrammer.hh
 	G4UserActionManager.hh
 )
 
@@ -108,6 +110,9 @@ target_link_libraries(test_dmpythia ${LIBRARIES})
 
 add_executable(test_root test/root.cc ${sources} ${headers})
 target_link_libraries(test_root ${LIBRARIES})
+
+add_executable(test_histogrammer test/histogrammer.cc ${sources} ${headers})
+target_link_libraries(test_histogrammer ${LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

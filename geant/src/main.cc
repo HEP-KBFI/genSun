@@ -13,6 +13,7 @@
 #include "NeutrinoStackingAction.hh"
 #include "NeutrinoHistogram.hh"
 #include "G4UserActionManager.hh"
+#include "DMRootHistogrammer.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -125,6 +126,10 @@ int main(int argc, char * argv[]) {
 	       << " | unit[eV]:" << p_unit/eV
 	       << G4endl;
 	
+	char str_physics[50];
+	sprintf(str_physics, "%s_%s", p_vacuum ? "VAC" : "SUN", p_trans ? "TRANS" : "QGSP_BERT");
+	if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
+	
 	// Start setting up Geant4
 	// Start constructing the run manager
 	G4RunManager* runManager = new G4RunManager;
@@ -158,8 +163,9 @@ int main(int argc, char * argv[]) {
 	
 	// create and add actions
 	NeutrinoHistogram* h = new NeutrinoHistogram(channel, dm_mass);
+	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
 	NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
-	SunSteppingAction* sun_stepping_action = new SunSteppingAction();
+	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
 	
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);
@@ -177,7 +183,12 @@ int main(int argc, char * argv[]) {
 		runManager->BeamOn(p_runs);
 	}
 	h->countRuns(p_runs);
-	h->write(p_ofile);
+	hgr->countEvent(p_runs);
+	
+	char p_ofile_old[50]; sprintf(p_ofile_old, "oldhists_%s", p_ofile.c_str());
+	h->write(p_ofile_old);
+	
+	hgr->save(p_ofile);
 	
 	if(!p_quiet){sun_stepping_action->statistics();}
 

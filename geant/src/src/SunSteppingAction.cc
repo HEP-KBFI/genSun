@@ -13,9 +13,11 @@
 #include "G4NeutrinoTau.hh"
 #include "G4AntiNeutrinoTau.hh"
 
+#include "DMRootHistogrammer.hh"
+
 extern bool p_quiet;
 
-SunSteppingAction::SunSteppingAction() {}
+SunSteppingAction::SunSteppingAction(DMRootHistogrammer* hgr) : hgr(hgr) {}
 
 bool is_neutrino(const G4ParticleDefinition* g4def) {
 	return ( g4def == G4NeutrinoE::NeutrinoEDefinition()
@@ -39,6 +41,7 @@ void SunSteppingAction::UserSteppingAction(const G4Step* step) {
 		if(is_neutrino(step->GetTrack()->GetParticleDefinition())) borderNeutrinosCounter++;
 		
 		if(!p_quiet){G4cout << "World boundary step at r1>r2 = (" << r0/m << " > " << r/m << ") m, P:" << pname << " (" << E/MeV << " MeV)" << G4endl;}
+		hgr->addParticle(step->GetTrack());
 	}
 }
 
