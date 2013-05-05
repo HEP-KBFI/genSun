@@ -159,7 +159,7 @@ int main(int argc, char * argv[]) {
 	// create and add actions
 	NeutrinoHistogram* h = new NeutrinoHistogram(channel, dm_mass);
 	NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
-	SunSteppingAction* sun_stepping_action = new SunSteppingAction(!p_quiet);
+	SunSteppingAction* sun_stepping_action = new SunSteppingAction();
 	
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);

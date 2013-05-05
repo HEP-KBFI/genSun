@@ -13,7 +13,9 @@
 #include "G4NeutrinoTau.hh"
 #include "G4AntiNeutrinoTau.hh"
 
-SunSteppingAction::SunSteppingAction(bool verbose) : verbose(verbose) {}
+extern bool p_quiet;
+
+SunSteppingAction::SunSteppingAction() {}
 
 bool is_neutrino(const G4ParticleDefinition* g4def) {
 	return ( g4def == G4NeutrinoE::NeutrinoEDefinition()
@@ -36,7 +38,7 @@ void SunSteppingAction::UserSteppingAction(const G4Step* step) {
 		borderParticlesCounter++;
 		if(is_neutrino(step->GetTrack()->GetParticleDefinition())) borderNeutrinosCounter++;
 		
-		if(verbose) G4cout << "World boundary step at r1>r2 = (" << r0/m << " > " << r/m << ") m, P:" << pname << " (" << E/MeV << " MeV)" << G4endl;
+		if(!p_quiet){G4cout << "World boundary step at r1>r2 = (" << r0/m << " > " << r/m << ") m, P:" << pname << " (" << E/MeV << " MeV)" << G4endl;}
 	}
 }
 

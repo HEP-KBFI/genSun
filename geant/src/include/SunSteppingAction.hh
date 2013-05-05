@@ -10,13 +10,11 @@ class SunSteppingAction :
 	public G4UserSteppingAction,
 	public G4UserRunAction {
 	
-	bool verbose;
-	
 	G4int borderParticlesCounter, borderNeutrinosCounter;
 	std::vector<G4int> borderParticles, borderNeutrinos;
 	
 	public:
-		SunSteppingAction(bool verbose=true);
+		SunSteppingAction();
 		void UserSteppingAction(const G4Step* step);
 		
 		void BeginOfRunAction(const G4Run* run);
