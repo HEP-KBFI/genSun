@@ -14,7 +14,6 @@ sbatch -n10 batch.sh -pVAC -r1000000 22 100   # ~ 6s/1000 runs
 sbatch -n10 batch.sh -pVAC -r1000000 22 1000  # ~ 6s/1000 runs
 
 # Z boson
-sbatch -n100 batch.sh -pVAC -r100000 23 1   # 10M events
 sbatch -n100 batch.sh -pVAC -r100000 23 1000   # 10M events
 sbatch -n100 batch.sh -pVAC -r100000 23 100000   # 10M events
 
