@@ -25,7 +25,7 @@ std::map<G4int, pinfo> particles = {
 	/*{12, pinfo(12,   "nu_e")}, {-12, pinfo(-12,   "anti_nu_e")},
 	{14, pinfo(14,  "nu_mu")}, {-14, pinfo(-14,  "anti_nu_mu")},
 	{16, pinfo(16, "nu_tau")}, {-16, pinfo(-16, "anti_nu_tau")}*/
-	{12, pinfo(12,   "nue")}, {-12, pinfo(-12,   "anue")},
+	{12, pinfo(12,  "nuel")}, {-12, pinfo(-12,  "anuel")},
 	{14, pinfo(14,  "numu")}, {-14, pinfo(-14,  "anumu")},
 	{16, pinfo(16, "nutau")}, {-16, pinfo(-16, "anutau")}
 };
