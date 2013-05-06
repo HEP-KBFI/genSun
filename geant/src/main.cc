@@ -285,6 +285,6 @@ void go_visual(int argc, char* argv[]) {
 	delete ui;
 	delete visManager;
 #else
-	G4err << "No visalization compiled!" << G4endl;
+	G4err << "No visualization compiled!" << G4endl;
 #endif
 }
