@@ -70,6 +70,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 			} else if(strcmp(arg, "VACTRANS") == 0) {
 				p_vacuum = true;
 				p_trans = true;
+			} else {
+				G4cout << "Bad physics: " << arg << G4endl;
+				return ARGP_ERR_UNKNOWN;
 			}
 			break;
 		case 'u':
