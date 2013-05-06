@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Low energy electons(11), muons(13) and gammas(22)
+sbatch -n10 batch.sh -pVAC -r1000000 11 10    # ~ 8s/1000 runs
+sbatch -n10 batch.sh -pVAC -r1000000 11 100   # ~ 8s/1000 runs
+sbatch -n10 batch.sh -pVAC -r1000000 11 1000  # ~ 8s/1000 runs
+
+sbatch -n10 batch.sh -pVAC -r1000000 13 10    # ~ 8s/1000 runs
+sbatch -n10 batch.sh -pVAC -r1000000 13 100   # ~ 8s/1000 runs
+sbatch -n10 batch.sh -pVAC -r1000000 13 1000  # ~ 8s/1000 runs
+
+sbatch -n10 batch.sh -pVAC -r1000000 22 10    # ~ 6s/1000 runs
+sbatch -n10 batch.sh -pVAC -r1000000 22 100   # ~ 6s/1000 runs
+sbatch -n10 batch.sh -pVAC -r1000000 22 1000  # ~ 6s/1000 runs
+
 # Z boson
 sbatch -n100 batch.sh -pVAC -r100000 23 1   # 10M events
 sbatch -n100 batch.sh -pVAC -r100000 23 1000   # 10M events
