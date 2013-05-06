@@ -31,6 +31,7 @@ const argp_option argp_options[] = {
 	{"quiet",     'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
 	{"ofile",     'o',   "ofile",      0,   "Output root file.", 0},
 	{"physics",   'p', "physics",      0,   "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
+	{"creator",   'c', "creator",      0,   "Specify the particle creator (PYTHIA8 or GEANT4). Default: PYTHIA8.", 0},
 	{"unit",      'u',    "unit",      0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
 	{"oldhist", PC_OH,         0,      0,   "Also create old-styles histograms.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
@@ -42,6 +43,7 @@ bool p_quiet = false; // reduce verbosity. Default: false
 bool p_vacuum = false; // use vacuum instead of sun. Default: false
 bool p_trans = false; // use only translation physics. Default: false
 bool p_oldhisto = false; // also create old histograms. Default: false
+bool p_useG4 = false; // use G4 particle generation of possbile. Default: false
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -72,6 +74,16 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				p_trans = true;
 			} else {
 				G4cout << "Bad physics: " << arg << G4endl;
+				return ARGP_ERR_UNKNOWN;
+			}
+			break;
+		case 'c':
+			if(strcmp(arg, "PYTHIA8") == 0) {
+				p_useG4 = false;
+			} else if(strcmp(arg, "GEANT4") == 0) {
+				p_useG4 = true;
+			} else {
+				G4cout << "Bad creator: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
 			}
 			break;
@@ -248,6 +260,12 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 		default:
 			G4cout << "Bad channel: " << channel << G4endl;
 			break;
+	}
+	
+	if(!p_useG4) {
+		mode = m_pythia;
+	} else if(mode == m_pythia) {
+		G4cout << "Unable to use Geant4 for this particle! Using PYTHIA8." << G4endl;
 	}
 	
 	G4VUserPrimaryGeneratorAction* generatorAction = NULL;
