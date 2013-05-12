@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
 	
 	// detector
 	runManager->SetUserInitialization(new SunDetectorConstruction(
-		p_vacuum ? 1e9*m : 10*m,
+		p_vacuum ? 1e9*m : 1e3*m,
 		p_vacuum
 	));
 	
