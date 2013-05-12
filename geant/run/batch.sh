@@ -2,10 +2,12 @@
 #SBATCH -J "solnuG4" -x comp-c-[002,004,028,031,032,034,037,038]
 
 # Parse arguments
-GETOPT=$(getopt -n "batch" -o r:p:u: -- "$@")
+GETOPT=$(getopt -n "batch" -o r:p:u:c: -- "$@")
 runs=1 # default number of runs
 physics="FULL" # default physics
 units="G" # default GeV units
+creator="PYTHIA8"
+creator_suffix=""
 eval set -- "$GETOPT"
 while true; do
 	case $1 in
@@ -19,6 +21,11 @@ while true; do
 		;;
 		-u)
 			units=$2
+			shift 2; continue
+		;;
+		-c)
+			creator=$2
+			creator_suffix="_G4"
 			shift 2; continue
 		;;
 		--)
@@ -39,7 +46,7 @@ if [ ! -d ready ]; then mkdir ready; fi
 particle=$1
 energy=$2
 
-prefix=hist_job${SLURM_JOB_ID}_p${particle}_e${energy}${units}_P${physics}
+prefix=hist_job${SLURM_JOB_ID}_p${particle}_e${energy}${units}_P${physics}${creator_suffix}
 
 echo "Starting batch job" ${SLURM_JOB_ID} "on" ${SLURM_JOB_NUM_NODES} "nodes"
 date
@@ -51,6 +58,7 @@ echo "physics="$physics
 echo "particle="$particle
 echo "energy="$energy
 echo "prefix="$prefix
+echo "creator="$creator
 
 echo "Nodelist:" ${SLURM_NODELIST}
 echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
@@ -58,7 +66,7 @@ echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
 mkdir working/$prefix
 
 echo "Starting Geant4 runs"
-srun -l ./run.sh ${prefix} ${particle} ${energy} ${units} ${runs} ${physics}
+srun -l ./run.sh ${prefix} ${particle} ${energy} ${units} ${runs} ${physics} ${creator}
 echo "Geant simulations done"
 
 echo "hadding histograms"
