@@ -8,7 +8,7 @@ physlist = {
 	'physics_VAC_QGSP_BERT': ROOT.kBlue
 }
 
-tfile = ROOT.TFile('merged_mMay06_jApr28.root')
+tfile = ROOT.TFile('input.root')
 ofile = ROOT.TFile('output.root', 'RECREATE')
 
 for key_mass in tfile.GetListOfKeys():
