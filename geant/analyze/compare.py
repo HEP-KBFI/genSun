@@ -13,8 +13,7 @@ ofile = ROOT.TFile('output.root', 'RECREATE')
 
 for key_mass in tfile.GetListOfKeys():
 	mass = key_mass.GetTitle().split('_')[1]
-	odir_mass = ofile.mkdir('mass_%s'%mass)
-	odir_mass.cd()
+	mass_dir_done = False
 	
 	for key_particle in key_mass.ReadObj().GetListOfKeys():
 		particle = int(key_particle.GetTitle().split('_')[1])
@@ -24,8 +23,12 @@ for key_mass in tfile.GetListOfKeys():
 			break
 		print 'Particle: %i, Mass: %s'%(particle, mass)
 		
+		if not mass_dir_done:
+			odir_mass = ofile.mkdir('mass_%s'%mass)
+			odir_mass.cd()
+			mass_dir_done = True
 		odir_particle = odir_mass.mkdir('particle_%i'%particle)
-		odir_technical = odir_particle.mkdir('techical')
+		#odir_technical = odir_particle.mkdir('techical')
 		
 		for pname in physlist:
 			pdir = key_particle.ReadObj().FindKey(pname).ReadObj()
@@ -33,23 +36,15 @@ for key_mass in tfile.GetListOfKeys():
 			pdir_new = odir_particle.mkdir(pdir.GetName())
 			pdir_new.cd()
 			for key in pdir.GetListOfKeys():
-				key.ReadObj().Write()
+				obj = key.ReadObj()
+				obj.GetXaxis().SetTitle("log_{10}(E/m_{#chi})")
+				obj.Write()
 		odir_particle.cd()
 		
 		subcvss = []
 		
 		for hname in histlist:
-			def hname_f(hname, pname):
-				print hname, pname
-				if pname=='physics_VAC_QGSP_BERT':
-					if hname=='nuel':
-						return 'nue'
-					elif hname=='anuel':
-						return 'anue'
-				return hname
-
-			#hists = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey(hname).ReadObj() for pname in physlist}
-			hists = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey(hname_f(hname, pname)).ReadObj() for pname in physlist}
+			hists = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey(hname).ReadObj() for pname in physlist}
 			evstat = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey('eventStatus').ReadObj().GetBinContent(1) for pname in physlist}
 			
 			cvs = ROOT.TCanvas(hname)
@@ -66,7 +61,10 @@ for key_mass in tfile.GetListOfKeys():
 			ohstack.Draw('nostack')
 			legend.Draw()
 			
-			odir_technical.WriteObject(ohstack, ohstack.GetName())
+			ohstack.GetXaxis().SetTitle("log_{10}(E/m_{#chi})")
+			ohstack.GetYaxis().SetTitle("N_{#nu} per event")
+			
+			#odir_technical.WriteObject(ohstack, ohstack.GetName())
 			cvs.Write()
 			
 			#subcvss.append(cvs)
