@@ -30,7 +30,7 @@ class DMRootHistogrammer {
 		void save(const char* fname);
 	
 	private:
-		std::vector<TH1F*> hists;
+		//std::vector<TH1F*> hists;
 		TH1F * h_evstatus, * h_pcounter;
 		
 		G4int channel;

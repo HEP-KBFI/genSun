@@ -46,7 +46,7 @@ DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const
 			energyhist.nbins, energyhist.xmin, energyhist.xmax
 		);
 		if(!p_quiet){G4cout << "Histogram `" << hname << "` for pid=" << it->first << G4endl;}
-		hists.push_back(it->second.h);
+		//hists.push_back(it->second.h);
 	}
 	
 	// create particle counter histogram
@@ -70,7 +70,7 @@ DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const
 		sprintf(binname, "%i (%s)", it->first, it->second.name);
 		h_pcounter->GetXaxis()->SetBinLabel(it->second.ch_bin, binname);
 	}
-	hists.push_back(h_pcounter);
+	//hists.push_back(h_pcounter);
 	
 	// create the event status histogram
 	sprintf(hname, "eventStatus");
@@ -79,7 +79,7 @@ DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const
 		statushist.nbins, statushist.xmin, statushist.xmax
 	);
 	if(!p_quiet){G4cout << "Histogram `" << hname << "` for ev.status" << G4endl;}
-	hists.push_back(h_evstatus);
+	//hists.push_back(h_evstatus);
 }
 
 DMRootHistogrammer::~DMRootHistogrammer() {}
@@ -124,8 +124,15 @@ void DMRootHistogrammer::save(const char* name) {
 	TDirectory* dir = tfile.mkdir(dirname_mass)->mkdir(dirname_particle)->mkdir(dirname_physics);
 	dir->cd();
 	
-	for(auto it = hists.begin(); it != hists.end(); ++it) {
+	/*for(auto it = hists.begin(); it != hists.end(); ++it) {
 		(*it)->Write();
+	}*/
+	
+	h_evstatus->Write();
+	h_pcounter->Write();
+	
+	for(auto it = particles.begin(); it != particles.end(); ++it) {
+		if(it->second.b_enh) it->second.h->Write();
 	}
 	
 	tfile.Close();
