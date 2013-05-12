@@ -25,7 +25,17 @@ struct pinfo {
 	}
 };
 
-std::map<G4int, pinfo> particles = {
+struct pdgid_compare {
+	bool operator() (const G4int& lhs, const G4int& rhs) const {
+		if(abs(lhs) == abs(rhs)) {
+			return lhs > rhs;
+		} else {
+			return abs(lhs) < abs(rhs);
+		}
+	}
+};
+
+std::map<G4int, pinfo, pdgid_compare> particles = {
 	{12, pinfo(12,  "nuel")}, {-12, pinfo(-12,  "anuel")},
 	{14, pinfo(14,  "numu")}, {-14, pinfo(-14,  "anumu")},
 	{16, pinfo(16, "nutau")}, {-16, pinfo(-16, "anutau")},
