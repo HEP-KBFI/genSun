@@ -135,6 +135,7 @@ void DMRootHistogrammer::save(const char* name) {
 	
 	TFile tfile(name, "RECREATE");
 	TDirectory* dir = tfile.mkdir(dirname_mass)->mkdir(dirname_particle)->mkdir(dirname_physics);
+	TDirectory* dir_o = dir->mkdir("others");
 	dir->cd();
 	
 	/*for(auto it = hists.begin(); it != hists.end(); ++it) {
@@ -145,7 +146,11 @@ void DMRootHistogrammer::save(const char* name) {
 	h_pcounter->Write();
 	
 	for(auto it = particles.begin(); it != particles.end(); ++it) {
-		if(it->second.b_enh) it->second.h->Write();
+		if(it->second.b_enh) {
+			it->second.h->Write();
+		} else {
+			dir_o->WriteTObject(it->second.h);
+		}
 	}
 	
 	tfile.Close();
