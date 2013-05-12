@@ -41,7 +41,8 @@ std::map<G4int, pinfo, pdgid_compare> particles = {
 	{16, pinfo(16, "nutau")}, {-16, pinfo(-16, "anutau")},
 	{11, pinfo(11,   "ele", false)}, {-11, pinfo(-11,   "aele", false)},
 	{13, pinfo(13,    "mu", false)}, {-13, pinfo(-13,    "amu", false)},
-	{15, pinfo(15,   "tau", false)}, {-15, pinfo(-15,   "atau", false)}
+	{15, pinfo(15,   "tau", false)}, {-15, pinfo(-15,   "atau", false)},
+	{22, pinfo(22, "gamma", false)}
 };
 
 DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, HistParams energyhist, HistParams statushist)
