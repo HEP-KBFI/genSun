@@ -28,7 +28,10 @@ struct pinfo {
 std::map<G4int, pinfo> particles = {
 	{12, pinfo(12,  "nuel")}, {-12, pinfo(-12,  "anuel")},
 	{14, pinfo(14,  "numu")}, {-14, pinfo(-14,  "anumu")},
-	{16, pinfo(16, "nutau")}, {-16, pinfo(-16, "anutau")}
+	{16, pinfo(16, "nutau")}, {-16, pinfo(-16, "anutau")},
+	{11, pinfo(11,   "ele", false)}, {-11, pinfo(-11,   "aele", false)},
+	{13, pinfo(13,    "mu", false)}, {-13, pinfo(-13,    "amu", false)},
+	{15, pinfo(15,   "tau", false)}, {-15, pinfo(-15,   "atau", false)}
 };
 
 DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, HistParams energyhist, HistParams statushist)
