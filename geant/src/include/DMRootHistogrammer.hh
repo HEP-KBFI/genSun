@@ -31,7 +31,7 @@ class DMRootHistogrammer {
 	
 	private:
 		std::vector<TH1F*> hists;
-		TH1F * h_evstatus;
+		TH1F * h_evstatus, * h_pcounter;
 		
 		G4int channel;
 		G4double dm_mass;

@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <map>
+#include <vector>
 
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
@@ -15,8 +16,11 @@ extern bool p_quiet;
 struct pinfo {
 	const char * name;
 	TH1F * h;
+	bool b_enh, b_cnth;
+	double ch_val; int ch_bin;
 	
-	pinfo(G4int id, const char * name) : name(name) {
+	pinfo(G4int id, const char * name, bool energyhist=true, bool counthist=true)
+	: name(name), b_enh(energyhist), b_cnth(counthist) {
 		h = NULL;
 	}
 };
@@ -32,7 +36,7 @@ std::map<G4int, pinfo> particles = {
 
 DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, HistParams energyhist, HistParams statushist)
 : channel(channel_id), dm_mass(dm_mass), physics(physics) {
-	char hname[50];
+	char hname[50], binname[50];
 	
 	// create histograms for all particles
 	for(auto it = particles.begin(); it != particles.end(); ++it) {
@@ -44,6 +48,29 @@ DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const
 		if(!p_quiet){G4cout << "Histogram `" << hname << "` for pid=" << it->first << G4endl;}
 		hists.push_back(it->second.h);
 	}
+	
+	// create particle counter histogram
+	int n_lbl_bins = 1;
+	for(auto it = particles.begin(); it != particles.end(); ++it) {
+		if(it->second.b_cnth) {
+			it->second.ch_val = n_lbl_bins + 0.5;
+			it->second.ch_bin = n_lbl_bins + 1;
+			n_lbl_bins++;
+		} else {
+			it->second.ch_val = 0.5;
+		}
+	}
+	h_pcounter = new TH1F(
+		"particlecounter", "Particles",
+		n_lbl_bins, 0, n_lbl_bins
+	);
+	h_pcounter->GetXaxis()->SetBinLabel(1, "other");
+	for(auto it = particles.begin(); it != particles.end(); ++it) {
+		if(!it->second.b_cnth) continue;
+		sprintf(binname, "%i (%s)", it->first, it->second.name);
+		h_pcounter->GetXaxis()->SetBinLabel(it->second.ch_bin, binname);
+	}
+	hists.push_back(h_pcounter);
 	
 	// create the event status histogram
 	sprintf(hname, "eventStatus");
@@ -67,9 +94,12 @@ void DMRootHistogrammer::addParticle(const G4Track* tr) {
 	if(!p_quiet){G4cout << " > Adding particle: " << energy/MeV << "[MeV] (" << pdgid << ", " << pname << ") -- logE = " << logE << G4endl;}
 	
 	try {
-		particles.at(pdgid).h->Fill(logE);
+		pinfo p = particles.at(pdgid);
+		p.h->Fill(logE);
+		h_pcounter->Fill(p.ch_val);
 	} catch(std::out_of_range &e) {
-		if(!p_quiet){G4cout << " > Bad particle - ho histogram!" << G4endl;}
+		h_pcounter->Fill(0.5);
+		if(!p_quiet){G4cout << " > Bad particle - not listed!" << G4endl;}
 	}
 }
 
