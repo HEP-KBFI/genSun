@@ -26,10 +26,10 @@ for sf in slurmfiles:
 		run_time = (date_end - date_start)/m_runs
 	except ValueError:
 		date_end = 'NOTFINISHED'
-		delta = 'NOTFINISHED'
+		delta = '+'+str(datetime.now().replace(microsecond=0) - date_start)
 		run_time = 'NOTFINISHED'
 	
-	print 'J {0}: {1:>2} {2:>7} {3:>5} {4:>14} {5}'.format(m_jobid, m_particle, m_energy, m_physics, run_time, date_start)
+	print 'J {0}: {1:>2} {2:>7} {3:>5} {4:>10}  {5:>14}  {6}'.format(m_jobid, m_particle, m_energy, m_physics, delta, run_time, date_start)
 	#print 'Start/end: %s / %s'%(date_start, date_end)
 	#print 'Delta: %s (%s /run)'%(delta, run_time)
 	
