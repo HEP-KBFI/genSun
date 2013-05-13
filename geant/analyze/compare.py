@@ -30,22 +30,31 @@ for key_mass in tfile.GetListOfKeys():
 		odir_particle = odir_mass.mkdir('particle_%i'%particle)
 		#odir_technical = odir_particle.mkdir('techical')
 		
-		for pname in physlist:
-			pdir = key_particle.ReadObj().FindKey(pname).ReadObj()
-			objs = [key.ReadObj() for key in pdir.GetListOfKeys()]
-			pdir_new = odir_particle.mkdir(pdir.GetName())
-			pdir_new.cd()
+		def root_deepcopy_dir(dirname, src, dst):
+			pdir = src.FindKey(dirname).ReadObj()
+			ddir = dst.mkdir(dirname)
 			for key in pdir.GetListOfKeys():
 				obj = key.ReadObj()
-				obj.GetXaxis().SetTitle("log_{10}(E/m_{#chi})")
-				obj.Write()
+				print '`%s` %s'%(type(obj), obj.GetName())
+				if isinstance(obj, ROOT.TDirectory):
+					root_deepcopy_dir(obj.GetName(), pdir, ddir)
+				elif isinstance(obj, ROOT.TH1F) or isinstance(obj, ROOT.TH1D):
+					obj.GetXaxis().SetTitle("log_{10}(E/m_{#chi})")
+					ddir.WriteTObject(obj)
+				else:
+					ddir.WriteTObject(obj)
+		
+		for pname in physlist:
+			root_deepcopy_dir(pname, key_particle.ReadObj(), odir_particle)
 		odir_particle.cd()
 		
 		subcvss = []
 		
 		for hname in histlist:
-			hists = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey(hname).ReadObj() for pname in physlist}
-			evstat = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey('eventStatus').ReadObj().GetBinContent(1) for pname in physlist}
+			#hists = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey(hname).ReadObj() for pname in physlist}
+			#evstat = {pname: key_particle.ReadObj().FindKey(pname).ReadObj().FindKey('eventStatus').ReadObj().GetBinContent(1) for pname in physlist}
+			hists = dict([(pname,key_particle.ReadObj().FindKey(pname).ReadObj().FindKey(hname).ReadObj()) for pname in physlist])
+			evstat = dict([(pname, key_particle.ReadObj().FindKey(pname).ReadObj().FindKey('eventStatus').ReadObj().GetBinContent(1)) for pname in physlist])
 			
 			cvs = ROOT.TCanvas(hname)
 			
