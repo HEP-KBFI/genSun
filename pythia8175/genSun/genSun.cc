@@ -559,10 +559,13 @@ int main(int argc, char **argv) {
     
     TFile f(argv[3],"RECREATE");
     
+    bool absorbPiMinus = true;
     //Create the subdirectories for the output
     std::stringstream ss;
     ss << "energyLoss" << "_hhad_" << hHadronELossInstruction << "_lhad_" << lHadronELossInstruction << "_chlep_" << chLeptonELossInstruction;
-    
+    if (!absorbPiMinus) {
+        ss << "_noPiMinusAbs";
+    }
     TDirectory* massDir = subDir(&f, "mass", (int)dmMass);
     TDirectory* particleDir = subDir(massDir, "particle", (int)partId);
     
@@ -655,9 +658,10 @@ int main(int argc, char **argv) {
         mainDecayHandler->addHandler(handleChLepDecays, handledChLeptons);
     }
     pythia.setDecayPtr((DecayHandler*)mainDecayHandler, mainDecayHandler->getHandledParticles());
-    
-    pythia.readString("211:onMode = 2"); //This is the way to switch off decay of anti-211(pi-) but keep the decay of 211(pi+)
-
+  
+    if(absorbPiMinus) {
+        pythia.readString("211:onMode = 2"); //This is the way to switch off decay of anti-211(pi-) but keep the decay of 211(pi+)
+    }
     pythia.init();
     
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
