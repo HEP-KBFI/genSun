@@ -287,6 +287,10 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 			if(!p_quiet){G4cout << "Standard particle generation (two identical particles)" << G4endl;}
 			generatorAction = new DMPrimaryGeneratorAction(channel, channel, dm_mass);
 			break;
+		
+		default:
+			G4cout << "Bad generator mode! (" << mode << ")" << G4endl;
+			break;
 	}
 	return generatorAction;
 }
