@@ -241,6 +241,7 @@ int main(int argc, char * argv[]) {
 		G4AntiNeutron::AntiNeutron()->GetDecayTable()->DumpInfo();
 	}
 
+	// Start runs or go into visual mode
 	if(p_vis) go_visual(argc, argv);
 	else {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
@@ -249,6 +250,7 @@ int main(int argc, char * argv[]) {
 	hgr->countEvent(p_runs);
 	hgr->save(p_ofile);
 	
+	// if requested, produce old styles histograms
 	if(p_oldhisto) {
 		h->countRuns(p_runs);
 		char p_ofile_old[50]; sprintf(p_ofile_old, "oldhists_%s", p_ofile.c_str());
