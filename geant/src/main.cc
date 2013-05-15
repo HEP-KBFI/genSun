@@ -18,11 +18,16 @@
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 
+#include "G4Neutron.hh"
+#include "G4AntiNeutron.hh"
+#include <G4DecayTable.hh>
+
 // ---------------------------------------------------------------------
 //                    Argument parser settings
 // ---------------------------------------------------------------------
 #include <argp.h>
-#define PC_OH 1000
+#define PC_OH  1000
+#define PC_NDC 1001
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
@@ -34,6 +39,7 @@ const argp_option argp_options[] = {
 	{"creator",   'c', "creator",      0,   "Specify the particle creator (PYTHIA8 or GEANT4). Default: PYTHIA8.", 0},
 	{"unit",      'u',    "unit",      0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
 	{"oldhist", PC_OH,         0,      0,   "Also create old-styles histograms.", 0},
+	{"short-neutron", PC_NDC, "on/off", 0,  "Enable/disable short-lived neutrons.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -44,6 +50,7 @@ bool p_vacuum = false; // use vacuum instead of sun. Default: false
 bool p_trans = false; // use only translation physics. Default: false
 bool p_oldhisto = false; // also create old histograms. Default: false
 bool p_useG4 = false; // use G4 particle generation of possbile. Default: false
+enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -102,6 +109,16 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 			break;
 		case PC_OH:
 			p_oldhisto = true;
+			break;
+		case PC_NDC:
+			if(strcmp(arg, "on") == 0) {
+				p_ndc = NDC_SHORT;
+			} else if(strcmp(arg, "off") == 0) {
+				p_ndc = NDC_LONG;
+			} else {
+				G4cout << "Bad value for --short-neutron: " << arg << G4endl;
+				return ARGP_ERR_UNKNOWN;
+			}
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -203,6 +220,27 @@ int main(int argc, char * argv[]) {
 	runManager->Initialize(); // initialize G4 kernel
 	if(!p_quiet){G4cout << "===========================    END   INIT   ===========================" << G4endl;}
 
+	// Set up the neutron. Antineutron is stable by default for some reason...
+	// Also, if necessary, set neutron lifetime to a microsecond (forces decay in vacuum)
+	G4AntiNeutron::AntiNeutron()->SetPDGStable(false);
+	if(p_ndc == NDC_SHORT || (p_ndc == NDC_UNDEF && p_vacuum)) {
+		G4Neutron::Neutron()->SetPDGLifeTime(1e-6*s);
+		G4AntiNeutron::AntiNeutron()->SetPDGLifeTime(1e-6*s);
+	}
+	
+	if(!p_quiet){
+		G4cout << "Neutron: "
+		       << "T=" << G4Neutron::Neutron()->GetPDGLifeTime()/s << " [s]"
+		       << ", " << (G4Neutron::Neutron()->GetPDGStable() ? "stable" : "unstable")
+		       << G4endl;
+		G4Neutron::Neutron()->GetDecayTable()->DumpInfo();
+		G4cout << "Antineutron: "
+		       << "T=" << G4AntiNeutron::AntiNeutron()->GetPDGLifeTime()/s << " [s]"
+		       << ", " << (G4AntiNeutron::AntiNeutron()->GetPDGStable() ? "stable" : "unstable")
+		       << G4endl;
+		G4AntiNeutron::AntiNeutron()->GetDecayTable()->DumpInfo();
+	}
+
 	if(p_vis) go_visual(argc, argv);
 	else {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
@@ -228,7 +266,7 @@ int main(int argc, char * argv[]) {
 
 enum generator_mode {m_pythia, m_ppbar, m_2p};
 G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4double dm_mass) {
-	generator_mode mode;
+	generator_mode mode; bool pythia_possible = true;
 	switch(channel) {
 		// Quarks and gluons
 		case 1: case -1: case 2: case -2:
@@ -260,12 +298,15 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 		case 12: case -12: case 14: case -14: case 16: case -16:
 			if(!p_quiet){G4cout << "Particle: neutrino" << G4endl;} mode = m_ppbar; break;
 		
+		case 2112:
+			if(!p_quiet){G4cout << "Particle: neutron" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+		
 		default:
 			G4cout << "Bad channel: " << channel << G4endl;
 			break;
 	}
 	
-	if(!p_useG4) {
+	if(!p_useG4 && pythia_possible) {
 		mode = m_pythia;
 	} else if(mode == m_pythia) {
 		G4cout << "Unable to use Geant4 for this particle! Using PYTHIA8." << G4endl;
