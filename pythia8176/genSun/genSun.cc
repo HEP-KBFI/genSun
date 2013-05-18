@@ -510,9 +510,10 @@ int main(int argc, char **argv) {
     randomGeneratorType = gsl_rng_default;
     rng = gsl_rng_alloc (randomGeneratorType);
     seedRandom();
-
-    if (argc != 8 ) {
-        cout << "Usage: ./gen part DMmass output.root params.card bchad lhad chlep" << endl;
+    
+    std::cout << argc << std::endl;
+    if (!(argc == 8 || argc == 9)) {
+        cout << "Usage: ./genSun.exe part DMmass output.root params.card bchad lhad chlep (NEv)" << endl;
         return 1;
     }
     gsl_set_error_handler(&gslErrorHandler);
@@ -556,6 +557,7 @@ int main(int argc, char **argv) {
     
     // Extract settings to be used in the main program.
     int nEvent = pythia.mode("Main:numberOfEvents");
+    if(argc==9) nEvent=atoi(argv[8]);    
     int nList = pythia.mode("Main:numberToList");
     int nShow = pythia.mode("Main:timesToShow");
     int nAbort = pythia.mode("Main:timesAllowErrors");
