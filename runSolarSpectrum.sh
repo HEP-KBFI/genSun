@@ -16,7 +16,7 @@ echo "HHADINSTR="$HHADINSTR
 echo "LHADINSTR="$LHADINSTR
 echo "LEPINSTR="$LEPINSTR
 
-cp -R /home/joosep/solarNu/pythia8175 $WD
+cp -R /home/joosep/solarNu/pythia8176 $WD
 cd $WD
 cd genSun
 #LD_LIBRARY_PATH=/home/joosep/local/lib:/home/joosep/local/lib64:$LD_LIBRARY_PATH ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR &> log \
