@@ -5,7 +5,7 @@
 Main:numberOfEvents = 1000000      ! number of events to generate
 Main:numberToList = 0              ! number of events to print
 Main:timesToShow = 10000              ! show how far along run is
-Main:timesAllowErrors = 1000000      ! allow a few failures before quitting
+Main:timesAllowErrors = 100      ! allow a few failures before quitting
 Main:showChangedSettings = off      ! print changed flags/modes/parameters
 Main:showChangedParticleData = off  ! print changed particle and decay data
 
