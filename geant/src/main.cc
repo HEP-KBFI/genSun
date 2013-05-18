@@ -300,8 +300,8 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 		case 12: case -12: case 14: case -14: case 16: case -16:
 			if(!p_quiet){G4cout << "Particle: neutrino" << G4endl;} mode = m_ppbar; break;
 		
-		case 2112:
-			if(!p_quiet){G4cout << "Particle: neutron" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+		case 2112: case 2212:
+			if(!p_quiet){G4cout << "Particle: neutron/proton" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
 		
 		default:
 			G4cout << "Bad channel: " << channel << G4endl;
