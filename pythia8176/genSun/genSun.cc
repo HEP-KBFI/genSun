@@ -291,7 +291,12 @@ protected:
 //and initial momentum p4_0. The minimum of the final momentum p4_1 is specified by
 //the particle mass.
 Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
-    double p_abs_1 = sqrt( fabs(pow(E_1,2) - pow(pdtPtr->m0(id),2)) );
+    double dif = pow(E_1,2) - pow(pdtPtr->m0(id),2);
+    double p_abs_1 = 0.0;
+    if (dif>0.0)
+        p_abs_1 = sqrt(dif);
+    else
+        p_abs_1 = sqrt(-dif);
     double sf = p_abs_1/p4_0.pAbs();
     Vec4 p4_1(p4_0);
     p4_1.rescale3(sf);
@@ -301,6 +306,18 @@ Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
 
 bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
                             vector<Vec4>& pProd, int iDec, const Event& event) {
+    
+    /*
+     //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
+     //do it already before calling the decay method?
+     if (event[iDec].tau() < event[iDec].tau0()) {
+     //pProd.push_back(p4);
+     #ifdef NDEBUG
+     cout << "Lifetime not exceeded: " << event[iDec].tau() << " < " << event[iDec].tau0() << "\n";
+     #endif
+     return true;
+     }
+     */
     
     const unsigned int absId = abs(idProd[0]);
     
@@ -356,7 +373,7 @@ public:
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        double E_new = energyLossDistributions::E_hadronic(p4.e(), id, pdtPtr);
+        double E_new = event[iDec].m0() + energyLossDistributions::E_hadronic(p4.e() - event[iDec].m0(), id, pdtPtr);
         Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }
@@ -372,7 +389,8 @@ public:
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        Vec4 p4_out(0, 0, 0, pdtPtr->m0(id));
+//        Vec4 p4_out(0.0, 0.0, 0.0, pdtPtr->m0(id));
+        Vec4 p4_out(0.0, 0.0, 0.0, event[iDec].m());
         return p4_out;
     }
 };
@@ -404,7 +422,7 @@ public:
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        double E_new = energyLossDistributions::E_leptonic(p4.e(), id, pdtPtr);
+        double E_new = event[iDec].m0() + energyLossDistributions::E_leptonic(p4.e()-event[iDec].m0(), id, pdtPtr);
         Vec4 p4_out = newP4(p4, E_new, id);
         return p4_out;
     }
@@ -448,7 +466,7 @@ int main(int argc, char **argv) {
     cout << "ROOTSYS=" << getenv("ROOTSYS") << "\n";
     
     //Compile the dictionaries for the classes that are put to the TTree
-    gROOT->ProcessLine(".L loader.C+");
+//    gROOT->ProcessLine(".L loader.C+");
 
     std::vector<unsigned int> bHadrons;
     bHadrons.push_back(512);
@@ -492,7 +510,7 @@ int main(int argc, char **argv) {
     randomGeneratorType = gsl_rng_default;
     rng = gsl_rng_alloc (randomGeneratorType);
     seedRandom();
-    
+
     if (argc != 8 ) {
         cout << "Usage: ./gen part DMmass output.root params.card bchad lhad chlep" << endl;
         return 1;
@@ -703,7 +721,6 @@ int main(int argc, char **argv) {
     TStopwatch *watch = new TStopwatch();
     watch->Start();
     for (int iEvent = 0; iEvent < nEvent; ++iEvent) {
-    
         #ifdef NDEBUG
         p_energy->clear();
         p_id->clear();
@@ -717,7 +734,6 @@ int main(int argc, char **argv) {
                 hEventStatus->Fill(1);
                 PythiaErrCount++;
                 pythia.event.list();
-                
                 continue;
             }
             cout << " Event generation aborted prematurely, owing to error!\n";
@@ -904,6 +920,7 @@ int main(int argc, char **argv) {
         tree->Fill();
         #endif
     }
+    pythia.statistics(true);
     watch->Stop();
     cout << "Processing took " << watch->RealTime() << " (" <<
         watch->CpuTime() << ") real(cpu) sec" << endl;
