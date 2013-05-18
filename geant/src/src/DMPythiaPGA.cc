@@ -15,7 +15,7 @@ DMPythiaPGA::DMPythiaPGA(
 	G4double dm_mass,
 	G4ThreeVector position, 
 	G4ThreeVector momentumDirection
-) : G4VUserPrimaryGeneratorAction(), pythia(channel, dm_mass),
+) : PGAInterface(), pythia(channel, dm_mass),
     init_position(position), init_momentum(momentumDirection) {}
 
 DMPythiaPGA::~DMPythiaPGA() {}

@@ -7,6 +7,8 @@
 #include "G4ThreeVector.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
+#include "PGAInterface.hh"
+
 class G4ParticleGun;
 class G4Event;
 class G4ParticleDefinition;
@@ -31,7 +33,7 @@ class Pythia8Interface {
 		Pythia8::Pythia* pythia;
 };
 
-class DMPythiaPGA : public G4VUserPrimaryGeneratorAction {
+class DMPythiaPGA : public PGAInterface {
 	public:
 		DMPythiaPGA(
 			int channel=25,
@@ -43,6 +45,7 @@ class DMPythiaPGA : public G4VUserPrimaryGeneratorAction {
 
 		// methods
 		void GeneratePrimaries(G4Event*);
+		const char* getName() {return "P8";}
 
 	private:
 		// data members

@@ -7,12 +7,14 @@
 
 #include "CLHEP/Units/SystemOfUnits.h"
 
+#include "PGAInterface.hh"
+
 class G4ParticleGun;
 class G4Event;
 
 /// The primary generator class with particle gun
 
-class DMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class DMPrimaryGeneratorAction : public PGAInterface {
 	public:
 		DMPrimaryGeneratorAction(
 			G4int p1id, G4int p2id,
@@ -24,6 +26,7 @@ class DMPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 
 		// methods
 		virtual void GeneratePrimaries(G4Event*);
+		const char* getName() {return "G4";}
 
 	private:
 		// data members

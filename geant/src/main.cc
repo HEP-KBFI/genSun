@@ -5,6 +5,7 @@
 #include "G4UserRunAction.hh"
 #include "G4Run.hh"
 
+#include "PGAInterface.hh"
 #include "SunDetectorConstruction.hh"
 #include "SunSteppingAction.hh"
 #include "DMPhysicsList.hh"
@@ -139,7 +140,7 @@ const argp argp_argp = {
 //                                MAIN
 // ---------------------------------------------------------------------
 void go_visual(int argc, char* argv[]);
-G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4double dm_mass);
+PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass);
 
 int main(int argc, char * argv[]) {
 	// Parse the arguments
@@ -167,10 +168,6 @@ int main(int argc, char * argv[]) {
 	       << " | unit[eV]:" << p_unit/eV
 	       << G4endl;
 	
-	char str_physics[50];
-	sprintf(str_physics, "%s_%s", p_vacuum ? "VAC" : "SUN", p_trans ? "TRANS" : "QGSP_BERT");
-	if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
-	
 	// Start setting up Geant4
 	// Start constructing the run manager
 	G4RunManager* runManager = new G4RunManager;
@@ -194,13 +191,18 @@ int main(int argc, char * argv[]) {
 	}
 	runManager->SetUserInitialization(physlist); // physics
 	
-	G4VUserPrimaryGeneratorAction* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass);
+	PGAInterface* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass);
 	if(primaryGeneratorAction == NULL) {
 		G4cerr << "No generator!" << G4endl;
 		return -1;
 	} else {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
+	
+	// create the physics string
+	char str_physics[50];
+	sprintf(str_physics, "%s_%s_%s", p_vacuum ? "VAC" : "SUN", p_trans ? "TRANS" : "QGSP_BERT", primaryGeneratorAction->getName());
+	if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
 	
 	// create and add actions
 	NeutrinoHistogram* h;
@@ -267,7 +269,7 @@ int main(int argc, char * argv[]) {
 }
 
 enum generator_mode {m_pythia, m_ppbar, m_2p};
-G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4double dm_mass) {
+PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass) {
 	generator_mode mode; bool pythia_possible = true;
 	switch(channel) {
 		// Quarks and gluons
@@ -314,7 +316,7 @@ G4VUserPrimaryGeneratorAction* get_primary_generator_action(G4int channel, G4dou
 		G4cout << "Unable to use Geant4 for this particle! Using PYTHIA8." << G4endl;
 	}
 	
-	G4VUserPrimaryGeneratorAction* generatorAction = NULL;
+	PGAInterface* generatorAction = NULL;
 	switch(mode) {
 		case m_pythia:
 			if(!p_quiet){G4cout << "Going for Pythia8!" << G4endl;}

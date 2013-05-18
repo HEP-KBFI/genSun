@@ -9,7 +9,7 @@ DMPrimaryGeneratorAction::DMPrimaryGeneratorAction(
 	G4double dm_mass,
 	G4ThreeVector position, 
 	G4ThreeVector momentumDirection
-) : G4VUserPrimaryGeneratorAction() {
+) : PGAInterface() {
 	G4int nofParticles = 1;
 	fPGun1 = new G4ParticleGun(nofParticles);
 	fPGun2 = new G4ParticleGun(nofParticles);

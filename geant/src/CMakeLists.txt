@@ -75,6 +75,7 @@ set(include_files
 	SunSteppingAction.hh
 	DMRootHistogrammer.hh
 	G4UserActionManager.hh
+	PGAInterface.hh
 )
 
 message(" > Sources...")
