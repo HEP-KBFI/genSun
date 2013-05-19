@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J "solnuG4" -x comp-c-[002,004,028,031,032,034,037,038]
+#SBATCH -J "solnuG4" -x comp-c-[002,004,022,028,031,032,034,037,038]
 
 # Parse arguments
 GETOPT=$(getopt -n "batch" -o r:p:u:c: -- "$@")
