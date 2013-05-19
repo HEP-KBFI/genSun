@@ -4,8 +4,8 @@ ROOT.gROOT.SetBatch()
 
 histlist = ['nuel', 'numu', 'nutau', 'anuel', 'anumu', 'anutau']
 physlist = {
-	'energyLoss_hhad_0_lhad_0_chlep_0': ROOT.kRed,
-	'physics_VAC_QGSP_BERT': ROOT.kBlue
+	'energyLoss_hhad_0_lhad_0_chlep_0_noPiMinusAbs': ROOT.kRed,
+	'physics_VAC_QGSP_BERT_P8': ROOT.kBlue
 }
 
 tfile = ROOT.TFile('input.root')
