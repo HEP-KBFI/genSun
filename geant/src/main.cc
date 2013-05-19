@@ -212,19 +212,26 @@ int main(int argc, char * argv[]) {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
 	
-	// create the physics string
-	char str_physics[50];
-	sprintf(str_physics, "%s_%s_%s", p_vacuum ? "VAC" : "SUN", p_trans ? "TRANS" : "QGSP_BERT", primaryGeneratorAction->getName());
-	if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
-	
 	// stacking action for energy cutoff
-	if(p_trk==TRK_ON || (p_trk==TRK_UNDEF && !p_vacuum)) {
+	bool b_track_killing = p_trk==TRK_ON || (p_trk==TRK_UNDEF && !p_vacuum);
+	if(b_track_killing) {
 		G4cout << "Track killing: enabled!" << G4endl;
 		NeutrinoStackingAction* cutoff_stacking_action = new NeutrinoStackingAction(p_trv);
 		runManager->SetUserAction(cutoff_stacking_action);
 	} else {
 		G4cout << "Track killing: disabled!" << G4endl;
 	}
+	
+	// create the physics string
+	char str_physics[50];
+	sprintf(str_physics, "%s_%s_trk%s_%s",
+	        p_vacuum ? "VAC" : "SUN",
+	        p_trans ? "TRANS" : "QGSP_BERT",
+	        b_track_killing ? "ON" : "OFF",
+	        primaryGeneratorAction->getName()
+	);
+	//if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
+	G4cout << "PHYS_STR=\"" << str_physics << "\"" << G4endl;
 	
 	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
