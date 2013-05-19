@@ -26,10 +26,10 @@ G4ClassificationOfNewTrack NeutrinoStackingAction::ClassifyNewTrack(const G4Trac
 	
 	if(tr->GetParticleDefinition() == G4Electron::Electron() && tr->GetKineticEnergy() < 100*MeV) {
 		if(!p_quiet&&verbose){G4cout << " T> " << tr->GetTrackID() << " -- KILL THIS ABOMINATION!!!!" << G4endl;}
-		//return fKill;
+		return fKill;
 	} else if(tr->GetParticleDefinition() == G4Gamma::Gamma() && tr->GetKineticEnergy() < 100*MeV) {
 		if(!p_quiet&&verbose){G4cout << " T> " << tr->GetTrackID() << " -- KILL THIS ABOMINATION!!!!" << G4endl;}
-		//return fKill;
+		return fKill;
 	}
 	
 	return fUrgent;
