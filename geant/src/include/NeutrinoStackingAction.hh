@@ -6,11 +6,11 @@
 class NeutrinoHistogram;
 
 class NeutrinoStackingAction : public G4UserStackingAction {
-	NeutrinoHistogram* histogram;
+	bool verbose;
 	
 	public:
-		NeutrinoStackingAction(NeutrinoHistogram* hist);
-		G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+		NeutrinoStackingAction(bool verbose);
+		G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* tr);
 };
 
 #endif

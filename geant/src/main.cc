@@ -27,8 +27,9 @@
 //                    Argument parser settings
 // ---------------------------------------------------------------------
 #include <argp.h>
-#define PC_OH  1000
 #define PC_NDC 1001
+#define PC_TRK 1002
+#define PC_TRV 1003
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
@@ -39,8 +40,9 @@ const argp_option argp_options[] = {
 	{"physics",   'p', "physics",      0,   "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
 	{"creator",   'c', "creator",      0,   "Specify the particle creator (PYTHIA8 or GEANT4). Default: PYTHIA8.", 0},
 	{"unit",      'u',    "unit",      0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
-	{"oldhist", PC_OH,         0,      0,   "Also create old-styles histograms.", 0},
 	{"short-neutron", PC_NDC, "on/off", 0,  "Enable/disable short-lived neutrons.", 0},
+	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
+	{"track-verbose", PC_TRV, 0,       0,   "Print out created Geant4 tracks.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -49,9 +51,10 @@ bool p_vis  = false; // go to visual mode. Default: false
 bool p_quiet = false; // reduce verbosity. Default: false
 bool p_vacuum = false; // use vacuum instead of sun. Default: false
 bool p_trans = false; // use only translation physics. Default: false
-bool p_oldhisto = false; // also create old histograms. Default: false
 bool p_useG4 = false; // use G4 particle generation of possbile. Default: false
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
+enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
+bool p_trv = false; // print G4 tracks. Default: false
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -108,9 +111,6 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				return ARGP_ERR_UNKNOWN;
 			}
 			break;
-		case PC_OH:
-			p_oldhisto = true;
-			break;
 		case PC_NDC:
 			if(strcmp(arg, "on") == 0) {
 				p_ndc = NDC_SHORT;
@@ -120,6 +120,19 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				G4cout << "Bad value for --short-neutron: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
 			}
+			break;
+		case PC_TRK:
+			if(strcmp(arg, "on") == 0) {
+				p_trk = TRK_ON;
+			} else if(strcmp(arg, "off") == 0) {
+				p_trk = TRK_OFF;
+			} else {
+				G4cout << "Bad value for --track-kill: " << arg << G4endl;
+				return ARGP_ERR_UNKNOWN;
+			}
+			break;
+		case PC_TRV:
+			p_trv = true;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -204,12 +217,13 @@ int main(int argc, char * argv[]) {
 	sprintf(str_physics, "%s_%s_%s", p_vacuum ? "VAC" : "SUN", p_trans ? "TRANS" : "QGSP_BERT", primaryGeneratorAction->getName());
 	if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
 	
-	// create and add actions
-	NeutrinoHistogram* h;
-	if(p_oldhisto) {
-		h= new NeutrinoHistogram(channel, dm_mass);
-		NeutrinoStackingAction* neutrino_stacking_action = new NeutrinoStackingAction(h);
-		runManager->SetUserAction(neutrino_stacking_action); // hook for histogramming
+	// stacking action for energy cutoff
+	if(p_trk==TRK_ON || (p_trk==TRK_UNDEF && !p_vacuum)) {
+		G4cout << "Track killing: enabled!" << G4endl;
+		NeutrinoStackingAction* cutoff_stacking_action = new NeutrinoStackingAction(p_trv);
+		runManager->SetUserAction(cutoff_stacking_action);
+	} else {
+		G4cout << "Track killing: disabled!" << G4endl;
 	}
 	
 	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
@@ -251,13 +265,6 @@ int main(int argc, char * argv[]) {
 	}
 	hgr->countEvent(p_runs);
 	hgr->save(p_ofile);
-	
-	// if requested, produce old styles histograms
-	if(p_oldhisto) {
-		h->countRuns(p_runs);
-		char p_ofile_old[50]; sprintf(p_ofile_old, "oldhists_%s", p_ofile.c_str());
-		h->write(p_ofile_old);
-	}
 	
 	if(!p_quiet){sun_stepping_action->statistics();}
 
