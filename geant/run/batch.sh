@@ -2,12 +2,13 @@
 #SBATCH -J "solnuG4" -x comp-c-[002,004,022,028,031,032,034,037,038]
 
 # Parse arguments
-GETOPT=$(getopt -n "batch" -o r:p:u:c: -- "$@")
+GETOPT=$(getopt -n "batch" -o r:p:u:c: -l trk: -- "$@")
 runs=1 # default number of runs
 physics="FULL" # default physics
 units="G" # default GeV units
 creator="PYTHIA8"
 creator_suffix=""
+trk_arg=""
 eval set -- "$GETOPT"
 while true; do
 	case $1 in
@@ -26,6 +27,10 @@ while true; do
 		-c)
 			creator=$2
 			creator_suffix="_G4"
+			shift 2; continue
+		;;
+		--trk)
+			trk_arg="--track-kill="$2
 			shift 2; continue
 		;;
 		--)
@@ -66,7 +71,7 @@ echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
 mkdir working/$prefix
 
 echo "Starting Geant4 runs"
-srun -l ./run.sh ${prefix} -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator}
+srun -l ./run.sh ${prefix} -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator} ${trk_arg}
 echo "Geant simulations done"
 
 echo "hadding histograms"
