@@ -66,7 +66,7 @@ echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
 mkdir working/$prefix
 
 echo "Starting Geant4 runs"
-srun -l ./run.sh ${prefix} ${particle} ${energy} ${units} ${runs} ${physics} ${creator}
+srun -l ./run.sh ${prefix} -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator}
 echo "Geant simulations done"
 
 echo "hadding histograms"
