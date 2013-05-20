@@ -13,7 +13,7 @@ ms_p = [
 	('particle',  'particle=(.*)',    _  ),
 	('energy',    'energy=(.*)',      _  ),
 	('prefix',    'prefix=(.*)',      _  ),
-	('phystring', 'PHYS_STR="(.*)"',  _  )
+	('phystring', 'PHYS_STR=\"(.*)\"',  _  )
 ]
 
 for sf in slurmfiles:
@@ -25,14 +25,13 @@ for sf in slurmfiles:
 	# Filter and match:
 	ms = []
 	def mfn(p,f,s):
-		m = re.match(p,s)
+		m = re.search(p,s)
 		return f(m.group(1)) if m is not None else None
 	for ln in lines[:200]:
 		rd=map(lambda(k,p,f): (k,mfn(p,f,ln)), ms_p)
 		ms += filter(lambda (k,s): s is not None, rd)
 		if len(set(map(lambda(k,v):k, ms)))==len(ms_p): break
 	ms=dict(ms)
-	#print ms
 	
 	m_runs = ms['runs']
 	m_physics = ms['physics']
