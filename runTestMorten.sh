@@ -4,10 +4,10 @@ if [ -d $OFDIR ]; then
     rm -Rf $OFDIR
 fi
 mkdir $OFDIR
-WDIR=pythia8176/genSun/
+WDIR=/home/joosep/solarNu/pythia8176/genSun/
 runSpec() {
 
-    $WDIR/genSun.exe $1 $2 $OFDIR/output_prob_$i_$2.root $WDIR/cardSunBatch.card 0 0 0 $3 &> $OFDIR/log_prob_$1_$2.txt &
+    $WDIR/genSun.exe $1 $2 $OFDIR/output_prob_$1_$2.root $WDIR/cardSunBatch.card 0 0 0 $3 &> $OFDIR/log_prob_$1_$2.txt &
 }
 
 runSpec 11 10 10000000
