@@ -17,20 +17,20 @@ echo "LHADINSTR="$LHADINSTR
 echo "LEPINSTR="$LEPINSTR
 
 cp -R /home/joosep/solarNu/pythia8176 $WD
-cd $WD
-cd genSun
+cd $WD/genSun
+ls
 #LD_LIBRARY_PATH=/home/joosep/local/lib:/home/joosep/local/lib64:$LD_LIBRARY_PATH ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR &> log \
 for i in {1..50}
 do
     echo "Trying to run genSun.exe, try "$i
-    srun ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR
+    srun ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR | bzip2 -c > pythia.out.bz2
     if [ $? -eq 0 ]
     then
         break
     fi
 done
-cp output.root $OFDIR/output_$SLURM_JOB_ID.root
-#mv log $OFDIR/log_$SLURM_JOB_ID.txt
+rsync output.root $OFDIR/output_$SLURM_JOB_ID.root
+rsync pythia.out.bz2 $OFDIR/pythia_$SLURM_JOB_ID.bz2
 
 ls -al
 rm -Rf $WD
