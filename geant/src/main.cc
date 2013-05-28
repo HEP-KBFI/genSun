@@ -1,3 +1,5 @@
+#include <ctime>
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
@@ -31,6 +33,7 @@
 #define PC_NDC  1001
 #define PC_TRK  1002
 #define PC_TRV  1003
+#define PC_SEED 1004
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
@@ -44,6 +47,7 @@ const argp_option argp_options[] = {
 	{"short-neutron", PC_NDC, "on/off", 0,  "Enable/disable short-lived neutrons.", 0},
 	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
 	{"track-verbose", PC_TRV,  0,       0,  "Print out created Geant4 tracks.", 0},
+	{"seed",  PC_SEED,    "seed",       0,  "Set the random seed used. Default: time(0).", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -56,6 +60,7 @@ bool p_useG4 = false; // use G4 particle generation of possbile. Default: false
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
 bool p_trv = false; // print G4 tracks. Default: false
+int p_seed = 0; // seed value, 0==time(0). Default: 0
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -135,6 +140,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case PC_TRV:
 			p_trv = true;
 			break;
+		case PC_SEED:
+			p_seed = std::atoi(arg);
+			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
 			return ARGP_ERR_UNKNOWN;
@@ -154,7 +162,7 @@ const argp argp_argp = {
 //                                MAIN
 // ---------------------------------------------------------------------
 void go_visual(int argc, char* argv[]);
-PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass);
+PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int seedvalue);
 
 int main(int argc, char * argv[]) {
 	// Parse the arguments
@@ -182,6 +190,10 @@ int main(int argc, char * argv[]) {
 	       << " | unit[eV]:" << p_unit/eV
 	       << G4endl;
 	
+	// Decide the random seed
+	int seedvalue = (p_seed==0)? std::time(0) : p_seed;
+	if(!p_quiet){G4cout << "Seed: " << seedvalue << G4endl;}
+	
 	// Start setting up Geant4
 	// Start constructing the run manager
 	G4RunManager* runManager = new G4RunManager;
@@ -205,7 +217,7 @@ int main(int argc, char * argv[]) {
 	}
 	runManager->SetUserInitialization(physlist); // physics
 	
-	PGAInterface* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass);
+	PGAInterface* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass, seedvalue);
 	if(primaryGeneratorAction == NULL) {
 		G4cerr << "No generator!" << G4endl;
 		return -1;
@@ -289,7 +301,7 @@ int main(int argc, char * argv[]) {
 }
 
 enum generator_mode {m_pythia, m_ppbar, m_2p};
-PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass) {
+PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int seedvalue) {
 	generator_mode mode; bool pythia_possible = true;
 	switch(channel) {
 		// Quarks and gluons
@@ -340,7 +352,7 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass) {
 	switch(mode) {
 		case m_pythia:
 			if(!p_quiet){G4cout << "Going for Pythia8!" << G4endl;}
-			generatorAction = new DMPythiaPGA(channel, dm_mass);
+			generatorAction = new DMPythiaPGA(channel, dm_mass, seedvalue);
 			break;
 		
 		case m_ppbar:

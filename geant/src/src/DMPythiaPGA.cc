@@ -13,9 +13,10 @@ DMPythiaPGA::DMPythiaPGA(
 	//const G4String& channel, 
 	int channel,
 	G4double dm_mass,
+	int seedvalue,
 	G4ThreeVector position, 
 	G4ThreeVector momentumDirection
-) : PGAInterface(), pythia(channel, dm_mass),
+) : PGAInterface(), pythia(channel, dm_mass, seedvalue),
     init_position(position), init_momentum(momentumDirection) {}
 
 DMPythiaPGA::~DMPythiaPGA() {}
@@ -56,7 +57,8 @@ class Sigma1GenRes : public Pythia8::Sigma1Process {
 
 Pythia8Interface::Pythia8Interface(
 	int pid,
-	G4double dm_mass
+	G4double dm_mass,
+	int seed
 ) {
 	if(!p_quiet){G4cout << "Initializing PYTHIA: " << pid << " at " << dm_mass/GeV << " GeV" << G4endl;}
 	
@@ -75,6 +77,10 @@ Pythia8Interface::Pythia8Interface(
 	// A class to generate the fictitious resonance initial state.
 	Pythia8::SigmaProcess* sigma1GenRes = new Sigma1GenRes();
 	pythia->setSigmaPtr( sigma1GenRes);
+	
+	if(!p_quiet){G4cout << "Init PYTHIA seed to: " << seed << G4endl;}
+	pythia->readString("Random:setSeed = on");
+	sprintf(ch, "Random:seed = %d", seed); pythia->readString(ch);
 	
 	//pythia->init(25, 25, 1000/GeV);
 	pythia->init();

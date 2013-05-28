@@ -68,6 +68,9 @@ echo "creator="$creator
 echo "Nodelist:" ${SLURM_NODELIST}
 echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
 
+export BASESEED=$(date +%s)
+echo "Base seed:" $BASESEED
+
 mkdir working/$prefix
 
 echo "Starting Geant4 runs"

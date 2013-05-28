@@ -24,8 +24,8 @@ Beams:idA = -11                    ! ficititious incoming e+
 Beams:idB = 11                     ! ficititious incoming e-
 PDF:lepton = off                   ! no radiation off ficititious e+e-
 !Beams:eCM = 500.                   ! CM energy of collision
-Random:seed = 0
-Random:setSeed = on
+!Random:seed = 0
+!Random:setSeed = on
 
 ! 3) Set up properties of the GeneralResonance and its decay channels.
 ! id:all = name antiName spinType chargeType colType m0 mWidth mMin mMax tau0
