@@ -4,6 +4,7 @@
 #include "G4VisExecutive.hh"
 #include "G4UserRunAction.hh"
 #include "G4Run.hh"
+#include "CLHEP/Random/Random.h"
 
 #include "PGAInterface.hh"
 #include "SunDetectorConstruction.hh"
@@ -263,6 +264,9 @@ int main(int argc, char * argv[]) {
 		       << G4endl;
 		G4AntiNeutron::AntiNeutron()->GetDecayTable()->DumpInfo();
 	}
+	
+	// Information about Geant4 randomness
+	if(!p_quiet) {CLHEP::HepRandom::showEngineStatus();}
 
 	// Start runs or go into visual mode
 	if(p_vis) {
