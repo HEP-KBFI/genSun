@@ -28,22 +28,22 @@
 //                    Argument parser settings
 // ---------------------------------------------------------------------
 #include <argp.h>
-#define PC_NDC 1001
-#define PC_TRK 1002
-#define PC_TRV 1003
+#define PC_NDC  1001
+#define PC_TRK  1002
+#define PC_TRV  1003
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
-	{"runs",      'n',    "runs",      0,   "Number of runs.", 0},
-	{"vis",       'v',         0,      0,   "Enable visual mode.", 0},
-	{"quiet",     'q',         0,      0,   "Reduce verbosity as much as possible.", 0},
-	{"ofile",     'o',   "ofile",      0,   "Output root file.", 0},
-	{"physics",   'p', "physics",      0,   "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
-	{"creator",   'c', "creator",      0,   "Specify the particle creator (PYTHIA8 or GEANT4). Default: PYTHIA8.", 0},
-	{"unit",      'u',    "unit",      0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
+	{"runs",      'n',    "runs",       0,   "Number of runs.", 0},
+	{"vis",       'v',         0,       0,   "Enable visual mode.", 0},
+	{"quiet",     'q',         0,       0,   "Reduce verbosity as much as possible.", 0},
+	{"ofile",     'o',   "ofile",       0,   "Output root file.", 0},
+	{"physics",   'p', "physics",       0,   "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
+	{"creator",   'c', "creator",       0,   "Specify the particle creator (PYTHIA8 or GEANT4). Default: PYTHIA8.", 0},
+	{"unit",      'u',    "unit",       0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
 	{"short-neutron", PC_NDC, "on/off", 0,  "Enable/disable short-lived neutrons.", 0},
 	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
-	{"track-verbose", PC_TRV, 0,       0,   "Print out created Geant4 tracks.", 0},
+	{"track-verbose", PC_TRV,  0,       0,  "Print out created Geant4 tracks.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
