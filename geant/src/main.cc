@@ -265,17 +265,19 @@ int main(int argc, char * argv[]) {
 	}
 
 	// Start runs or go into visual mode
-	if(p_vis) go_visual(argc, argv);
-	else {
+	if(p_vis) {
+		go_visual(argc, argv);
+	} else {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
-	}
-	hgr->countEvent(p_runs);
-	hgr->save(p_ofile);
+		
+		hgr->countEvent(p_runs);
+		hgr->save(p_ofile);
 	
-	if(!p_quiet){sun_stepping_action->statistics();}
-
-	// job terminationi
+		if(!p_quiet){sun_stepping_action->statistics();}
+	}
+	
+	// job termination
 	if(!p_quiet){G4cout << "Deconstructing..." << G4endl;}
 	delete runManager;
 	G4cout << "Closing program!" << G4endl;
