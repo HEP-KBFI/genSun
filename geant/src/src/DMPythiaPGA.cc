@@ -81,9 +81,11 @@ Pythia8Interface::Pythia8Interface(
 	if(!p_quiet){G4cout << "Init PYTHIA seed to: " << seed << G4endl;}
 	pythia->readString("Random:setSeed = on");
 	sprintf(ch, "Random:seed = %d", seed); pythia->readString(ch);
+	if(!p_quiet){G4cout << "PYTHIA conf: " << ch << G4endl;}
 	
 	//pythia->init(25, 25, 1000/GeV);
 	pythia->init();
+	pythia->rndm.init(seed);
 }
 
 Pythia8Interface::~Pythia8Interface() {

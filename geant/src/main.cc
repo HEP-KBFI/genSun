@@ -278,6 +278,7 @@ int main(int argc, char * argv[]) {
 	}
 	
 	// Information about Geant4 randomness
+	CLHEP::HepRandom::setTheSeed(seedvalue);
 	if(!p_quiet) {CLHEP::HepRandom::showEngineStatus();}
 
 	// Start runs or go into visual mode
