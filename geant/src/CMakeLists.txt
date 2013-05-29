@@ -146,6 +146,6 @@ add_custom_target(SOLNUGEANT DEPENDS solnugeant)
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 # ---
-install(TARGETS solnugeant DESTINATION bin)
+install(TARGETS solnugeant DESTINATION .)
 
 
