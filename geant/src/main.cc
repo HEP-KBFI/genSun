@@ -286,6 +286,10 @@ int main(int argc, char * argv[]) {
 	} else {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
+		/*int run_step = 1;
+		for(int i=0; i<p_runs; i+=run_step) {
+			runManager->BeamOn(run_step);
+		}*/
 		
 		hgr->countEvent(p_runs);
 		hgr->save(p_ofile);
