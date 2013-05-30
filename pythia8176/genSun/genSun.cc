@@ -65,9 +65,11 @@ int idQuark(int idHad) {
     
     std::ostringstream os;
     os << abs(idHad);
-    std::string digits = os.str();
+    const std::string digits = os.str().substr(0,1);
     const char f = digits[0];
-    int first = atoi(&f);
+    int first=0;
+    std::istringstream ( digits ) >> first;
+    //std::cerr << "idHad=" << idHad << " idQ=" << first << " f='" << digits  << "'" << std::endl;
     return first;
 }
 
@@ -104,6 +106,7 @@ namespace avgEnergyLoss {
         if(idQ==4 || idQ==5) { //c or b
             return pdt->m0(idQ)/pdt->m0(idHad);
         }
+        std::cerr << "Unknown idQ=" << idQ << std::endl;
         return GSL_NAN;
     }
     
@@ -167,9 +170,14 @@ namespace energyLossDistributions {
         // \exp(u) with mean 1
         double u = gsl_ran_exponential(rng, 1.0);
         double Ecr = avgEnergyLoss::Ecr(E0, idHad, pdt);
+        if (std::isnan(Ecr)) {
+            std::cerr << "Ecr=nan for " << idHad << " E0=" << E0 << std::endl;
+            throw 1;
+        }
         double x0 = Ecr/E0;
         
         double x = u + x0;
+        //double E = pdt->m0(idHad) + (Ecr - pdt->m0(idHad))/x;
         double E = Ecr/x;
         return E;
     }
@@ -184,7 +192,8 @@ namespace energyLossDistributions {
         double x = powerDistributionRandom(0, 1, p);
         
         //The E should be between [m0...E0] with m0 being the rest mass and E0 the initial energy
-        double E = (pdt->m0(idLep)) + (E0-pdt->m0(idLep))*x;
+        //double E = (pdt->m0(idLep)) + (E0-pdt->m0(idLep))*x;
+        double E = E0*x;
         return E;
     }
 }
@@ -283,24 +292,39 @@ protected:
     ~EnergyLossDecay() {};
     
     //Calculates the rescaled quadrimomentum of the particle with pdgID id.
-    Vec4 newP4(const Vec4& p4_0, double E_new, const int id);
+    Vec4 newP4(const Vec4& p4_0, double E_new, const int id, double m2);
     
 };
 
+double m2dif(const Vec4& p4, double m2) {
+    double d = p4.m2Calc() - m2;
+    return d;
+}
 //This method calculates the rescaled quadrimomentum of a particle with pdgID id
 //and initial momentum p4_0. The minimum of the final momentum p4_1 is specified by
 //the particle mass.
-Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
-    double dif = pow(E_1,2) - pow(pdtPtr->m0(id),2);
+Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id, double m2) {
+    double dif = pow(E_1,2);
     double p_abs_1 = 0.0;
-    if (dif>0.0)
-        p_abs_1 = sqrt(dif);
-    else
-        p_abs_1 = sqrt(-dif);
+    p_abs_1 = sqrt(dif);
+    //double sf2 = (pow(E_1, 2) - pow(p4_0.e(), 2) + p4_0.pAbs2()) / p4_0.pAbs2();
+   
     double sf = p_abs_1/p4_0.pAbs();
+
     Vec4 p4_1(p4_0);
     p4_1.rescale3(sf);
-    p4_1.e(E_1);
+    p4_1.e(sqrt(m2 + p4_1.pAbs2()));
+    double d = m2dif(p4_1, m2);
+    if (std::fabs(p4_1.mCalc() - p4_0.mCalc()) > 0.001 || std::fabs(d)>0.001 || (p4_1.mCalc() != p4_1.mCalc())) {
+        std::cout << std::setprecision(9);
+        std::cout << "E0=" << p4_0.e() << " E1=" << E_1 << std::endl;
+        std::cout << "mass shell violation p**2 - m**2 = " << d << " | " << id << std::endl;
+        std::cout << "p0**2 = " << p4_0.m2Calc() << " m2=" << m2 << std::endl; 
+        std::cout << "p1**2 = " << p4_1.m2Calc() << " m2=" << m2 << std::endl; 
+        std::cout << "p0=" << p4_0;
+        std::cout << "p1=" << p4_1;
+        std::cout << "sf=" << sf << std::endl;
+    }
     return p4_1;
 }
 
@@ -359,7 +383,7 @@ public:
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
         double E_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
-        Vec4 p4_out = newP4(p4, E_new, id);
+        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
         return p4_out;
     }
 };
@@ -373,8 +397,9 @@ public:
     
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        double E_new = event[iDec].m0() + energyLossDistributions::E_hadronic(p4.e() - event[iDec].m0(), id, pdtPtr);
-        Vec4 p4_out = newP4(p4, E_new, id);
+        //double E_new = event[iDec].m0() + energyLossDistributions::E_hadronic(p4.e() - event[iDec].m0(), id, pdtPtr);
+        double E_new = energyLossDistributions::E_hadronic(event[iDec].m0(), id, pdtPtr);
+        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
         return p4_out;
     }
 };
@@ -408,7 +433,7 @@ protected:
         double p = energyLossDistributions::chLeptonExponent(id, pdtPtr);
         
         double E_new = pdtPtr->m0(id) + (p4.e() - pdtPtr->m0(id)) / (1.0+p);
-        Vec4 p4_out = newP4(p4, E_new, id);
+        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
         return p4_out;
     }
 };
@@ -423,7 +448,7 @@ public:
 protected:
     Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
         double E_new = event[iDec].m0() + energyLossDistributions::E_leptonic(p4.e()-event[iDec].m0(), id, pdtPtr);
-        Vec4 p4_out = newP4(p4, E_new, id);
+        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
         return p4_out;
     }
 };
