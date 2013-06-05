@@ -92,21 +92,28 @@ double powerDistributionRandom(double xu, double xl, double n) {
     return x;
 }
 
+namespace energyLossDistributions {
+    double chLeptonExponent(const int idLep, Pythia8::ParticleData* pdt);
+};
+
 //Calculates the average energy loss that a B or C hadron suffers in
 //dense material. Implemented as in http://arxiv.org/pdf/hep-ph/0506298v5.pdf
 //formula 8, 9
 namespace avgEnergyLoss {
 
     //typical interaction time for hadrons in the Sun
-    double tint = 2.5E-11; // Page 12 of Strumia, Cirelli et al
+    //double tint = 2.5E-11; // Page 12 of Strumia, Cirelli et al
+    double tint = 3.5E-11; // (14) in Ritz & Seckel
     
     //quark/hadron mass ratio
     double x(int idQ, int idHad, Pythia8::ParticleData* pdt);
     double x(int idQ, int idHad, Pythia8::ParticleData* pdt) {
         if(idQ==4 || idQ==5) { //c or b
             return pdt->m0(idQ)/pdt->m0(idHad);
+        } else {
+            std::cerr << "Unknown idQ=" << idQ << std::endl;
+            throw 1;
         }
-        std::cerr << "Unknown idQ=" << idQ << std::endl;
         return GSL_NAN;
     }
     
@@ -120,34 +127,52 @@ namespace avgEnergyLoss {
         return GSL_NAN;
     }
     
-    double Ecr(double E0, int idHad, Pythia8::ParticleData* pdt);
-    double Ecr(double E0, int idHad, Pythia8::ParticleData* pdt) {
-        double tdec = pdt->tau0(idHad);
+    double t_stop(double E0, int idHad, Pythia8::ParticleData* pdt) {
         int idQ = idQuark(idHad);
         double Z = x(idQ, idHad, pdt)*z(idQ);
+        bool isBaryon = pdt->spinType(idHad) % 2;
         double tstop = tint/(1.0-Z);
+        // The scattering cross-section is different for baryons and mesons, hence the stopping time changes
+        if (isBaryon)
+            tstop = tstop/2.5; // section 2.5 of Ritz & Seckel
+        return tstop;
+    }
+    
+    double Ecr(double E0, int idHad, Pythia8::ParticleData* pdt) {
+        double tdec = pdt->tau0(idHad);
+        double tstop = t_stop(E0, idHad, pdt);
         double Ec = (pdt->m0(idHad))*tstop/tdec;
         return Ec;
     }
     
-    double E(double E0, int idHad, Pythia8::ParticleData* pdt);
-    double E(double E0, int idHad, Pythia8::ParticleData* pdt) {
-        double tdec = pdt->tau0(idHad);
-        int idQ = idQuark(idHad);
-        double Z = x(idQ, idHad, pdt)*z(idQ);
-        double tstop = tint/(1.0-Z);
-        double Ec = (pdt->m0(idHad))*tstop/tdec;
-        double _x = Ec/E0;
+    double E_hadronic(double E0, int idHad, Pythia8::ParticleData* pdt) {
+        double Ec = Ecr(E0, idHad, pdt);
+        double E_kin = E0 - pdt->m0(idHad);
         
-        double _E = TMath::QuietNaN();
+        double _x = Ec/E_kin;
+        
+        double E1 = TMath::QuietNaN();
         if(!std::isnan(_x)) {
             double f = gsl_sf_gamma_inc(0.0, _x); //Integral as incomplete gamma function from gsl
             if (f != GSL_ERANGE) { //no over/underflow
-                _E = Ec*exp(_x)*f;
+                E1 = Ec*exp(_x)*f;
             }
         }
-        return _E;
+        E1 = pdt->m0(idHad) + E1;
+        return E1;
     }
+    
+    double E_leptonic(double E0, int idLep, Pythia8::ParticleData* pdt) {
+        double p = energyLossDistributions::chLeptonExponent(idLep, pdt);
+        double E_kin = E0 - pdt->m0(idLep);
+        double E_new = pdt->m0(idLep) + E_kin / (1.0+p);
+        return E_new;
+    }
+    
+    double E_stop(double E0, int id, Pythia8::ParticleData* pdt) {
+        return pdt->m0(id);
+    }
+
 }
 
 namespace energyLossDistributions {
@@ -162,7 +187,6 @@ namespace energyLossDistributions {
     // x = E_cr / E and x_0 = E_cr / E_0 with E_cr depending on the hadron species
     
     //FIXME: draw value for x from gsl_ran_exponential
-    double E_hadronic(double E0, int idHad, Pythia8::ParticleData* pdt);
     double E_hadronic(double E0, int idHad, Pythia8::ParticleData* pdt) {
         
         // The PDF for x is p(x)=\exp(x_0 - x) with normalization \int_x0^\infty p(x) dx = 1
@@ -174,11 +198,11 @@ namespace energyLossDistributions {
             std::cerr << "Ecr=nan for " << idHad << " E0=" << E0 << std::endl;
             throw 1;
         }
-        double x0 = Ecr/E0;
         
+        double E_kin = E0 - pdt->m0(idHad);
+        double x0 = Ecr/E_kin;
         double x = u + x0;
-        //double E = pdt->m0(idHad) + (Ecr - pdt->m0(idHad))/x;
-        double E = Ecr/x;
+        double E = pdt->m0(idHad) + Ecr/x;
         return E;
     }
     
@@ -187,14 +211,20 @@ namespace energyLossDistributions {
         return (timeConv*pdt->tau0(idLep)) * E / pdt->m0(idLep);
     }
     
+    //Returns the total energy of a charged lepton undergoing energy loss
+    //E0 - total energy before energy losses (time-component of p4)
+    //idLep - absolute value of the pdgID of the lepton
+    //pdt - a pointer to the Pythia particle data table
     double E_leptonic(double E0, const int idLep, Pythia8::ParticleData* pdt) {
         double p = chLeptonExponent(idLep, pdt);
         double x = powerDistributionRandom(0, 1, p);
         
         //The E should be between [m0...E0] with m0 being the rest mass and E0 the initial energy
         //double E = (pdt->m0(idLep)) + (E0-pdt->m0(idLep))*x;
-        double E = E0*x;
-        return E;
+        
+        double E_kin = E0 - pdt->m0(idLep);
+        double E1 = pdt->m0(idLep) + E_kin*x;
+        return E1;
     }
 }
 
@@ -272,8 +302,10 @@ const std::vector<int> SubDecayHandler::getHandledParticles() {
 class EnergyLossDecay : public DecayHandler {
 public:
     
-    EnergyLossDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn) {
+    EnergyLossDecay(ParticleData* pdtPtrIn, Rndm* rndmPtrIn, std::function<double(double, int id, ParticleData* pdtPtrIn)> _energy_loss_func) {
         pdtPtr = pdtPtrIn; rndmPtr = rndmPtrIn;
+        energy_loss_func = _energy_loss_func;
+        
     }
     
     bool decay(vector<int>& idProd, vector<double>& mProd,
@@ -281,10 +313,12 @@ public:
     
 protected:
     
-    virtual Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) = 0;
+    //virtual Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) = 0;
     
     // Pointer to the particle data table.
     ParticleData* pdtPtr;
+    
+    std::function<double(double, int id, ParticleData* pdtPtrIn)> energy_loss_func;
     
     // Pointer to the random number generator.
     Rndm* rndmPtr;
@@ -292,38 +326,33 @@ protected:
     ~EnergyLossDecay() {};
     
     //Calculates the rescaled quadrimomentum of the particle with pdgID id.
-    Vec4 newP4(const Vec4& p4_0, double E_new, const int id, double m2);
+    Vec4 newP4(const Vec4& p4_0, double E_new, const int id);
     
 };
 
-double m2dif(const Vec4& p4, double m2) {
-    double d = p4.m2Calc() - m2;
-    return d;
-}
 //This method calculates the rescaled quadrimomentum of a particle with pdgID id
 //and initial momentum p4_0. The minimum of the final momentum p4_1 is specified by
 //the particle mass.
-Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id, double m2) {
-    double dif = pow(E_1,2);
-    double p_abs_1 = 0.0;
-    p_abs_1 = sqrt(dif);
-    //double sf2 = (pow(E_1, 2) - pow(p4_0.e(), 2) + p4_0.pAbs2()) / p4_0.pAbs2();
-   
+Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
+    double p_abs_squared_1 = pow(E_1,2) - pow(pdtPtr->m0(id),2);
+    if (p_abs_squared_1<0.0) {
+        cerr << "Negative square in newP4" << endl;
+        p_abs_squared_1 = 0.0;
+        //throw 1;
+    }
+    double p_abs_1 = sqrt(p_abs_squared_1);
     double sf = p_abs_1/p4_0.pAbs();
-
     Vec4 p4_1(p4_0);
-    p4_1.rescale3(sf);
-    p4_1.e(sqrt(m2 + p4_1.pAbs2()));
-    double d = m2dif(p4_1, m2);
-    if (std::fabs(p4_1.mCalc() - p4_0.mCalc()) > 0.001 || std::fabs(d)>0.001 || (p4_1.mCalc() != p4_1.mCalc())) {
-        std::cout << std::setprecision(9);
-        std::cout << "E0=" << p4_0.e() << " E1=" << E_1 << std::endl;
-        std::cout << "mass shell violation p**2 - m**2 = " << d << " | " << id << std::endl;
-        std::cout << "p0**2 = " << p4_0.m2Calc() << " m2=" << m2 << std::endl; 
-        std::cout << "p1**2 = " << p4_1.m2Calc() << " m2=" << m2 << std::endl; 
-        std::cout << "p0=" << p4_0;
-        std::cout << "p1=" << p4_1;
-        std::cout << "sf=" << sf << std::endl;
+    if (sf>=0) {
+        p4_1.rescale3(sf);
+        p4_1.e(E_1);
+    } else {
+        //cout << "not rescaling" << endl;
+    }
+    double mcalc = p4_1.mCalc();
+    if (mcalc<0 || std::isnan<double>(mcalc)) {
+        cerr << "p4 was nan" << endl;
+        throw 1;
     }
     return p4_1;
 }
@@ -343,7 +372,7 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
      }
      */
     
-    const unsigned int absId = abs(idProd[0]);
+    //const unsigned int absId = abs(idProd[0]);
     
     //Already decayed by external handler, return false to decay with Pythia
     if (event[iDec].statusAbs() == 93 || event[iDec].statusAbs() == 94) {
@@ -354,106 +383,24 @@ bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
     int id = idProd[0];
     double m = mProd[0];
     Vec4 p4 = pProd[0];
-    double tau = event[iDec].tau();
-    double tau0 = event[iDec].tau0();
+    //double tau = event[iDec].tau();
+    //double tau0 = event[iDec].tau0();
     
     //decay the particle to itself but with rescaled momentum
-    Vec4 p4_out = energyLoss(p4, id, iDec, event);
+    double E1 = energy_loss_func(p4.e(), id, pdtPtr);
+    Vec4 p4_out = newP4(p4, E1, id);
     idProd.push_back(id);
     mProd.push_back(m);
     pProd.push_back(p4_out);
     
     //Create fake graviton to respect energy conservation
+    //NOTE: in 2-body decay, the second particle has fixed kinematics and may be off the mass shell. We don't care about this for gravitons.
     idProd.push_back(39);
     mProd.push_back(0);
     pProd.push_back(p4-p4_out);
     
     return true;    
 }
-
-// B or C hadrons lose energy in a continous way, based on the initial energy
-// and the average energy loss. Based on Ritz-Seckel 2.5 (15)-(18)
-class HeavyHadronDecayAverage : public EnergyLossDecay {
-    
-public:
-    HeavyHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-    }
-    
-protected:
-    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        double E_new = avgEnergyLoss::E(p4.e(), id, pdtPtr);
-        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
-        return p4_out;
-    }
-};
-
-class HeavyHadronDecayProbabilistic : public EnergyLossDecay {
-    
-public:
-    HeavyHadronDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-    }
-    
-protected:
-    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        //double E_new = event[iDec].m0() + energyLossDistributions::E_hadronic(p4.e() - event[iDec].m0(), id, pdtPtr);
-        double E_new = energyLossDistributions::E_hadronic(event[iDec].m0(), id, pdtPtr);
-        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
-        return p4_out;
-    }
-};
-
-//Light hadrons just stop
-class LHadronDecayAverage : public EnergyLossDecay {
-    
-public:
-    LHadronDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-    }
-    
-protected:
-    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-//        Vec4 p4_out(0.0, 0.0, 0.0, pdtPtr->m0(id));
-        Vec4 p4_out(0.0, 0.0, 0.0, event[iDec].m());
-        return p4_out;
-    }
-};
-
-//Charged lepton average energy loss follows from the exponential distribution
-class CHLeptonDecayAverage : public EnergyLossDecay {
-    
-public:
-    CHLeptonDecayAverage(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-    }
-    
-protected:
-    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        double p = energyLossDistributions::chLeptonExponent(id, pdtPtr);
-        
-        double E_new = pdtPtr->m0(id) + (p4.e() - pdtPtr->m0(id)) / (1.0+p);
-        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
-        return p4_out;
-    }
-};
-
-class CHLeptonDecayProbabilistic : public EnergyLossDecay {
-    
-public:
-    CHLeptonDecayProbabilistic(ParticleData* pdtPtrIn, Rndm* rndmPtrIn)
-    : EnergyLossDecay(pdtPtrIn, rndmPtrIn) {
-    }
-    
-protected:
-    Vec4 energyLoss(const Vec4& p4, const int id, const int iDec, const Event& event) {
-        double E_new = event[iDec].m0() + energyLossDistributions::E_leptonic(p4.e()-event[iDec].m0(), id, pdtPtr);
-        Vec4 p4_out = newP4(p4, E_new, id, event[iDec].m2());
-        return p4_out;
-    }
-};
-
-
 
 // A derived class for (e+ e- ->) GenericResonance -> various final states.
 class Sigma1GenRes : public Sigma1Process {
@@ -615,13 +562,13 @@ int main(int argc, char **argv) {
         //average decay
         if (hHadronELossInstruction == 1) {
             cout << "Decaying heavy hadron energy by HeavyHadronDecayAverage" << endl;
-            handleBCHadDecays = new HeavyHadronDecayAverage(
-                &pythia.particleData, &pythia.rndm);
+            handleBCHadDecays = new EnergyLossDecay(
+                &pythia.particleData, &pythia.rndm, avgEnergyLoss::E_hadronic);
         //Probabilistic decay
         } else if (hHadronELossInstruction == 2) {
             cout << "Decaying heavy hadron energy by HeavyHadronDecayProbabilistic" << endl;
-            handleBCHadDecays = new HeavyHadronDecayProbabilistic(
-                &pythia.particleData, &pythia.rndm);
+            handleBCHadDecays = new EnergyLossDecay(
+                &pythia.particleData, &pythia.rndm, energyLossDistributions::E_hadronic);
         } else {
             std::cerr << "hHadronELossInstruction value not recognized" << std::endl;
             exit(1);
@@ -648,8 +595,10 @@ int main(int argc, char **argv) {
         if (lHadronELossInstruction == 1) {
             cout << "Decaying light hadron energy by LHadronDecayAverage" << endl;
             
-            handleLHadDecays = new LHadronDecayAverage(&pythia.particleData,
-                                                       &pythia.rndm);
+            handleLHadDecays = new EnergyLossDecay(&pythia.particleData,
+                &pythia.rndm,
+                avgEnergyLoss::E_stop
+            );
         } else {
             std::cerr << "lHadronELossInstruction value not recognized" << std::endl;
             exit(1);
@@ -670,13 +619,19 @@ int main(int argc, char **argv) {
         if (chLeptonELossInstruction == 1) {
             cout << "Decaying charged lepton energy by CHLeptonDecayAverage" << endl;
             
-            handleChLepDecays = new CHLeptonDecayAverage(&pythia.particleData,
-                                                         &pythia.rndm);
+            handleChLepDecays = new EnergyLossDecay(
+                &pythia.particleData,
+                &pythia.rndm,
+                avgEnergyLoss::E_leptonic
+            );
         //Probabilistic decay
         } else if (chLeptonELossInstruction == 2) {
             cout << "Decaying charged lepton energy by CHLeptonDecayProbabilistic" << endl;
-            handleChLepDecays = new CHLeptonDecayProbabilistic(&pythia.particleData,
-                                                               &pythia.rndm);
+            handleChLepDecays = new EnergyLossDecay(
+                &pythia.particleData,
+                &pythia.rndm,
+                energyLossDistributions::E_leptonic
+            );
             
         } else {
             std::cerr << "chLeptonELossInstruction value not recognized" << std::endl;
@@ -703,13 +658,8 @@ int main(int argc, char **argv) {
     
     const unsigned int nBins = 300;
     
+    //How many events were successfully generated
     TH1I *hEventStatus = new TH1I("eventStatus","Event status distribution",2,0,2);
-    
-    TH1D *hantip = new TH1D("antip","Antiproton distribution",nBins,-9,0);
-    TH1D *hantin = new TH1D("antin","Antineutron distribution",nBins,-9,0);
-    TH1D *hproton = new TH1D("proton","Proton distribution",nBins,-9,0);
-    TH1D *hneutron = new TH1D("neutron","Neutron distribution",nBins,-9,0);
-    TH1D *hel = new TH1D("el","Electron distribution",nBins,-9,0);
     
     //neutrino fluxes per energy
     TH1D *hnuel = new TH1D("nuel","Electron nu distribution",nBins,-9,0);
@@ -720,8 +670,6 @@ int main(int argc, char **argv) {
     TH1D *hanuel = new TH1D("anuel","Electron anti-nu distribution",nBins,-9,0);
     TH1D *hanumu = new TH1D("anumu","Muon anti-nu distribution",nBins,-9,0);
     TH1D *hanutau = new TH1D("anutau","Tau anti-nu distribution",nBins,-9,0);
-    
-    TH1D *hgam = new TH1D("gam","Gamma distribution",nBins,-9,0);
     
     #ifdef NDEBUG
     TTree* tree = new TTree("events", "events");
@@ -763,7 +711,7 @@ int main(int argc, char **argv) {
                 pythia.event.list();
                 continue;
             }
-            cout << " Event generation aborted prematurely, owing to error!\n";
+            cerr << " Event generation aborted prematurely, owing to error!\n";
             break;
         }
         hEventStatus->Fill(0); //Fill with return code 0: successful event generation
@@ -775,66 +723,8 @@ int main(int argc, char **argv) {
         
         //List the events
         if (iEvent < nList) {
-            //pythia.info.list();
-            //pythia.event.list();
-        }
-        
-        // FIXME: This decay hack is from the old method and probably can be done
-        // instead using a specific decay handler for leptons.
-        // --JP
-        
-        // Here's where we have to decay the particles that were still left intact
-        // 1. loop over all particles and add at the end of the event copies of those while they are standing still
-        //int nn = pythia.event.size();
-        //for (int i=0; i < nn; ++i)
-        /* //DEPRECATED(?)
-         if (pythia.event[i].isFinal()) {
-         int id = pythia.event[i].id();
-         int idAbs = abs(id);
-         double m = pythia.event[i].mass();
-         
-         //mu, tau, c, b, t, Z0, W+-, H0
-         if (idAbs == 13 || idAbs == 15 || idAbs == 4 || idAbs == 5 || idAbs == 6 || idAbs == 23 || idAbs == 24 || idAbs == 25) {
-         // If it's one of the relevant particles, then add a respective particle to the event, but at rest
-         pythia.event.append(id,1,0,0,0.,0.,0.,m,m);
-         //cout << " New particle: " << ni << " mayDecay = " << pythia.event[ni].mayDecay() << " tau=" << pythia.event[ni].tau() << endl;
-         }
-         }
-         */
-        
-        //cout << "With my additions it's " << pythia.event.size() << " particles" << endl;
-        // Force the new particles to decay
-        //pythia.readString("ParticleDecays:limitTau = off");
-        //pythia.moreDecays();
-        //pythia.readString("ParticleDecays:limitTau = on");
-        //cout << "And after decays it's  " << pythia.event.size() << " particles" << endl;
-        
-        // List first few events.
-        
-        //Get spectra of protons and neutrons
-        for (int i = 0; i < pythia.event.size(); ++i) {
-            if (pythia.event[i].isFinal()) {
-                int id = pythia.event[i].id();
-                double x = log10((pythia.event[i].e()-pythia.event[i].m())/dmMass);
-                
-                //protons
-                if (id == -2212) {
-                    //antip.push_back(pythia.event[i]);
-                    hantip->Fill(x);
-                }
-                else if (id == 2212) {
-                    hproton->Fill(x);
-                }
-                
-                //neutrons
-                else if (id == -2112) {
-                    //antin.push_back(pythia.event[i]);
-                    hantin->Fill(x);
-                }
-                if (id == 2112) {
-                    hneutron->Fill(x);
-                }
-            }
+            pythia.info.list();
+            pythia.event.list();
         }
         
         //decay neutrons
@@ -863,89 +753,13 @@ int main(int argc, char **argv) {
                     p_energy->push_back(pythia.event[i].e());
                     p_id->push_back(pythia.event[i].id());
                     p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-                    //p_particles->push_back(SolarNu::Particle(pythia.event[i].e(), pythia.event[i].id(), pythia.event[pythia.event[i].mother1()].id()));
 #endif
                 }
-
-//                
-//                //electron/positron
-//                if (idAbs == 11) {
-//                    hel->Fill(x);
-//                }
-//                
-//                //nu_el
-//                if (idAbs == 12) {
-//                    hnuel->Fill(x);
-//                    
-//                    #ifdef NDEBUG
-//                    p_energy->push_back(pythia.event[i].e());
-//                    p_id->push_back(pythia.event[i].id());
-//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-//                    //p_particles->push_back(SolarNu::Particle(pythia.event[i].e(), pythia.event[i].id(), pythia.event[pythia.event[i].mother1()].id()));
-//                    #endif
-//                }
-//                
-//                //nu_mu
-//                if (idAbs == 14) {
-//                    hnumu->Fill(x);
-//                    
-//                    #ifdef NDEBUG
-//                    p_energy->push_back(pythia.event[i].e());
-//                    p_id->push_back(pythia.event[i].id());
-//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-//                    #endif
-//                }
-//                
-//                //nu_tau
-//                if (idAbs == 16) {
-//                    hnutau->Fill(x);
-//                    
-//                    #ifdef NDEBUG
-//                    p_energy->push_back(pythia.event[i].e());
-//                    p_id->push_back(pythia.event[i].id());
-//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-//                    #endif
-//                }
-//                //gamma
-//                if (id == 22) {
-//                    hgam->Fill(x);
-//                    
-//                    #ifdef NDEBUG
-//                    p_energy->push_back(pythia.event[i].e());
-//                    p_id->push_back(pythia.event[i].id());
-//                    p_parent->push_back(pythia.event[pythia.event[i].mother1()].id());
-//                    #endif
-//                }
-//                if (id == -2212) {
-//                    hantip->Fill(x);
-//                }
             }
         }
-        
-        /*
-         // Loop over anti-partons and fill histograms
-         for (vector<Particle>::iterator ap = antip.begin(); ap != antip.end(); ap++)
-         for (vector<Particle>::iterator an = antin.begin(); an != antin.end(); an++) {
-         Vec4 d = ap->p() - an->p();
-         Vec4 d2 = ap->p() + an->p();
-         double y = sqrt(pow(d.px(),2)+pow(d.py(),2)+pow(d.pz(),2)-pow(ap->e()-an->e(),2));
-         //double x = log10((d2.e()-ap->m()-an->m())/dmMass);
-         double x = 0;
-         if (y < 0.16 && ap->status() > 0 && an->status() > 0) {
-         hantid->Fill(x,y);
-         ap->statusNeg();
-         an->statusNeg();
-         }
-         }
-         */
-        // clean up
-        //antip.clear();
-        //antin.clear();
-        // End of event loop.
-        //br->Fill();
-        #ifdef NDEBUG
+#ifdef NDEBUG
         tree->Fill();
-        #endif
+#endif
     }
     pythia.statistics(true);
     watch->Stop();
