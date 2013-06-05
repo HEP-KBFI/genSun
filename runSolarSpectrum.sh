@@ -34,3 +34,4 @@ rsync pythia.out.bz2 $OFDIR/pythia_$SLURM_JOB_ID.bz2
 
 ls -al
 rm -Rf $WD
+echo "All done!"

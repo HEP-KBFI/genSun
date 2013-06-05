@@ -349,11 +349,11 @@ Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
     } else {
         //cout << "not rescaling" << endl;
     }
-    double mcalc = p4_1.mCalc();
-    if (mcalc<0 || std::isnan<double>(mcalc)) {
-        cerr << "p4 was nan" << endl;
-        throw 1;
-    }
+    //double mcalc = p4_1.mCalc();
+    //if (mcalc<0 || std::isnan<double>(mcalc)) {
+    //    cerr << "p4 was nan" << endl;
+    //    throw 1;
+    //}
     return p4_1;
 }
 
