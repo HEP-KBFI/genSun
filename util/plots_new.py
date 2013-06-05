@@ -184,13 +184,13 @@ class EnergyDistribution:
         return ostr
 
     def __repr__(self):
-        return "<EnergyDistribution(%s -> %s, %d)>" % (self.decay_channel, self.fstate, int(self.dm_mass))
+        return "<EnergyDistribution(%s -> %s, %d, %d)>" % (self.decay_channel, self.fstate, int(self.dm_mass), self.n_events)
 
     def __str__(self):
         return self.__repr__()
 
 if __name__=="__main__":
-    f = rootpy.io.open("mergedOut/spec_Apr28.root")
+    f = rootpy.io.open("mergedOut/spec_May26.root")
     #f = rootpy.io.open("output.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
