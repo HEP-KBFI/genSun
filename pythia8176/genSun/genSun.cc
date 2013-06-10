@@ -96,11 +96,14 @@ namespace energyLossDistributions {
     double chLeptonExponent(const int idLep, Pythia8::ParticleData* pdt);
 };
 
+// 1 [mm/(c m/s)] = timeConv [s]. 
+const double timeConv = 3.33564095E-12;
+
 //Calculates the average energy loss that a B or C hadron suffers in
 //dense material. Implemented as in http://arxiv.org/pdf/hep-ph/0506298v5.pdf
 //formula 8, 9
 namespace avgEnergyLoss {
-
+    
     //typical interaction time for hadrons in the Sun
     //double tint = 2.5E-11; // Page 12 of Strumia, Cirelli et al
     double tint = 3.5E-11; // (14) in Ritz & Seckel
@@ -127,6 +130,7 @@ namespace avgEnergyLoss {
         return GSL_NAN;
     }
     
+    //Stopping time in seconds
     double t_stop(double E0, int idHad, Pythia8::ParticleData* pdt) {
         int idQ = idQuark(idHad);
         double Z = x(idQ, idHad, pdt)*z(idQ);
@@ -138,8 +142,9 @@ namespace avgEnergyLoss {
         return tstop;
     }
     
+    
     double Ecr(double E0, int idHad, Pythia8::ParticleData* pdt) {
-        double tdec = pdt->tau0(idHad);
+        double tdec = timeConv*pdt->tau0(idHad);
         double tstop = t_stop(E0, idHad, pdt);
         double Ec = (pdt->m0(idHad))*tstop/tdec;
         return Ec;
@@ -179,9 +184,6 @@ namespace energyLossDistributions {
     
     //Charged lepton energy loss rate in the Sun [GeV/s].
     const double chLeptonELossRate = 0.8E10;
-    
-    // 1 [mm/s] = timeConv [s]
-    const double timeConv = 3.33564095E-12;
     
     //Draws the energy loss from the exponential distribution p(x)=\exp(x_0 - x) where
     // x = E_cr / E and x_0 = E_cr / E_0 with E_cr depending on the hadron species
