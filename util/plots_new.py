@@ -190,7 +190,7 @@ class EnergyDistribution:
         return self.__repr__()
 
 if __name__=="__main__":
-    f = rootpy.io.open("mergedOut/spec_May26.root")
+    f = rootpy.io.open("merged_Jun6.root")
     #f = rootpy.io.open("output.root")
 
     pat = re.compile("mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
