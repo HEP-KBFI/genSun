@@ -4,23 +4,27 @@ ROOT.gROOT.SetBatch()
 
 histlist = ['nuel', 'numu', 'nutau', 'anuel', 'anumu', 'anutau']
 physlist = {
-	'energyLoss_hhad_0_lhad_0_chlep_0_noPiMinusAbs': ROOT.kRed,
-	'physics_VAC_QGSP_BERT_P8': ROOT.kBlue
+	#'energyLoss_hhad_0_lhad_0_chlep_0_noPiMinusAbs': ROOT.kRed,
+	'energyLoss_hhad_2_lhad_1_chlep_2': ROOT.kGreen,
+	#'physics_VAC_QGSP_BERT_P8': ROOT.kBlue,
+	'physics_SUN_QGSP_BERT_trkON_P8': ROOT.kBlue+2
 }
 
-tfile = ROOT.TFile('input.root')
+tfile = ROOT.TFile('fullinput.root')
 ofile = ROOT.TFile('output.root', 'RECREATE')
 
 for key_mass in tfile.GetListOfKeys():
 	mass = key_mass.GetTitle().split('_')[1]
 	mass_dir_done = False
+	#print '> mass:', mass
 	
 	for key_particle in key_mass.ReadObj().GetListOfKeys():
 		particle = int(key_particle.GetTitle().split('_')[1])
+		#print '> > particle:', particle
 		
 		avphys = [key_phys.GetTitle() for key_phys in key_particle.ReadObj().GetListOfKeys()]
 		if not set(physlist).issubset(avphys):
-			break
+			continue
 		print 'Particle: %i, Mass: %s'%(particle, mass)
 		
 		if not mass_dir_done:
@@ -74,6 +78,7 @@ for key_mass in tfile.GetListOfKeys():
 			ohstack.GetYaxis().SetTitle("N_{#nu} per event")
 			
 			#odir_technical.WriteObject(ohstack, ohstack.GetName())
+			cvs.SetLogy()
 			cvs.Write()
 			
 			#subcvss.append(cvs)
@@ -93,6 +98,7 @@ for key_mass in tfile.GetListOfKeys():
 		for cvs in subcvss:
 			sumcvs_pads.cd(i)
 			i=i+1
+			ROOT.gPad.SetLogy()
 			cvs.Draw('nostack')
 		sumcvs.Write()
 
