@@ -11,7 +11,7 @@ echo "Run ${SLURM_PROCID} start:" `date`
 echo "ofname:" ${ofname}
 echo "arguments: $@"
 echo "Seed:" $seed "("$BASESEED")"
-time ./../build/solnugeant -q --ofile=${ofname} --seed=$SEED $@
+time ./../install/solnugeant -q --ofile=${ofname} --seed=$SEED $@
 echo "Run ${SLURM_PROCID} stop:" `date`
 
 #echo procid:$SLURM_PROCID localid:$SLURM_LOCALID
