@@ -124,6 +124,8 @@ set(SCRIPTS
 	default.mac
 	vis.mac
 	pythia.card
+	measure.sh
+	test.sh
 )
 
 message(" > Copying scripts...")
