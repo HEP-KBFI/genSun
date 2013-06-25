@@ -1,6 +1,6 @@
 #start -q -n120 13 10 --seed=1371037194
 
-tbreak main.cc:294
+tbreak main.cc:293
 condition 1 i==113
 commands 1
 	tbreak G4HadronStoppingProcess.cc:194
@@ -15,5 +15,5 @@ end
 run -q -n120 13 10 --seed=1371037194
 
 backtrace
-checkpoint
-info checkpoints
+#checkpoint
+#info checkpoints
