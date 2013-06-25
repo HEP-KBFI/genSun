@@ -68,7 +68,7 @@ echo "creator="$creator
 echo "Nodelist:" ${SLURM_NODELIST}
 echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
 
-export BASESEED=$(date +%s)
+export BASESEED=$(($(date +%s) + $RANDOM)
 echo "Base seed:" $BASESEED
 
 mkdir working/$prefix
