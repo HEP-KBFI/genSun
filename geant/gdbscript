@@ -6,7 +6,7 @@ commands 1
 	tbreak G4HadronStoppingProcess.cc:194
 	condition 2 track.fCurrentStepNumber==33
 	commands 2
-		tbreak G4MuMinusCapturePrecompound.cc:116
+		break G4MuMinusCapturePrecompound.cc:100
 		continue
 	end
 	continue
@@ -15,5 +15,7 @@ end
 run -q -n90 13 10 --seed=10330000052
 
 backtrace
+break G4MuMinusCapturePrecompound.cc:245
+
 #checkpoint
 #info checkpoints
