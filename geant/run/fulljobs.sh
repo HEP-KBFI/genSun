@@ -27,7 +27,7 @@ sendjob 21 10     1 5     20000  # ~ 0.08 sec / run (from 1:22 / 1000 runs)
 sendjob 21 100    1 20    5000   # ~ 0.42 sec / run (from 42 sec / 100 runs)
 sendjob 21 1000   1 100   1000   # ~ 2.60 sec / run (from 26 sec / 10 runs)
 
-# Gauge bosons (Z = 23, W = 24)
+# Weak bosons (Z = 23, W = 24)
 sendjob 23 100    1 20    5000   # ~ 0.31 sec / run (from 31 sec / 100 runs)
 sendjob 23 1000   1 100   1000   # ~ 1.51 sec / run (from 2:31 / 100 runs)
 sendjob 24 100    1 20    5000   # ~ 0.27 sec / run (from 27 sec / 100 runs)
