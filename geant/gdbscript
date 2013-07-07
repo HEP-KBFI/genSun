@@ -1,10 +1,10 @@
 #start -q -n120 13 10 --seed=1371037194
 
 tbreak main.cc:293
-condition 1 i==113
+condition 1 i==883
 commands 1
 	tbreak G4HadronStoppingProcess.cc:194
-	condition 2 track.fCurrentStepNumber==29
+	condition 2 track.fCurrentStepNumber==27
 	commands 2
 		tbreak G4MuMinusCapturePrecompound.cc:116
 		continue
@@ -12,7 +12,7 @@ commands 1
 	continue
 end
 
-run -q -n120 13 10 --seed=1371037194
+run -q -n900 13 10 --seed=18917398179
 
 backtrace
 #checkpoint
