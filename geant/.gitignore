@@ -5,3 +5,5 @@ debug/
 *.root
 *.pdf
 *.png
+
+*.pyc
