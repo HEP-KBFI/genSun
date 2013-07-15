@@ -66,6 +66,8 @@ for key_mass in tfile.GetListOfKeys():
 			legend = ROOT.TLegend(0.15, 0.65, 0.50, 0.85)
 			
 			for k,h in hists.iteritems():
+				if evstat[k] == 0:
+					break
 				h.SetLineColor(physlist[k])
 				h.Scale(1/evstat[k])
 				
