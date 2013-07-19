@@ -4,20 +4,20 @@ fin = open('merged.pkl')
 o = pickle.load(fin)
 fin.close()
 
-optruns = [
-	1, 2, 4, 5, 8, 10, 16, 20, 25, 32, 40, 50, 80, 100,
-	125, 160, 200, 250, 400, 500, 625, 800, 1000, 1250,
-	2000, 2500, 3125, 4000, 5000, 6250, 10000, 12500,
-	20000, 25000, 50000, 100000
-]
-
 import argparse_local as argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-l', '--low', type=float, default=0)
 parser.add_argument('-u', '--high', type=float, default=1e5)
 parser.add_argument('-e', '--events', type=float, default=1e5)
+parser.add_argument('-N', '--max-nodes', type=float, default=500)
 args = parser.parse_args()
 print 'Arguments:', args
+
+def factors(n):    
+	return sorted(set(reduce(list.__add__, ([i, int(n)//i] for i in range(1, int(int(n)**0.5) + 1) if int(n) % i == 0))))
+
+optruns = factors(args.events)
+print 'Optimal runs:', optruns
 
 def findOptRuns(T):
 	fs = filter(lambda t: t>T, optruns)
@@ -25,7 +25,7 @@ def findOptRuns(T):
 
 def minimizeOpt(n):
 	j = 1
-	while n > 500:
+	while n > args.max_nodes:
 		if n%5 == 0:
 			n /= 5; j *= 5
 		elif n%2 == 0:
