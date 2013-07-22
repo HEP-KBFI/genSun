@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -J "solnuG4" -x comp-c-[002,004,006,009-012,014,016,020,022,024,025,028,031,032,034,036,037],comp-d-[001,083,098,111,117]
+#SBATCH -J "_solnuG4" -x comp-c-[002,004,006,009-012,014,016,020,022,024,025,028,031,032,034,036,037],comp-d-[001,083,098,111,117]
 
 # Parse arguments
 GETOPT=$(getopt -n "batch" -o r:p:u:c: -l trk: -- "$@")
@@ -44,19 +44,20 @@ while true; do
 done
 eval set -- "$@"; shift
 
-# Check for directories
-if [ ! -d working ]; then mkdir working; fi
-if [ ! -d ready ]; then mkdir ready; fi
-
+# Positional arguments
 particle=$1
 energy=$2
+shift 2
+
+# Check for output directory
+if [ ! -d hists ]; then mkdir hists; fi
 
 prefix=hist_job${SLURM_JOB_ID}_p${particle}_e${energy}${units}_P${physics}${creator_suffix}
 
-echo "Starting batch job" ${SLURM_JOB_ID} "on" ${SLURM_JOB_NUM_NODES} "nodes"
+echo "Starting batch job" ${SLURM_JOB_ID}
 date
-echo "Prefix:" $prefix
 
+echo "prefix="$prefix
 echo "date="`date`
 echo "runs="$runs
 echo "physics="$physics
@@ -65,20 +66,18 @@ echo "energy="$energy
 echo "prefix="$prefix
 echo "creator="$creator
 
-echo "Nodelist:" ${SLURM_NODELIST}
-echo "Tasks per node:" ${SLURM_TASKS_PER_NODE}
+seed=$(($(($(date +%s) + $RANDOM)) + ${SLURM_JOB_ID}))
+echo "seed="$seed
 
-export BASESEED=$(($(date +%s) + $RANDOM))
-echo "Base seed:" $BASESEED
+ofname=hists/${prefix}.root
+echo "ofname="$ofname
 
-mkdir working/$prefix
+echo "Run ${SLURM_PROCID} start:" `date`
+echo "arguments=$@"
 
-echo "Starting Geant4 runs"
-srun -l ./run.sh ${prefix} -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator} ${trk_arg}
-echo "Geant simulations done"
-
-echo "hadding histograms"
-hadd ready/$prefix.root working/$prefix/*
+echo "Starting SolNuGeant (Geant4) simulation.."
+time ./../solnugeant -q --ofile=${ofname} --seed=$seed -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator} ${trk_arg} $@
+echo "Geant simulation finished!"
 
 echo "Batch job" ${SLURM_JOB_ID} "done!"
 date
