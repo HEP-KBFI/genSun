@@ -19,7 +19,7 @@ os.chdir('jobs')
 cmd  = ['sbatch']
 cmd += ['-p{0}'.format(args.partition)]
 cmd += ['../batch.sh']
-cmd += ['-n{0}'.format(args.runs)]
+cmd += ['-r{0}'.format(args.runs)]
 cmd += [str(args.pid), args.mass]
 print 'CMD list:', cmd
 print 'Command:', ' '.join(cmd)
