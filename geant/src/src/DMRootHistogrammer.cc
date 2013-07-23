@@ -4,12 +4,15 @@
 
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4VProcess.hh"
 
 #include "TDirectory.h"
 #include "TFile.h"
 #include "TH1F.h"
 
 #include "DMRootHistogrammer.hh"
+#include "DMEventWriter.hh"
+#include "G4ParentTrackInformationAction.hh"
 
 extern bool p_quiet;
 
@@ -47,9 +50,13 @@ std::map<G4int, pinfo, pdgid_compare> particles = {
 	{2212, pinfo(2212,  "proton", false)}, {-2212, pinfo(-2212,  "aproton", false)},
 };
 
-DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, HistParams energyhist, HistParams statushist)
-: channel(channel_id), dm_mass(dm_mass), physics(physics) {
+DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, bool store_events, HistParams energyhist, HistParams statushist)
+: channel(channel_id), dm_mass(dm_mass), physics(physics), store_events(store_events) {
 	char hname[50], binname[50];
+	
+	if(store_events) {
+		this->evWriter = new DMEventWriter();
+	}
 	
 	// create histograms for all particles
 	for(auto it = particles.begin(); it != particles.end(); ++it) {
@@ -106,6 +113,18 @@ void DMRootHistogrammer::addParticle(const G4Track* tr) {
 	
 	if(!p_quiet){G4cout << " > Adding particle: " << energy/MeV << "[MeV] (" << pdgid << ", " << pname << ") -- logE = " << logE << G4endl;}
 	
+	if(store_events) {
+		ParentTrackInformation * userinfo = (ParentTrackInformation*) tr->GetUserInformation();
+		
+		G4cout << tr->GetCreatorProcess()->GetProcessName()
+		       << " - " << G4VProcess::GetProcessTypeName(tr->GetCreatorProcess()->GetProcessType())
+		       << " (" << tr->GetCreatorProcess()->GetProcessType() << ")"
+		       << ", " << tr->GetCreatorProcess()->GetProcessSubType()
+		       << " - parent id/pdg: " << userinfo->parentTrackID << " / " << userinfo->parentPDGID
+		       << G4endl;
+		evWriter->fill(0, pdgid, energy, userinfo->parentPDGID);
+	}
+	
 	try {
 		pinfo p = particles.at(pdgid);
 		p.h->Fill(logE);
@@ -154,4 +173,8 @@ void DMRootHistogrammer::save(const char* name) {
 	}
 	
 	tfile.Close();
+	
+	if(store_events) {
+		delete this->evWriter;
+	}
 }

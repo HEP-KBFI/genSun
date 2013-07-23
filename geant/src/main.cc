@@ -18,6 +18,7 @@
 #include "NeutrinoHistogram.hh"
 #include "G4UserActionManager.hh"
 #include "DMRootHistogrammer.hh"
+#include "G4ParentTrackInformationAction.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -34,6 +35,7 @@
 #define PC_TRK  1002
 #define PC_TRV  1003
 #define PC_SEED 1004
+#define PC_STEV 1005
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
@@ -48,6 +50,7 @@ const argp_option argp_options[] = {
 	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
 	{"track-verbose", PC_TRV,  0,       0,  "Print out created Geant4 tracks.", 0},
 	{"seed",  PC_SEED,    "seed",       0,  "Set the random seed used. Default: time(0).", 0},
+	{"store-events",  PC_STEV, 0,       0,  "Enable logging of particles to events.root file", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -57,6 +60,7 @@ bool p_quiet = false; // reduce verbosity. Default: false
 bool p_vacuum = false; // use vacuum instead of sun. Default: false
 bool p_trans = false; // use only translation physics. Default: false
 bool p_useG4 = false; // use G4 particle generation of possbile. Default: false
+bool p_stev = false; // Store events to a file. Default: false
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
 bool p_trv = false; // print G4 tracks. Default: false
@@ -142,6 +146,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 			break;
 		case PC_SEED:
 			p_seed = std::atoi(arg);
+			break;
+		case PC_STEV:
+			p_stev = true;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -246,11 +253,17 @@ int main(int argc, char * argv[]) {
 	//if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
 	G4cout << "PHYS_STR=\"" << str_physics << "\"" << G4endl;
 	
-	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
+	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics, p_stev);
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);
 	runManager->SetUserAction((G4UserSteppingAction*)sun_stepping_action);
+	
+	// If we store events too we need this hook to store information about parent
+	// particles to secondary tracks.
+	if(p_stev) {
+		runManager->SetUserAction(new G4ParentTrackInformationAction());
+	}
 	
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel

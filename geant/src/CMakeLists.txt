@@ -63,6 +63,7 @@ set(source_files
 	DMPythiaPGA.cc
 	SunSteppingAction.cc
 	DMRootHistogrammer.cc
+	DMEventWriter.cc
 	G4UserActionManager.cc
 	G4ParentTrackInformationAction.cc
 )
@@ -75,6 +76,7 @@ set(include_files
 	DMPythiaPGA.hh
 	SunSteppingAction.hh
 	DMRootHistogrammer.hh
+	DMEventWriter.hh
 	G4UserActionManager.hh
 	PGAInterface.hh
 	G4ParentTrackInformationAction.hh

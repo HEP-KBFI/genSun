@@ -7,6 +7,8 @@
 class G4Track;
 class TH1F;
 
+class DMEventWriter;
+
 struct HistParams {
 	char title[50];
 	int nbins;
@@ -19,6 +21,7 @@ class DMRootHistogrammer {
 	public:
 		DMRootHistogrammer(
 			G4int channel_id, G4double dm_mass, const char * physics,
+			bool store_events = false,
 			HistParams energyhist = energyhist_default,
 			HistParams statushist = statushist_default
 		);
@@ -36,6 +39,9 @@ class DMRootHistogrammer {
 		G4int channel;
 		G4double dm_mass;
 		const char * physics;
+		
+		bool store_events;
+		DMEventWriter * evWriter;
 };
 
 #endif
