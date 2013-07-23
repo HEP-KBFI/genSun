@@ -64,6 +64,7 @@ set(source_files
 	SunSteppingAction.cc
 	DMRootHistogrammer.cc
 	G4UserActionManager.cc
+	G4ParentTrackInformationAction.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
@@ -76,6 +77,7 @@ set(include_files
 	DMRootHistogrammer.hh
 	G4UserActionManager.hh
 	PGAInterface.hh
+	G4ParentTrackInformationAction.hh
 )
 
 message(" > Sources...")
