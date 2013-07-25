@@ -28,12 +28,14 @@ DMEventWriter::~DMEventWriter() {
 }
 
 void DMEventWriter::fill(int evid, int pid, double pE, int parentid) {
-	std::cout << "DMEventWriter::fill("
-	          << "evid=" << evid
-	          << ", pid=" << pid
-	          << ", pE=" << pE
-	          << ", parentid=" << parentid
-	          << ")" << std::endl;
+	if(!p_quiet) {
+		std::cout << "DMEventWriter::fill("
+		          << "evid=" << evid
+		          << ", pid=" << pid
+		          << ", pE=" << pE
+		          << ", parentid=" << parentid
+		          << ")" << std::endl;
+	}
 	
 	this->f_eventID = evid;
 	this->f_pid = pid;
