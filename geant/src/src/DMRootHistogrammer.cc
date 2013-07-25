@@ -16,6 +16,8 @@
 
 extern bool p_quiet;
 
+static ParentTrackInformation pythia_userinfo_pointer(0, 0);
+
 struct pinfo {
 	const char * name;
 	TH1F * h;
@@ -115,13 +117,24 @@ void DMRootHistogrammer::addParticle(const G4Track* tr) {
 	
 	if(store_events) {
 		ParentTrackInformation * userinfo = (ParentTrackInformation*) tr->GetUserInformation();
-		
-		G4cout << tr->GetCreatorProcess()->GetProcessName()
-		       << " - " << G4VProcess::GetProcessTypeName(tr->GetCreatorProcess()->GetProcessType())
-		       << " (" << tr->GetCreatorProcess()->GetProcessType() << ")"
-		       << ", " << tr->GetCreatorProcess()->GetProcessSubType()
-		       << " - parent id/pdg: " << userinfo->parentTrackID << " / " << userinfo->parentPDGID
-		       << G4endl;
+
+		if(userinfo == NULL) {
+			userinfo = &pythia_userinfo_pointer;
+		}
+
+		if(tr->GetCreatorProcess() == NULL) {
+			if(!p_quiet){G4cout << "Process: PYTHIA8" << G4endl;}
+		} else {
+			if(!p_quiet){
+				G4cout << tr->GetCreatorProcess()->GetProcessName()
+				       << " - " << G4VProcess::GetProcessTypeName(tr->GetCreatorProcess()->GetProcessType())
+				       << " (" << tr->GetCreatorProcess()->GetProcessType() << ")"
+				       << ", " << tr->GetCreatorProcess()->GetProcessSubType()
+				       << " - parent id/pdg: " << userinfo->parentTrackID << " / " << userinfo->parentPDGID
+				       << G4endl;
+			}
+		}
+
 		evWriter->fill(0, pdgid, energy, userinfo->parentPDGID);
 	}
 	
