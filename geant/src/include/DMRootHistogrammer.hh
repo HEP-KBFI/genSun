@@ -21,7 +21,7 @@ class DMRootHistogrammer {
 	public:
 		DMRootHistogrammer(
 			G4int channel_id, G4double dm_mass, const char * physics,
-			bool store_events = false,
+			G4String store_events = "",
 			HistParams energyhist = energyhist_default,
 			HistParams statushist = statushist_default
 		);

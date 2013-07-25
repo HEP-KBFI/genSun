@@ -50,7 +50,7 @@ const argp_option argp_options[] = {
 	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
 	{"track-verbose", PC_TRV,  0,       0,  "Print out created Geant4 tracks.", 0},
 	{"seed",  PC_SEED,    "seed",       0,  "Set the random seed used. Default: time(0).", 0},
-	{"store-events",  PC_STEV, 0,       0,  "Enable logging of particles to events.root file", 0},
+	{"store-events", PC_STEV, "ofile", OPTION_ARG_OPTIONAL, "Enable logging of particles to a file.", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -67,6 +67,7 @@ bool p_trv = false; // print G4 tracks. Default: false
 int p_seed = 0; // seed value, 0==time(0). Default: 0
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
+G4String p_stev_ofile = "events.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
 		case 'n':
@@ -149,6 +150,7 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 			break;
 		case PC_STEV:
 			p_stev = true;
+			if(arg != NULL) p_stev_ofile = arg;
 			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
@@ -253,7 +255,7 @@ int main(int argc, char * argv[]) {
 	//if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
 	G4cout << "PHYS_STR=\"" << str_physics << "\"" << G4endl;
 	
-	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics, p_stev);
+	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics, p_stev?p_stev_ofile:"");
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);

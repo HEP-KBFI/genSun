@@ -52,12 +52,14 @@ std::map<G4int, pinfo, pdgid_compare> particles = {
 	{2212, pinfo(2212,  "proton", false)}, {-2212, pinfo(-2212,  "aproton", false)},
 };
 
-DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, bool store_events, HistParams energyhist, HistParams statushist)
-: channel(channel_id), dm_mass(dm_mass), physics(physics), store_events(store_events) {
+DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, G4String events_ofile, HistParams energyhist, HistParams statushist)
+: channel(channel_id), dm_mass(dm_mass), physics(physics) {
 	char hname[50], binname[50];
 	
+	store_events = events_ofile.size() > 0;
+	
 	if(store_events) {
-		this->evWriter = new DMEventWriter();
+		this->evWriter = new DMEventWriter(events_ofile.c_str());
 	}
 	
 	// create histograms for all particles
