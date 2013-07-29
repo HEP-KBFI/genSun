@@ -488,8 +488,8 @@ public:
 
 //Creates a subdirectory in the directory f with prefix_val
 //Returns a pointer to the created directory
-TDirectory *subDir(TDirectory *f, const char *prefix, const int val)
-{
+template <typename T=const int>
+TDirectory* subDir(TDirectory* f, const char* prefix, T val) {
     stringstream ss;
     ss << prefix << "_" << val;
     TDirectory *out = f->mkdir(ss.str().c_str());
@@ -549,8 +549,7 @@ int main(int argc, char **argv)
     seedRandom();
 
     std::cout << argc << std::endl;
-    if (!(argc == 8 || argc == 9))
-    {
+    if (!(argc == 7 || argc == 8)) {
         cout << "Usage: ./genSun.exe part DMmass output.root params.card bchad lhad chlep (NEv)" << endl;
         return 1;
     }
@@ -565,7 +564,8 @@ int main(int argc, char **argv)
     int hHadronELossInstruction = atoi(argv[5]);
     int lHadronELossInstruction = atoi(argv[6]);
     int chLeptonELossInstruction = atoi(argv[7]);
-
+    
+    const char* cardFile = argv[4];
     if (partId == 23 || partId == 25) apartId = partId; else apartId = -partId;
 
     //must declare on heap (using new...) not stack to avoid crash
@@ -576,8 +576,8 @@ int main(int argc, char **argv)
     // A class to generate the fictitious resonance initial state.
     SigmaProcess *sigma1GenRes = new Sigma1GenRes();
     pythia.setSigmaPtr( sigma1GenRes);
-    pythia.readFile(argv[4]);
-
+    pythia.readFile(cardFile);
+    
     char ch[60];
 
     if (partId != 1)
@@ -602,21 +602,17 @@ int main(int argc, char **argv)
     bool showCS = pythia.flag("Main:showChangedSettings");
     bool showCPD = pythia.flag("Main:showChangedParticleData");
     pythia.readString("ParticleDecays:limitTau = off");
-
-    TFile f(argv[3], "RECREATE");
-
-    bool absorbPiMinus = true;
+    
+    TFile f(argv[3],"RECREATE");
+    
     //Create the subdirectories for the output
     std::stringstream ss;
     ss << "energyLoss" << "_hhad_" << hHadronELossInstruction << "_lhad_" << lHadronELossInstruction << "_chlep_" << chLeptonELossInstruction;
-    if (!absorbPiMinus)
-    {
-        ss << "_noPiMinusAbs";
-    }
-    TDirectory *massDir = subDir(&f, "mass", (int)dmMass);
-    TDirectory *particleDir = subDir(massDir, "particle", (int)partId);
-
-    TDirectory *energyLossDir = particleDir->mkdir(ss.str().c_str());
+    TDirectory* cardDir = subDir<const char*>(&f, "card", cardFile);
+    TDirectory* massDir = subDir(cardDir, "mass", (int)dmMass);
+    TDirectory* particleDir = subDir(massDir, "particle", (int)partId);
+    
+    TDirectory* energyLossDir = particleDir->mkdir(ss.str().c_str());
     energyLossDir->cd();
 
 
@@ -732,12 +728,8 @@ int main(int argc, char **argv)
         }
         mainDecayHandler->addHandler(handleChLepDecays, handledChLeptons);
     }
-    pythia.setDecayPtr((DecayHandler *)mainDecayHandler, mainDecayHandler->getHandledParticles());
-
-    if (absorbPiMinus)
-    {
-        pythia.readString("211:onMode = 2"); //This is the way to switch off decay of anti-211(pi-) but keep the decay of 211(pi+)
-    }
+    pythia.setDecayPtr((DecayHandler*)mainDecayHandler, mainDecayHandler->getHandledParticles());
+  
     pythia.init();
 
     cout << "Generating " << nEvent << " events of DM with mass " << dmMass << " GeV annihilating to " << partId << endl;
@@ -821,10 +813,10 @@ int main(int argc, char **argv)
         }
 
         //decay neutrons
-        pythia.particleData.mayDecay(2112, true);
-        pythia.moreDecays();
-        pythia.particleData.mayDecay(2112, false);
-
+        //pythia.particleData.mayDecay(2112,true);
+        //pythia.moreDecays();
+        //pythia.particleData.mayDecay(2112,false);
+        
         //Get spectra of final stable particles
         for (int i = 0; i < pythia.event.size(); ++i)
         {
