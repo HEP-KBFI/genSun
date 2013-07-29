@@ -9,7 +9,7 @@ INCLUDEDIR=/home/joosep/local-sl6/include
 LIBDIR=/home/joosep/local-sl6/lib
 CC=g++
 ROOTFLAGS=`root-config --cflags --ldflags --libs`
-CFLAGS= -O3 -W -Wall -std=gnu++0x -I$(INCLUDEDIR) $(ROOTFLAGS) -I$(PYTHIA8LOCATION)/$(INCDIR)
+CFLAGS= -O3 -W -Wall -std=gnu++0x -I. -I$(INCLUDEDIR) $(ROOTFLAGS) -I$(PYTHIA8LOCATION)/$(INCDIR)
 LDFLAGS= -O3 -L$(LIBDIR) -L$(PYTHIA8LOCATION)/$(LIBDIRARCH) $(PYTHIA8LOCATION)/$(LIBDIRARCH)/libpythia8.a $(PYTHIA8LOCATION)/$(LIBDIRARCH)/liblhapdfdummy.a -lgsl -lgslcblas
 genSun: genSun.cc
 	$(CC) $(CFLAGS) $@.cc $(LDFLAGS) $(FILELIST) -v -o $@.exe

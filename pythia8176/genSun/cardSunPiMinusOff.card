@@ -2,9 +2,9 @@
 ! Lines not beginning with a letter or digit are comments.
 
 ! 1) Settings used in the main program.
-Main:numberOfEvents = 1000000      ! number of events to generate
+Main:numberOfEvents = 500000      ! number of events to generate
 Main:numberToList = 0              ! number of events to print
-Main:timesToShow = 0              ! show how far along run is
+Main:timesToShow = 10000              ! show how far along run is
 Main:timesAllowErrors = 100      ! allow a few failures before quitting
 Main:showChangedSettings = off      ! print changed flags/modes/parameters
 Main:showChangedParticleData = off  ! print changed particle and decay data
@@ -47,7 +47,10 @@ Random:setSeed = on
 211:mayDecay  = true                 ! pi+-
 321:mayDecay  = true                 ! K+-
 130:mayDecay  = true                 ! K0_L
-!2112:mayDecay = true                 ! n 
+2112:mayDecay = false                 ! n 
 
 ! 5) Set alphaS to LEP measured value
 SigmaProcess:alphaSvalue = 0.116
+
+! Switch off pi- decay
+211:onMode = 2

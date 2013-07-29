@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A768B07916E125D90076ADB3 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A768B07316E125D90076ADB3 /* genSun.cc */; };
+		A76AE536175F569300C67E05 /* genSun.cc in Sources */ = {isa = PBXBuildFile; fileRef = A76AE535175F569300C67E05 /* genSun.cc */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,15 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A72AD9F416A8AC6B00749EF8 /* genSun */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genSun; sourceTree = BUILT_PRODUCTS_DIR; };
-		A768B07116E125D90076ADB3 /* cardSunBatch.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunBatch.card; sourceTree = "<group>"; };
-		A768B07216E125D90076ADB3 /* cardSunTest.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cardSunTest.card; sourceTree = "<group>"; };
-		A768B07316E125D90076ADB3 /* genSun.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = genSun.cc; sourceTree = "<group>"; };
-		A768B07416E125D90076ADB3 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		A768B07516E125D90076ADB3 /* Makefile-ied */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-ied"; sourceTree = "<group>"; };
-		A768B07616E125D90076ADB3 /* Makefile-lxplus */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-lxplus"; sourceTree = "<group>"; };
-		A768B07716E125D90076ADB3 /* Makefile-wn */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Makefile-wn"; sourceTree = "<group>"; };
-		A768B07816E125D90076ADB3 /* runSpectra.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = runSpectra.sh; sourceTree = "<group>"; };
+		A76AE535175F569300C67E05 /* genSun.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = genSun.cc; path = pythia8176/genSun/genSun.cc; sourceTree = "<group>"; };
+		A76AE537175F611300C67E05 /* cardSunTest.card */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = cardSunTest.card; path = pythia8176/genSun/cardSunTest.card; sourceTree = "<group>"; };
+		A76AE538175F642900C67E05 /* genSun */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = genSun; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,33 +42,10 @@
 		A72AD9E116A8AAF900749EF8 = {
 			isa = PBXGroup;
 			children = (
-				A768B07016E125D90076ADB3 /* genSun */,
-				A72AD9F516A8AC6B00749EF8 /* Products */,
+				A76AE537175F611300C67E05 /* cardSunTest.card */,
+				A76AE535175F569300C67E05 /* genSun.cc */,
+				A76AE538175F642900C67E05 /* genSun */,
 			);
-			sourceTree = "<group>";
-		};
-		A72AD9F516A8AC6B00749EF8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				A72AD9F416A8AC6B00749EF8 /* genSun */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		A768B07016E125D90076ADB3 /* genSun */ = {
-			isa = PBXGroup;
-			children = (
-				A768B07116E125D90076ADB3 /* cardSunBatch.card */,
-				A768B07216E125D90076ADB3 /* cardSunTest.card */,
-				A768B07316E125D90076ADB3 /* genSun.cc */,
-				A768B07416E125D90076ADB3 /* Makefile */,
-				A768B07516E125D90076ADB3 /* Makefile-ied */,
-				A768B07616E125D90076ADB3 /* Makefile-lxplus */,
-				A768B07716E125D90076ADB3 /* Makefile-wn */,
-				A768B07816E125D90076ADB3 /* runSpectra.sh */,
-			);
-			name = genSun;
-			path = pythia8175/genSun;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -94,7 +65,7 @@
 			);
 			name = genSun;
 			productName = genSun;
-			productReference = A72AD9F416A8AC6B00749EF8 /* genSun */;
+			productReference = A76AE538175F642900C67E05 /* genSun */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -113,7 +84,7 @@
 				en,
 			);
 			mainGroup = A72AD9E116A8AAF900749EF8;
-			productRefGroup = A72AD9F516A8AC6B00749EF8 /* Products */;
+			productRefGroup = A72AD9E116A8AAF900749EF8;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -127,7 +98,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A768B07916E125D90076ADB3 /* genSun.cc in Sources */,
+				A76AE536175F569300C67E05 /* genSun.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,11 +118,11 @@
 				GENERATE_MASTER_OBJECT_FILE = NO;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Users/joosep/Documents/pythia8170/include,
+					/Users/joosep/Documents/pythia8176/include,
 					/Applications/root/include,
 				);
 				LD_MAP_FILE_PATH = "";
-				LIBRARY_SEARCH_PATHS = /Users/joosep/Documents/pythia8170/lib/archive;
+				LIBRARY_SEARCH_PATHS = /Users/joosep/Documents/pythia8176/lib/archive;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -177,10 +148,10 @@
 				GENERATE_MASTER_OBJECT_FILE = NO;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					/Users/joosep/Documents/pythia8170/include,
+					/Users/joosep/Documents/pythia8176/include,
 					/Applications/root/include,
 				);
-				LIBRARY_SEARCH_PATHS = /Users/joosep/Documents/pythia8170/lib/archive;
+				LIBRARY_SEARCH_PATHS = /Users/joosep/Documents/pythia8176/lib/archive;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -217,7 +188,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = NO;
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -254,12 +225,11 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_MASTER_OBJECT_FILE = YES;
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/root/include/**",
 					"/Users/joosep/Documents/gsl/**",
-					"../include/**",
+					"pythia8176/include/**",
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = YES;
@@ -268,7 +238,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SYSTEM_APPS_DIR)/root/lib\"/**",
 					"/Users/joosep/Documents/gsl/libs/**",
-					"../lib/archive/**",
+					"pythia8176/lib/archive/**",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -278,12 +248,13 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OSACOMPILE_EXECUTE_ONLY = YES;
 				OTHER_CFLAGS = "";
-				OTHER_CPLUSPLUSFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-I/Applications/root/include";
 				OTHER_LDFLAGS = (
 					"-lpthread",
 					"-lm",
 					"-ldl",
 					"-lSystem",
+					"-fPIC",
 					"-dynamic",
 					"-keep_private_externs",
 					"-flat_namespace",
@@ -305,17 +276,19 @@
 					"-lMatrix",
 					"-lPhysics",
 					"-lMathCore",
-					../lib/archive/liblhapdfdummy.a,
-					../lib/archive/libpythia8.a,
+					pythia8176/lib/archive/liblhapdfdummy.a,
+					pythia8176/lib/archive/libpythia8.a,
 					"-lThread",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = macosx;
 				SEPARATE_SYMBOL_EDIT = NO;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = NO;
 			};
 			name = Debug;
@@ -345,7 +318,7 @@
 				DEAD_CODE_STRIPPING = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
@@ -380,12 +353,11 @@
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_PARAMETER = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				GENERATE_MASTER_OBJECT_FILE = YES;
+				GENERATE_MASTER_OBJECT_FILE = NO;
 				GENERATE_PROFILING_CODE = YES;
 				HEADER_SEARCH_PATHS = (
-					"/Applications/root/include/**",
 					"/Users/joosep/Documents/gsl/**",
-					"../include/**",
+					"pythia8176/include/**",
 				);
 				KEEP_PRIVATE_EXTERNS = NO;
 				LD_GENERATE_MAP_FILE = YES;
@@ -393,7 +365,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SYSTEM_APPS_DIR)/root/lib\"/**",
 					"/Users/joosep/Documents/gsl/libs/**",
-					"../lib/archive/**",
+					"pythia8176/lib/archive/**",
 				);
 				LINKER_DISPLAYS_MANGLED_NAMES = NO;
 				LINK_WITH_STANDARD_LIBRARIES = YES;
@@ -403,12 +375,13 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OSACOMPILE_EXECUTE_ONLY = YES;
 				OTHER_CFLAGS = "";
-				OTHER_CPLUSPLUSFLAGS = "";
+				OTHER_CPLUSPLUSFLAGS = "-I/Applications/root/include";
 				OTHER_LDFLAGS = (
 					"-lpthread",
 					"-lm",
 					"-ldl",
 					"-lSystem",
+					"-fPIC",
 					"-dynamic",
 					"-keep_private_externs",
 					"-flat_namespace",
@@ -430,17 +403,19 @@
 					"-lMatrix",
 					"-lPhysics",
 					"-lMathCore",
-					../lib/archive/liblhapdfdummy.a,
-					../lib/archive/libpythia8.a,
+					pythia8176/lib/archive/liblhapdfdummy.a,
+					pythia8176/lib/archive/libpythia8.a,
 					"-lThread",
 				);
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = NO;
 				PRELINK_LIBS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
 				RUN_CLANG_STATIC_ANALYZER = NO;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = NO;
 				SDKROOT = macosx;
 				SEPARATE_SYMBOL_EDIT = NO;
+				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = NO;
 			};
 			name = Release;

@@ -31,9 +31,9 @@ The output must _NOT_ be
 
 This will create a directory named 'genSun'
 
-2. Download pythia and extract it into 'genSun/pythia8170'
+2. Download pythia and extract it into 'genSun/pythia8175'
 3. Compile pythia
-4. Go to the genSun code directory 'genSun/pythia8170/genSun'
+4. Go to the genSun code directory 'genSun/pythia8175/genSun'
 5. compile the code using 'make -f Makefile-ied'
 
 ##Running the code
@@ -41,7 +41,7 @@ Run genSun.exe with the following parameters:
 >$ genSun.exe PARTICLE MASS OUTPUTFILE.root INPUTFILE.card CHARGEDHADRONLOSS LIGHTHADRONLOSS CHARGEDLEPTONLOSS
 
 * PARTICLE is a pdgId of a channel from the input card file to enable
-* MASS is the mass of the resonance
+* MASS is the mass of the resonance (DM mass)
 * OUTPUTFILE.root is the filename of the output to make
 * INPUTFILE.card is the input file you are using, e.g. 'cardSunTest.card'
 * CHARGEDHADRONLOSS, LIGHTHADRONLOSS, CHARGEDLEPTONLOSS is a number form {0, 1, 2} specifying the type of energy loss mechanism to enable for this type of particle.
@@ -50,8 +50,3 @@ Run genSun.exe with the following parameters:
 ##Output
 The output root file contains directories for each mass, loss mechanism and particle with the histograms nu{el, mu, tau} being the primary output.
 In these histograms, the event-by-event distribution of log((E_nu - m_nu)/M_resonance) is plotted.
-The loss mechanism nomenclature contains 1-3 numbers in the directory name, these are the values of CHARGEDHADRONLOSS, LIGHTHADRONLOSS, CHARGEDLEPTONLOSS in
-the same order. If there are less than 3 numbers, you need to prepend 0-s. So, for example, 
-* 1 -> 001 stands for charged hadrons default, light hadrons default, charged leptons average
-* 12 -> 012 stands for charged hadrons default(no loss), light hadrons average, charged leptons probabilistic
-* 100 stands for charged hadrons average, the other particles default
