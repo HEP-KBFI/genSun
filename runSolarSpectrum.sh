@@ -23,7 +23,7 @@ ls
 for i in {1..50}
 do
     echo "Trying to run genSun.exe, try "$i
-    srun ./genSun.exe $PARTID $DMMASS output.root cardSunTest.card $HHADINSTR $LHADINSTR $LEPINSTR | bzip2 -c > pythia.out.bz2
+    srun ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR | bzip2 -c > pythia.out.bz2
     if [ $? -eq 0 ]
     then
         break
