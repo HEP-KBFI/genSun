@@ -9,6 +9,7 @@ HHADINSTR=$3
 LHADINSTR=$4
 LEPINSTR=$5
 OFDIR=$6
+CARD=$7
 
 echo "PARTID="$PARTID
 echo "DMMASS="$DMMASS
@@ -22,8 +23,9 @@ ls
 #LD_LIBRARY_PATH=/home/joosep/local/lib:/home/joosep/local/lib64:$LD_LIBRARY_PATH ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR &> log \
 for i in {1..50}
 do
-    echo "Trying to run genSun.exe, try "$i
-    srun ./genSun.exe $PARTID $DMMASS output.root cardSunBatch.card $HHADINSTR $LHADINSTR $LEPINSTR | bzip2 -c > pythia.out.bz2
+    CMD="./genSun.exe $PARTID $DMMASS output.root $CARD $HHADINSTR $LHADINSTR $LEPINSTR"
+    echo "Calling genSun: $CMD" 
+    srun $CMD | bzip2 -c > pythia.out.bz2
     if [ $? -eq 0 ]
     then
         break

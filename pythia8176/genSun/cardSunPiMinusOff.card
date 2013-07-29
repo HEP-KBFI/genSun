@@ -53,4 +53,4 @@ Random:setSeed = on
 SigmaProcess:alphaSvalue = 0.116
 
 ! Switch off pi- decay
-!211:onMode = 2
+211:onMode = 2
