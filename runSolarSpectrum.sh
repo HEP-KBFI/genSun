@@ -26,11 +26,12 @@ do
     CMD="./genSun.exe $PARTID $DMMASS output.root $CARD $HHADINSTR $LHADINSTR $LEPINSTR"
     echo "Calling genSun: $CMD" 
     srun $CMD | bzip2 -c > pythia.out.bz2
-    if [ $? -eq 0 ]
+    if [ ${PIPESTATUS[0]} -eq 0 ]
     then
         break
     fi
 done
+bzgrep -B4 "Processing speed" pythia.out.bz2
 rsync output.root $OFDIR/output_$SLURM_JOB_ID.root
 rsync pythia.out.bz2 $OFDIR/pythia_$SLURM_JOB_ID.bz2
 
