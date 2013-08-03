@@ -231,7 +231,6 @@ if __name__=="__main__":
                 continue
             cardn = card.split(".")[0]
             eloss = "%d_%d_%d" % (hHadInstr, lHadInstr, chLepInstr)
-            ofd = os.path.join(args.outdir, cardn, eloss)
             try:
                 os.makedirs(ofd)
             except:
@@ -260,47 +259,72 @@ if __name__=="__main__":
                     if partId not in energy_distributions_part.keys():
                         energy_distributions_part[partId] = []
                     energy_distributions_part[partId].append(energy_distributions[name])
-                    
-                    chan_name = decay_channel_names_Mathematica[partId]
-                    fn = "DM%s.nb" % chan_name
-                    ofn = os.path.join(ofd, fn)
-                    ofi = open(ofn, "a")
-                    ofi.write(energy_distributions[name].printArray() + "\n")
-                    ofi.close()
         else:
             continue
 
+    #Add zeros for any missing spectra
+    #FIXME: make this independent of runs
+    cards = [
+        'cardSunPiMinusOn.card',
+        'cardSunPiMinusOff.card',
+        'cardSunPiMinusOffNeutronOn.card'
+    ]
+    masses = [10, 20, 50, 100, 200, 500, 1000]
+    channels = [5, 6, 11, 13, 15, 23, 24]
+    elosses = [
+        (0, 0, 0),
+        (2,1,2),
+        (1,1,1),
+        (0,0,1),
+        (0,1,0),
+        (1,0,0),
+        (0,0,2),
+        (2,0,0),
+    ]
+    hnames = ['nuel', 'numu', 'nutau', 'anuel', 'anumu', 'anutau']
 
-    # timestamp = strftime("%m_%d", gmtime())
-    # dir_no_loss = args.outdir + "/spec_loss_off_%s"%timestamp
-    # dir_with_loss = args.outdir + "/spec_loss_on_%s"%timestamp
-    # dir_with_avg_loss = args.outdir + "/spec_loss_on_avg_%s"%timestamp
-    # os.makedirs(dir_no_loss)
-    # os.makedirs(dir_with_loss)
-    # os.makedirs(dir_with_avg_loss)
+    empty_hist = hists.values()[0].Clone("emtpy")
+    for i in range(1,empty_hist.GetNbinsX()+1):
+        empty_hist.SetBinContent(i, 0)
+        empty_hist.SetBinError(i, 0)
+    for card in cards:
+        for m in masses:
+            for chan in channels:
+                for eloss in elosses:
+                    for hist in hnames:
+                        name = "card_" + card+ "/mass_%d"%m + "/particle_%d" % chan + "/energyLoss_hhad_%d_lhad_%d_chlep_%d" % eloss + "/" + hist
+                        if name not in energy_distributions.keys():
+                            print "Inserting ", name
+                            energy_distributions[name] = EnergyDistribution(
+                                empty_hist,
+                                card=card,
+                                dm_mass=m,
+                                decay_channel=chan,
+                                h_had=eloss[0],
+                                l_had=eloss[1],
+                                ch_lep=eloss[2],
+                                n_events=1,
+                                fstate=hname
+                            )
 
-    # for (part, distrs) in energy_distributions_part.items():
-    #     if part not in channels:
-    #         continue
-    #     chan_name = decay_channel_names_Mathematica[part]
-    #     #chan_name.replace("\\", r'\\\')
+    for edn, ed in energy_distributions.items():
+        chan_name = decay_channel_names_Mathematica[ed.decay_channel]
+        fn = "DM%s.nb" % chan_name
+        ofd = os.path.join(args.outdir, ed.card.split(".")[0], "%d_%d_%d" % (ed.energy_loss.h_had, ed.energy_loss.l_had, ed.energy_loss.ch_lep))
+        print ofd
+        try:
+            os.makedirs(ofd)
+        except:
+            pass
+        if sum(list(ed.hist.y()))<= 0.0:
+            print "No events: ", edn
+        ofn = os.path.join(ofd, fn)
+        ofi = open(ofn, "a")
+        s = ed.printArray()
+        print "Saving ", edn, ofn, len(s), ed.dm_mass
+        ofi.write(s + "\n")
+        ofi.close()
 
-
-    #     ofname_no_loss = dir_no_loss + "/DM%s.nb" % chan_name
-    #     ofname_with_loss = dir_with_loss + "/DM%s.nb" % chan_name
-    #     ofname_with_avg_loss = dir_with_avg_loss + "/DM%s.nb" % chan_name
-    #     ofile_no_loss = open(ofname_no_loss, "w")
-    #     ofile_with_loss = open(ofname_with_loss, "w")
-    #     ofile_with_avg_loss = open(ofname_with_avg_loss, "w")
-    #     for dist in distrs:
-    #         if dist.energy_loss.lossType()==0:
-    #             ofile_no_loss.write(dist.printArray() + "\n")
-    #         elif dist.energy_loss.lossType()==1:
-    #             ofile_with_loss.write(dist.printArray() + "\n")
-    #         elif dist.energy_loss.lossType()==2:
-    #             ofile_with_avg_loss.write(dist.printArray() + "\n")
-    #     ofile_no_loss.close()
-    #     ofile_with_loss.close()
 
 
     def drawHist(h, color, linestyle):
