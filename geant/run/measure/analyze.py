@@ -60,7 +60,7 @@ for (ch,es) in o.items():
 		}
 
 print 'Job count distribution:', totJobs_E
-print 'Total jobs (N, N/5k, N/clust.hours, N/clust.days):', totJobs, totJobs/5e3, (args.job_time/60)*totJobs/5e3, (args.job_time/(60*24))*totJobs/5e3
+print 'Total jobs (N, N/5k, N/clust.hours, N/clust.days):', totJobs, totJobs/5e3, (args.job_time/60.0)*totJobs/5e3, (args.job_time/(60.0*24.0))*totJobs/5e3
 print 'Target job time: {0} min'.format(args.job_time)
 
 fhtml = open('report.html', 'w')
@@ -100,7 +100,7 @@ fscript = open('submitscript.sh', 'w')
 fscript.write('#!/bin/bash\n\n')
 print >>fscript, '# Target events:', str(int(args.events/1e3))+'k'
 print >>fscript, '# Target job time: {0} min'.format(args.job_time)
-print >>fscript, '# Total jobs (N, N/5k, N/clust.days):', totJobs, totJobs/5e3, (args.job_time/(60*24))*totJobs/5e3
+print >>fscript, '# Total jobs (N, N/5k, N/clust.days):', totJobs, totJobs/5e3, (args.job_time/(60.0*24.0))*totJobs/5e3
 print >>fscript, '# Job count distribution:', totJobs_E
 
 for (ch,es) in o.items():
