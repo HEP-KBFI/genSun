@@ -106,5 +106,5 @@ print >>fscript, '# Job count distribution:', totJobs_E
 for (ch,es) in o.items():
 	for E,d in sorted(es.items()):
 		c = d['calc']
-		print >>fscript, './sendjob -n{2} -r{3} {0} {1}'.format(ch, E, c['jobs'], c['rounded_runs_per_30min'])
+		print >>fscript, './sendjob.py -n{2} -r{3} {0} {1}'.format(ch, E, c['jobs'], c['rounded_runs_per_30min'])
 fscript.close()
