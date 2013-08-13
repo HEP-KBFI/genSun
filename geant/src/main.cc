@@ -164,6 +164,10 @@ const argp argp_argp = {
 void go_visual(int argc, char* argv[]);
 PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int seedvalue);
 
+#define PRINTVARINFO(name,val,info) G4cout << "$ " << (name) << " " << (val) << " [" << (info) << "]" << G4endl
+#define PRINTVAR(name,val) G4cout << "$ " << (name) << " " << (val) << G4endl
+#define PRINT(string) G4cout << "$ " << (string) << G4endl
+
 int main(int argc, char * argv[]) {
 	// Parse the arguments
 	int argp_index;
@@ -181,14 +185,13 @@ int main(int argc, char * argv[]) {
 	G4int channel = atoi(argv[argp_index+0]);
 	G4double dm_mass = atof(argv[argp_index+1]) * p_unit;
 	
-	G4cout << "G4-sim: "
-	       <<    "ch:" << channel
-	       << " | runs:" << p_runs
-	       << " | m_dm[GeV]:" << dm_mass/GeV
-	       << " | mat:" << (p_vacuum ? "VAC" : "SUN")
-	       << " | phys:" << (p_trans ? "TRANS" : "QGSP_BERT")
-	       << " | unit[eV]:" << p_unit/eV
-	       << G4endl;
+	G4cout << "--- Geant4 simulation of solar neutrinos ---" << G4endl;
+	PRINTVAR("channel", channel);
+	PRINTVAR("runs", p_runs);
+	PRINTVARINFO("m_dm", dm_mass/GeV, "GeV");
+	PRINTVAR("material", p_vacuum ? "VAC" : "SUN");
+	PRINTVAR("physics", p_trans ? "TRANS" : "QGSP_BERT");
+	PRINTVAR("unit", p_unit/eV);
 	
 	// Decide the random seed
 	int seedvalue = (p_seed==0)? std::time(0) : p_seed;
@@ -297,7 +300,9 @@ int main(int argc, char * argv[]) {
 	// job termination
 	if(!p_quiet){G4cout << "Deconstructing..." << G4endl;}
 	delete runManager;
-	G4cout << "Closing program!" << G4endl;
+
+	PRINT("closing");
+	G4cout << "--- Closing Geant4 simulation! ---" << G4endl;
 	return 0;
 }
 
