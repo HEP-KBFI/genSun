@@ -302,18 +302,6 @@ Vec4 EnergyLossDecay::newP4(const Vec4& p4_0, double E_1, const int id) {
 bool EnergyLossDecay::decay(vector<int>& idProd, vector<double>& mProd,
                             vector<Vec4>& pProd, int iDec, const Event& event) {
     
-    /*
-     //Check for lifetime. FIXME: is this needed in Pythia or does Pythia
-     //do it already before calling the decay method?
-     if (event[iDec].tau() < event[iDec].tau0()) {
-     //pProd.push_back(p4);
-     #ifdef NDEBUG
-     cout << "Lifetime not exceeded: " << event[iDec].tau() << " < " << event[iDec].tau0() << "\n";
-     #endif
-     return true;
-     }
-     */
-    
     const unsigned int absId = abs(idProd[0]);
     
     //Already decayed by external handler, return false to decay with Pythia

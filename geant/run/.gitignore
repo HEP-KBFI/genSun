@@ -1,0 +1,6 @@
+jobs/
+ready/
+working/
+slurm*
+*.root
+/auto_*
