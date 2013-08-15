@@ -34,6 +34,7 @@
 #define PC_TRK  1002
 #define PC_TRV  1003
 #define PC_SEED 1004
+#define PC_RAD  1005
 
 const char* argp_program_version = "SolNuGeant";
 const argp_option argp_options[] = {
@@ -48,6 +49,7 @@ const argp_option argp_options[] = {
 	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
 	{"track-verbose", PC_TRV,  0,       0,  "Print out created Geant4 tracks.", 0},
 	{"seed",  PC_SEED,    "seed",       0,  "Set the random seed used. Default: time(0).", 0},
+	{"radius", PC_RAD,  "radius",       0,  "Radius of the world in meters (default: 1000).", 0},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
@@ -61,6 +63,7 @@ enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime fla
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
 bool p_trv = false; // print G4 tracks. Default: false
 int p_seed = 0; // seed value, 0==time(0). Default: 0
+G4double p_radius = 1000.0; // world radius in meters. Default: 1000 [m]
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -143,6 +146,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case PC_SEED:
 			p_seed = std::atoi(arg);
 			break;
+		case PC_RAD:
+			p_radius = std::atof(arg);
+			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
 			return ARGP_ERR_UNKNOWN;
@@ -203,8 +209,10 @@ int main(int argc, char * argv[]) {
 	runManager->SetVerboseLevel( p_quiet ? 0 : 1 );
 	
 	// detector
+	G4double final_radius = p_vacuum ? p_radius*1e6*m : p_radius*m;
+	PRINTVARINFO("radius", final_radius/m, "m");
 	runManager->SetUserInitialization(new SunDetectorConstruction(
-		p_vacuum ? 1e9*m : 1e3*m,
+		final_radius,
 		p_vacuum
 	));
 	
