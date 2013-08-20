@@ -59,21 +59,25 @@ const argp_option argp_options[] = {
 		" are 'G' for GeV and 'M' for MeV; GeV is the default", 0},
 
 	{0, 0, 0, 0, "Options for tweaking the physics:", 2},
-	{"physics",          'p', "PHYSICS",       0,
-		"specify the physics configuration of Geant4; the possible options"
-		" are 'FULL' (default), 'TRANS', 'VAC' and 'VACTRANS'", 2},
-	{"creator",          'c', "CREATOR",       0,
+	{"physics", 'p', "PHYSICS", 0, "specify the physics list;"
+		" 'TRANS' refers to the custom translation-only physics list;"
+		" otherwise the specified Geant4 reference physics list is used;"
+		" the default list is 'QGSP_BERT'", 2},
+	{"creator", 'c', "CREATOR", 0,
 		"specify how the particles are created; possible values are"
 		" 'PYTHIA8' (default) or 'GEANT4'", 2},
 
-	{"radius",        PC_RAD,  "R",       0,
+	{"radius",        PC_RAD,       "R", 0,
 		"set the radius of the world in meters; the default is 1000 meters;"
 		" in vacuum the value is multiplied by factor of 1 million", 2},
-	{"short-neutron", PC_NDC,  "on/off",       0,
+	{"material",         'm',     "MAT", 0,
+		"specify the material of the world; possible values are 'SUN' (default)"
+		" and 'VAC'", 2},
+	{"short-neutron", PC_NDC,  "on/off", 0,
 		"enable/disable short-lived neutrons", 2},
-	{"track-kill",    PC_TRK,  "on/off",       0,
+	{"track-kill",    PC_TRK,  "on/off", 0,
 		"enable/disable the killing of low energy tracks", 2},
-	{"track-verbose", PC_TRV,         0,       0,
+	{"track-verbose", PC_TRV,         0, 0,
 		"print out the created Geant4 tracks", 2},
 
 	{0, 0, 0, 0, "Other:", -1},
@@ -87,8 +91,8 @@ const argp_option argp_options[] = {
 int  p_runs = 1; // number of runs
 bool p_vis  = false; // go to visual mode (i.e. open the GUI instead)
 bool p_quiet = false; // maximally reduce verbosity if true
-bool p_vacuum = false; // use vacuum instead of sun
-bool p_trans = false; // use only translation physics
+G4String p_phys = "QGSP_BERT"; // physics list
+enum {MAT_SUN, MAT_VAC} p_mat = MAT_SUN; // material of the world
 bool p_useG4 = false; // use G4 particle generation if possbile
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
@@ -97,6 +101,26 @@ int p_seed = 0; // seed value; p_seed==0 => seed=time(0)
 G4double p_radius = 1000.0; // world radius in meters
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
+
+// Functions to get some derived values of parameters (e.g. enum -> string)
+inline const char * p_mat_str() {
+	// return the string representation of `p_mat`
+	switch(p_mat) {
+		case MAT_SUN:
+			return "SUN";
+			break;
+		case MAT_VAC:
+			return "VACUUM";
+			break;
+	}
+	G4cerr << "ERROR (material_string): bad material ID (`" << (int)m << "`)" << G4endl;
+	return "ERROR";
+}
+
+inline bool p_vacuum() {
+	// return true if `p_mat` is a vacuum
+	return p_mat == MAT_VAC;
+}
 
 // Argument parser callback called by argp
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
@@ -114,18 +138,15 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 			p_ofile = arg;
 			break;
 		case 'p':
-			if(strcmp(arg, "VAC") == 0) {
-				p_vacuum = true;
-			} else if(strcmp(arg, "TRANS") == 0) {
-				p_trans = true;
-			} else if(strcmp(arg, "VACTRANS") == 0) {
-				p_vacuum = true;
-				p_trans = true;
-			} else if(strcmp(arg, "FULL") == 0) {
-				p_vacuum = false;
-				p_trans = false;
+			p_phys = arg;
+			break;
+		case 'm':
+			if(strcmp(arg, "SUN") == 0) {
+				p_mat = MAT_SUN;
+			} else if(strcmp(arg, "VAC") == 0) {
+				p_mat = MAT_VAC;
 			} else {
-				G4cout << "Bad physics: " << arg << G4endl;
+				G4cout << "Bad material: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
 			}
 			break;
@@ -232,8 +253,8 @@ int main(int argc, char * argv[]) {
 	PRINTVAR("channel", channel);
 	PRINTVAR("runs", p_runs);
 	PRINTVARINFO("m_dm", dm_mass/GeV, "GeV");
-	PRINTVAR("material", p_vacuum ? "VAC" : "SUN");
-	PRINTVAR("physics", p_trans ? "TRANS" : "QGSP_BERT");
+	PRINTVAR("material", p_mat_str());
+	PRINTVAR("physics", p_phys);
 	PRINTVAR("unit", p_unit/eV);
 	
 	// Decide the random seed
@@ -246,22 +267,22 @@ int main(int argc, char * argv[]) {
 	runManager->SetVerboseLevel( p_quiet ? 0 : 1 );
 	
 	// detector
-	G4double final_radius = p_vacuum ? p_radius*1e6*m : p_radius*m;
+	G4double final_radius = p_vacuum() ? p_radius*1e6*m : p_radius*m;
 	PRINTVARINFO("radius", final_radius/m, "m");
 	runManager->SetUserInitialization(new SunDetectorConstruction(
 		final_radius,
-		p_vacuum
+		p_vacuum()
 	));
 	
-	// create the physics list (using a factory)
-	//G4VModularPhysicsList* physlist;
+	// set the physics list; for translation a custom list is used,
+	// otherwise a Geant4 reference physics list is used
 	G4VUserPhysicsList * physlist;
-	if(!p_trans) {
-		G4PhysListFactory factory;
-		physlist = factory.GetReferencePhysList("QGSP_BERT");
-		physlist->SetVerboseLevel( p_quiet ? 0 : 1 );
-	} else {
+	if(p_phys == "TRANS") {
 		physlist = new DMPhysicsList;
+	} else {
+		G4PhysListFactory factory;
+		physlist = factory.GetReferencePhysList(p_phys);
+		physlist->SetVerboseLevel(p_quiet ? 0 : 1);
 	}
 	runManager->SetUserInitialization(physlist); // physics
 	
@@ -274,7 +295,7 @@ int main(int argc, char * argv[]) {
 	}
 	
 	// stacking action for energy cutoff
-	bool b_track_killing = p_trk==TRK_ON || (p_trk==TRK_UNDEF && !p_vacuum);
+	bool b_track_killing = p_trk==TRK_ON || (p_trk==TRK_UNDEF && !p_vacuum());
 	if(b_track_killing) {
 		G4cout << "Track killing: enabled!" << G4endl;
 		NeutrinoStackingAction* cutoff_stacking_action = new NeutrinoStackingAction(p_trv);
@@ -286,8 +307,8 @@ int main(int argc, char * argv[]) {
 	// create the physics string
 	char str_physics[50];
 	sprintf(str_physics, "%s_%s_trk%s_%s",
-	        p_vacuum ? "VAC" : "SUN",
-	        p_trans ? "TRANS" : "QGSP_BERT",
+	        p_mat_str(),
+	        p_phys.c_str(),
 	        b_track_killing ? "ON" : "OFF",
 	        primaryGeneratorAction->getName()
 	);
@@ -307,7 +328,7 @@ int main(int argc, char * argv[]) {
 	// Set up the neutron. Antineutron is stable by default for some reason...
 	// Also, if necessary, set neutron lifetime to a microsecond (forces decay in vacuum)
 	G4AntiNeutron::AntiNeutron()->SetPDGStable(false);
-	if(p_ndc == NDC_SHORT || (p_ndc == NDC_UNDEF && p_vacuum)) {
+	if(p_ndc == NDC_SHORT || (p_ndc == NDC_UNDEF && p_vacuum())) {
 		G4Neutron::Neutron()->SetPDGLifeTime(1e-6*s);
 		G4AntiNeutron::AntiNeutron()->SetPDGLifeTime(1e-6*s);
 	}

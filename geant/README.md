@@ -45,9 +45,12 @@ The program takes a number of command line arguments.
 	 Options for tweaking the physics:
 	  -c, --creator=CREATOR      specify how the particles are created; possible
 								 values are 'PYTHIA8' (default) or 'GEANT4'
-	  -p, --physics=PHYSICS      specify the physics configuration of Geant4; the
-								 possible options are 'FULL' (default), 'TRANS',
-								 'VAC' and 'VACTRANS'
+	  -m, --material=MAT         specify the material of the world; possible values
+								 are 'SUN' (default) and 'VAC'
+	  -p, --physics=PHYSICS      specify the physics list; 'TRANS' refers to the
+								 custom translation-only physics list; otherwise
+								 the specified Geant4 reference physics list is
+								 used; the default list is 'QGSP_BERT'
 		  --radius=R             set the radius of the world in meters; the default
 								 is 1000 meters; in vacuum the value is multiplied
 								 by factor of 1 million
