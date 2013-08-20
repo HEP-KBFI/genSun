@@ -29,60 +29,89 @@
 // ---------------------------------------------------------------------
 //                    Argument parser settings
 // ---------------------------------------------------------------------
+// The GNU `argp` is used to conveniently parse command line arguments.
+// The documentation: http://www.gnu.org/software/libc/manual/html_node/Argp.html
 #include <argp.h>
+const char* argp_program_version = "solnugeant";
+
+// Codes for options without the short name.
 #define PC_NDC  1001
 #define PC_TRK  1002
 #define PC_TRV  1003
 #define PC_SEED 1004
 #define PC_RAD  1005
 
-const char* argp_program_version = "SolNuGeant";
+// Program's arguments - an array of option specifiers
+// name, short name, arg. name, flags, doc, group
 const argp_option argp_options[] = {
-	{"runs",      'n',    "runs",       0,   "Number of runs.", 0},
-	{"vis",       'v',         0,       0,   "Enable visual mode.", 0},
-	{"quiet",     'q',         0,       0,   "Reduce verbosity as much as possible.", 0},
-	{"ofile",     'o',   "ofile",       0,   "Output root file.", 0},
-	{"physics",   'p', "physics",       0,   "Specify the physics (FULL, TRANS, VAC, VACTRANS). If not specified, FULL is used.", 0},
-	{"creator",   'c', "creator",       0,   "Specify the particle creator (PYTHIA8 or GEANT4). Default: PYTHIA8.", 0},
-	{"unit",      'u',    "unit",       0,   "Specify the energy unit of <DM mass>: {G=GeV (default), M = MeV}", 0},
-	{"short-neutron", PC_NDC, "on/off", 0,  "Enable/disable short-lived neutrons.", 0},
-	{"track-kill",    PC_TRK, "on/off", 0,  "Enable/disable killing of low energy tracks", 0},
-	{"track-verbose", PC_TRV,  0,       0,  "Print out created Geant4 tracks.", 0},
-	{"seed",  PC_SEED,    "seed",       0,  "Set the random seed used. Default: time(0).", 0},
-	{"radius", PC_RAD,  "radius",       0,  "Radius of the world in meters (default: 1000).", 0},
+	{0, 0, 0, 0, "General options:", 0},
+	{"quiet", 'q',       0, 0, "reduce verbosity as much as possible", 0},
+	{"ofile", 'o', "OFILE", 0, "write spectra to OFILE; default is output.root", 0},
+	{"vis",   'v',       0, 0,
+		"open the GUI instead of running the simulation", 0},
+
+	{"seed", PC_SEED, "SEED", 0,
+		"set the seed for the random generators; if this is not"
+		" specified, time(0) is used)", 0},
+	{"runs",     'n',    "N", 0, "run the simulation N times", 0},
+	{"unit",     'u', "UNIT", 0,
+		"explicitly specify the unit of the <DM mass>; supported options"
+		" are 'G' for GeV and 'M' for MeV; GeV is the default", 0},
+
+	{0, 0, 0, 0, "Options for tweaking the physics:", 2},
+	{"physics",          'p', "PHYSICS",       0,
+		"specify the physics configuration of Geant4; the possible options"
+		" are 'FULL' (default), 'TRANS', 'VAC' and 'VACTRANS'", 2},
+	{"creator",          'c', "CREATOR",       0,
+		"specify how the particles are created; possible values are"
+		" 'PYTHIA8' (default) or 'GEANT4'", 2},
+
+	{"radius",        PC_RAD,  "R",       0,
+		"set the radius of the world in meters; the default is 1000 meters;"
+		" in vacuum the value is multiplied by factor of 1 million", 2},
+	{"short-neutron", PC_NDC,  "on/off",       0,
+		"enable/disable short-lived neutrons", 2},
+	{"track-kill",    PC_TRK,  "on/off",       0,
+		"enable/disable the killing of low energy tracks", 2},
+	{"track-verbose", PC_TRV,         0,       0,
+		"print out the created Geant4 tracks", 2},
+
+	{0, 0, 0, 0, "Other:", -1},
 	{0, 0, 0, 0, 0, 0} // terminates the array
 };
 
-int  p_runs = 1; // number of runs. Default: 1
-bool p_vis  = false; // go to visual mode. Default: false
-bool p_quiet = false; // reduce verbosity. Default: false
-bool p_vacuum = false; // use vacuum instead of sun. Default: false
-bool p_trans = false; // use only translation physics. Default: false
-bool p_useG4 = false; // use G4 particle generation of possbile. Default: false
+// Global variables set with command line arguments that configure the
+// simulation. The initial value is the default value. It might then be
+// later modified by the `argp_parser` function, which is called by the
+// argp argument parser.
+int  p_runs = 1; // number of runs
+bool p_vis  = false; // go to visual mode (i.e. open the GUI instead)
+bool p_quiet = false; // maximally reduce verbosity if true
+bool p_vacuum = false; // use vacuum instead of sun
+bool p_trans = false; // use only translation physics
+bool p_useG4 = false; // use G4 particle generation if possbile
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
-bool p_trv = false; // print G4 tracks. Default: false
-int p_seed = 0; // seed value, 0==time(0). Default: 0
-G4double p_radius = 1000.0; // world radius in meters. Default: 1000 [m]
+bool p_trv = false; // if true, print G4 tracks
+int p_seed = 0; // seed value; p_seed==0 => seed=time(0)
+G4double p_radius = 1000.0; // world radius in meters
 G4double p_unit = GeV;
 G4String p_ofile = "output.root";
+
+// Argument parser callback called by argp
 error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	switch(key) {
 		case 'n':
 			p_runs = std::atoi(arg);
-			//G4cout << "Setting number of runs to " << p_runs << G4endl;
 			break;
 		case 'v':
 			p_vis = true;
-			//G4cout << "Enabling visual mode!" << G4endl;
 			break;
 		case 'q':
 			p_quiet = true;
-			//G4cout << "Silence! I kill you!" << G4endl;
 			break;
 		case 'o':
 			p_ofile = arg;
-			//G4cout << "Setting ofile to " << p_ofile << G4endl;
 			break;
 		case 'p':
 			if(strcmp(arg, "VAC") == 0) {
@@ -156,11 +185,17 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 	return 0;
 }
 
+// argp configuration structure passed to the `argp_parse` function
 const argp argp_argp = {
 	argp_options,
 	&argp_parser,
-	"<channel id> <DM mass>",
-	"DM annihilation simulation",
+	"<CHANNEL> <MASS>",
+	"Simulate the annihilation of a dark matter particles in the Sun's core."
+	"\n\n"
+	"It is assumed that the DM has a mass MASS and decays solely into"
+	" particles specified by CHANNEL (which has to be the PDG ID of one"
+	" of the particles in the created particle-antiparticle pair)."
+	" The spectra of the created neutrinos will be stored to a ROOT file.",
 	0, 0, 0
 };
 
@@ -175,10 +210,11 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 #define PRINT(string) G4cout << "$ " << (string) << G4endl
 
 int main(int argc, char * argv[]) {
-	// Parse the arguments
+	// parse the arguments
 	int argp_index;
 	argp_parse(&argp_argp, argc, argv, 0, &argp_index, 0);
 	
+	// the two positional arguments have to be handled manually
 	if(argp_index+2 != argc) {
 		G4cerr << "Too many or too few arguments!" << G4endl;
 		G4cout << " > argp_index = " << argp_index << G4endl;
@@ -191,6 +227,7 @@ int main(int argc, char * argv[]) {
 	G4int channel = atoi(argv[argp_index+0]);
 	G4double dm_mass = atof(argv[argp_index+1]) * p_unit;
 	
+	// start of the simulation
 	G4cout << "--- Geant4 simulation of solar neutrinos ---" << G4endl;
 	PRINTVAR("channel", channel);
 	PRINTVAR("runs", p_runs);
