@@ -71,8 +71,8 @@ const argp_option argp_options[] = {
 		"set the radius of the world in meters; the default is 1000 meters;"
 		" in vacuum the value is multiplied by factor of 1 million", 2},
 	{"material",         'm',     "MAT", 0,
-		"specify the material of the world; possible values are 'SUN' (default)"
-		" and 'VAC'", 2},
+		"specify the material of the world; possible values are 'SUN'"
+		" (default), 'SUNFULL' and 'VAC'", 2},
 	{"short-neutron", PC_NDC,  "on/off", 0,
 		"enable/disable short-lived neutrons", 2},
 	{"track-kill",    PC_TRK,  "on/off", 0,
@@ -92,7 +92,7 @@ int  p_runs = 1; // number of runs
 bool p_vis  = false; // go to visual mode (i.e. open the GUI instead)
 bool p_quiet = false; // maximally reduce verbosity if true
 G4String p_phys = "QGSP_BERT"; // physics list
-enum {MAT_SUN, MAT_VAC} p_mat = MAT_SUN; // material of the world
+enum {MAT_VAC, MAT_SUN, MAT_SUNFULL} p_mat = MAT_SUN; // material of the world
 bool p_useG4 = false; // use G4 particle generation if possbile
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
@@ -112,6 +112,9 @@ inline const char * p_mat_str() {
 		case MAT_VAC:
 			return "VACUUM";
 			break;
+		case MAT_SUNFULL:
+			return "SUNFULL";
+			break;
 	}
 	G4cerr << "ERROR (material_string): bad material ID (`" << (int)m << "`)" << G4endl;
 	return "ERROR";
@@ -120,6 +123,23 @@ inline const char * p_mat_str() {
 inline bool p_vacuum() {
 	// return true if `p_mat` is a vacuum
 	return p_mat == MAT_VAC;
+}
+
+inline unsigned int p_mat_fractions() {
+	// return the number of fraction corresponding to `p_mat`
+	switch(p_mat) {
+		case MAT_VAC:
+			return 0;
+			break;
+		case MAT_SUN:
+			return 2;
+			break;
+		case MAT_SUNFULL:
+			return 10;
+			break;
+	}
+	G4cerr << "ERROR (material_string): bad material ID (`" << (int)m << "`)" << G4endl;
+	return 0;
 }
 
 // Argument parser callback called by argp
@@ -145,6 +165,8 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				p_mat = MAT_SUN;
 			} else if(strcmp(arg, "VAC") == 0) {
 				p_mat = MAT_VAC;
+			} else if(strcmp(arg, "SUNFULL") == 0) {
+				p_mat = MAT_SUNFULL;
 			} else {
 				G4cout << "Bad material: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
@@ -271,7 +293,7 @@ int main(int argc, char * argv[]) {
 	PRINTVARINFO("radius", final_radius/m, "m");
 	runManager->SetUserInitialization(new SunDetectorConstruction(
 		final_radius,
-		p_vacuum()
+		p_mat_fractions()
 	));
 	
 	// set the physics list; for translation a custom list is used,

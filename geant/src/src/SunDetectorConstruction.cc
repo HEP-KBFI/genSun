@@ -28,13 +28,13 @@ ElementFraction sun_fractions[] = {
 	{"G4_Mg", 0.05}
 };
 
-SunDetectorConstruction::SunDetectorConstruction(G4double radius, bool vacuum)
-	: G4VUserDetectorConstruction(),fRadius(radius),useVacuum(vacuum) {}
+SunDetectorConstruction::SunDetectorConstruction(G4double radius, unsigned int fractions)
+	: G4VUserDetectorConstruction(),fRadius(radius),fractions(fractions) {}
 
 SunDetectorConstruction::~SunDetectorConstruction() {}
 
 G4VPhysicalVolume* SunDetectorConstruction::Construct() {
-	G4Material* material = useVacuum ? this->getVacuumMaterial() : this->getSunMaterial();
+	G4Material* material = fractions==0 ? getVacuumMaterial() : getSunMaterial(fractions);
 	if(!p_quiet) {
 		G4cout << "==================  Material  ==================" << G4endl;
 		G4cout << (*material) << G4endl;

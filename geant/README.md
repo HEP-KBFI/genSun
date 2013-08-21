@@ -46,7 +46,7 @@ The program takes a number of command line arguments.
 	  -c, --creator=CREATOR      specify how the particles are created; possible
 								 values are 'PYTHIA8' (default) or 'GEANT4'
 	  -m, --material=MAT         specify the material of the world; possible values
-								 are 'SUN' (default) and 'VAC'
+								 are 'SUN' (default), 'SUNFULL' and 'VAC'
 	  -p, --physics=PHYSICS      specify the physics list; 'TRANS' refers to the
 								 custom translation-only physics list; otherwise
 								 the specified Geant4 reference physics list is
@@ -67,13 +67,14 @@ The program takes a number of command line arguments.
 	for any corresponding short options.
 
 The option `-p` or `--physics` specifies the exact physics configuration
-for the simulation. The possible values for `PHYSICS` and their meanings
-are the following:
+for the simulation. The values for `PHYSICS` can be either `TRANS`, which
+refers to the custom translation-only physics list, or a name of a
+[Geant4 reference physics list](http://geant4.cern.ch/support/proc_mod_catalog/physics_lists/referencePL.shtml).
+The default list is `QGSP_BERT`.
 
-* `FULL`     - do the full simulation, which is the default"
-* `TRANS`    - simulate only the translation of particles"
-* `VAC`      - do the simulation in vacuum"
-* `VACTRANS` - simulate only translation in vacuum"
+The option `-m` or `--material` specifies the exact material of the Sun.
+The possible values for `MAT` and their meanings are given in the
+[MATERIALS](/doc/MATERIALS.md) documentation file.
 
 The option `-c` or `--creator` specifies the method which creates the
 initial particles for the Geant4 simulation. The possible values for

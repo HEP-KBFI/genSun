@@ -10,7 +10,8 @@ class G4Material;
 
 class SunDetectorConstruction : public G4VUserDetectorConstruction {
 	public:
-		SunDetectorConstruction(G4double radius = 1*m, bool vacuum=false);
+		// fractions == 0 implies vacuum
+		SunDetectorConstruction(G4double radius = 1*m, unsigned int fractions=2);
 		~SunDetectorConstruction();
 
 		// methods from base class 
@@ -19,7 +20,7 @@ class SunDetectorConstruction : public G4VUserDetectorConstruction {
 	private:
 		G4double fRadius;
 		G4LogicalVolume* fWorldVolume;
-		bool useVacuum;
+		unsigned int fractions;
 
 		static G4Material * getSunMaterial(unsigned int Nfractions=2);
 		static G4Material * getVacuumMaterial();
