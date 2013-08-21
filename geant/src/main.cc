@@ -304,6 +304,10 @@ int main(int argc, char * argv[]) {
 	} else {
 		G4PhysListFactory factory;
 		physlist = factory.GetReferencePhysList(p_phys);
+		if(physlist == 0) {
+			G4cerr << "Bad physics list `" << p_phys << "`!" << G4endl;
+			return 1;
+		}
 		physlist->SetVerboseLevel(p_quiet ? 0 : 1);
 	}
 	runManager->SetUserInitialization(physlist); // physics
