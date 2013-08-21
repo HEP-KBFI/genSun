@@ -21,8 +21,8 @@ class SunDetectorConstruction : public G4VUserDetectorConstruction {
 		G4LogicalVolume* fWorldVolume;
 		bool useVacuum;
 
-		G4Material * getSunMaterial();
-		G4Material * getVacuumMaterial();
+		static G4Material * getSunMaterial(unsigned int Nfractions=2);
+		static G4Material * getVacuumMaterial();
 };
 
 struct ElementFraction {

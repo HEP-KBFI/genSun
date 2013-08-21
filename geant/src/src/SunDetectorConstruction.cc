@@ -17,7 +17,15 @@ G4double sun_pressure    = 1e9*atmosphere;
 G4double sun_temperature = 15e6*kelvin;
 ElementFraction sun_fractions[] = {
 	{"G4_H", 73.46},
-	{"G4_He", 24.85}
+	{"G4_He", 24.85},
+	{"G4_O", 0.77},
+	{"G4_C", 0.29},
+	{"G4_Fe", 0.16},
+	{"G4_Ne", 0.12},
+	{"G4_S", 0.10},
+	{"G4_N", 0.09},
+	{"G4_Si", 0.07},
+	{"G4_Mg", 0.05}
 };
 
 SunDetectorConstruction::SunDetectorConstruction(G4double radius, bool vacuum)
@@ -27,6 +35,10 @@ SunDetectorConstruction::~SunDetectorConstruction() {}
 
 G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 	G4Material* material = useVacuum ? this->getVacuumMaterial() : this->getSunMaterial();
+	if(!p_quiet) {
+		G4cout << "==================  Material  ==================" << G4endl;
+		G4cout << (*material) << G4endl;
+	}
 
 	// World
 	G4CSGSolid* sWorld = new G4Orb("World", fRadius);
@@ -47,21 +59,21 @@ G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 	return pWorld; // always return the root volume
 }
 
-G4Material * SunDetectorConstruction::getSunMaterial() {
+G4Material * SunDetectorConstruction::getSunMaterial(unsigned int Nfractions) {
 	// Define materials via NIST manager
 	G4NistManager* nm = G4NistManager::Instance();
 	//nm->SetVerbose(1);
 	
 	// Calculate the total fraction. Used for normalization.
-	size_t Nfractions = sizeof(sun_fractions)/sizeof(sun_fractions[0]);
+	//size_t Nfractions = sizeof(sun_fractions)/sizeof(sun_fractions[0]);
 	double totalfraction = 0.0;
-	for(size_t i=0; i < Nfractions; i++) {
+	for(unsigned int i=0; i < Nfractions; i++) {
 		totalfraction += sun_fractions[i].fraction;
 	}
 	
 	G4Material* solarmaterial = new G4Material(
 		"Sun", sun_density, // name, density
-		2, kStateGas, // ncomponents, state
+		Nfractions, kStateGas, // ncomponents, state
 		sun_temperature, sun_pressure // temperature, pressure
 	);
 	for(size_t i=0; i < Nfractions; i++) {
@@ -71,11 +83,7 @@ G4Material * SunDetectorConstruction::getSunMaterial() {
 		);
 	}
 	
-	if(!p_quiet) {
-		G4cout << "==================  Solar material  ==================" << G4endl;
-		G4cout << "Total fraction: " << totalfraction << G4endl;
-		G4cout << *solarmaterial << G4endl;
-	}
+	if(!p_quiet) {G4cout << "Sun material - total fraction: " << totalfraction << G4endl;}
 	
 	return solarmaterial;
 }
