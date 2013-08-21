@@ -200,13 +200,15 @@ if __name__=="__main__":
 
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--infile", help="the input root file", type=str, required=True)
-    parser.add_argument("--outdir", help="the output directory", type=str, required=True)
+    parser.add_argument("infile", help="the input root file", type=str)
+    parser.add_argument("outdir", help="the output directory", type=str)
     args = parser.parse_args()
 
     f = rootpy.io.File(args.infile)
 
     pat = re.compile("card_(.*)/mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
+    patNoCard = re.compile("()mass_([0-9]*)/particle_([0-9]*)/energyLoss_hhad_([0-9])_lhad_([0-9])_chlep_([0-9])")
+    
     interesting_hists = ["nuel", "numu", "nutau", "anuel", "anumu", "anutau"]#{"nu_electron": "nuel", "nu_muon": "numu", "nu_tau": "nutau", "gamma": "gam", "proton": "proton", "neutron": "neutron", "ele":"el"}
     hists = dict()
     energy_distributions = dict()
@@ -219,8 +221,13 @@ if __name__=="__main__":
 
     for root, dirs, items in f.walk():
         m = pat.match(root)
-        if m is not None:
-            card = m.group(1)
+        m1 = patNoCard.match(root)
+        card = m.group(1) if m is not None else "NONE"
+        
+        if not m:
+            m = m1
+
+        if m is not None or m1 is not None:
             mass = int(m.group(2))
             partId = int(m.group(3))
             hHadInstr = int(m.group(4))
@@ -265,21 +272,31 @@ if __name__=="__main__":
     #Add zeros for any missing spectra
     #FIXME: make this independent of runs
     cards = [
-        'cardSunPiMinusOn.card',
-        'cardSunPiMinusOff.card',
-        'cardSunPiMinusOffNeutronOn.card'
+        'NONE'
+        #'cardSunPiMinusOn.card',
+        #'cardSunPiMinusOff.card',
+        #'cardSunPiMinusOffNeutronOn.card'
     ]
-    masses = [10, 20, 50, 100, 200, 500, 1000]
-    channels = [5, 6, 11, 13, 15, 23, 24]
+    masses = [
+        5, 6, 8, 10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140,
+        150, 160, 180, 200, 220, 240, 260, 280, 300, 330, 360, 400, 450, 500, 550, 600, 650,
+        700, 750, 800, 900, 1000, 1100, 1200, 1300, 1500, 1700, 2000, 2500, 3000, 4000, 5000,
+        6000, 7000, 8000, 9000, 10000, 12000, 15000, 20000, 30000, 50000, 100000,
+    ]
+    channels = [
+        1, 4, 5, 6,
+        11, 12, 13, 14, 15,
+        21, 22, 23, 24, 25,
+    ]
     elosses = [
-        (0, 0, 0),
-        (2,1,2),
-        (1,1,1),
-        (0,0,1),
-        (0,1,0),
-        (1,0,0),
-        (0,0,2),
-        (2,0,0),
+        #(0, 0, 0),
+         (2,1,2),
+        # (1,1,1),
+        # (0,0,1),
+        # (0,1,0),
+        # (1,0,0),
+        # (0,0,2),
+        # (2,0,0),
     ]
     hnames = ['nuel', 'numu', 'nutau', 'anuel', 'anumu', 'anutau']
 
@@ -317,7 +334,7 @@ if __name__=="__main__":
         except:
             pass
         if sum(list(ed.hist.y()))<= 0.0:
-            print "No events: ", edn
+            print "!!!No events: ", edn
         ofn = os.path.join(ofd, fn)
         ofi = open(ofn, "a")
         s = ed.printArray()
