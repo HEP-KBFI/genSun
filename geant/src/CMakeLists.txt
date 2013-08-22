@@ -115,6 +115,9 @@ target_link_libraries(test_root ${LIBRARIES})
 add_executable(test_histogrammer test/histogrammer.cc ${sources} ${headers})
 target_link_libraries(test_histogrammer ${LIBRARIES})
 
+add_executable(test_pythiaps test/pythiaps.cc ${sources} ${headers})
+target_link_libraries(test_pythiaps ${LIBRARIES})
+
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build B1. This is so that we can run the executable directly because it

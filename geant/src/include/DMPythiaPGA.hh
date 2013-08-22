@@ -28,6 +28,8 @@ class Pythia8Interface {
 		
 		PhysicalParticleList generate();
 		void statistics();
+		
+		Pythia8::Pythia * getPythia() {return this->pythia;}
 	
 	private:
 		Pythia8::Pythia* pythia;
