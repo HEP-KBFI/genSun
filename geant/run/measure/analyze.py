@@ -25,6 +25,7 @@ def findOptRuns(T):
 	return fs[0] if len(fs)>0 else optruns[-1]
 
 # filter bad masses
+o[5]  = dict(filter(lambda (k,v): k >    5.0,  o[5].items()))
 o[6]  = dict(filter(lambda (k,v): k >= 175.0,  o[6].items()))
 o[23] = dict(filter(lambda (k,v): k >=  92.0, o[23].items()))
 o[24] = dict(filter(lambda (k,v): k >=  81.0, o[24].items()))
