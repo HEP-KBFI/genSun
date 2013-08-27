@@ -180,7 +180,7 @@ class EnergyDistribution:
 
     def printArray(self):
         decay_channel_str = decay_channel_names_Mathematica[int(self.decay_channel)]
-        ostr = 'lxbins[\"{0}\"->\"{1}\",{2},Pythia]={{'.format(decay_channel_str, fstate_names_Mathematica[self.fstate], int(self.dm_mass))
+        ostr = 'lxbins[\"{0}\"->\"{1}\",{2},Geant]={{'.format(decay_channel_str, fstate_names_Mathematica[self.fstate], int(self.dm_mass))
         n_bins = self.hist.GetNbinsX()
         lxtab = numpy.linspace(-9, 0, 300)
         tot = sum([0.03*(10**lxtab[i - 1])*self.hist.GetBinContent(i) for i in range (1,301)])
