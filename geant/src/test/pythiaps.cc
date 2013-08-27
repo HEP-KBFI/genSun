@@ -32,21 +32,39 @@ int main(int argc, char* argv[]) {
 	std::ofstream fout_maydecay("maydecay.txt");
 	//std::ostream& osmd = std::cout;
 	std::ostream& osmd = fout_maydecay;
-	osmd << "  PDGID           name  canDecay  mayDecay" << std::endl;
+	osmd << "  PDGID           name  canDecay  mayDecay  colType";
+	osmd << " lepton  quark  gluon diquark parton hadron  meson baryon";
+	osmd << std::endl;
 	for(int id=1; id != 0; id=pdata.nextId(id)) {
 		pcount++;
-		if(pdata.mayDecay(id) && pdata.canDecay(id)) continue;
+		bool decays = pdata.mayDecay(id) && pdata.canDecay(id);
+		bool isMeaningful = pdata.isLepton(id) || pdata.isHadron(id);
+		if(!isMeaningful || decays) continue;
 		mdcount++;
 
-		osmd << std::setw(7) << id;
+		osmd << std::setw(7)  << id;
 		osmd << std::setw(15) << pdata.name(id).c_str();
 		osmd << std::setw(10) << (pdata.canDecay(id)?"Yes":"No");
 		osmd << std::setw(10) << (pdata.mayDecay(id)?"Yes":"No");
+
+		osmd << std::setw(9) << pdata.colType(id);
+
+		osmd << std::setw(7)  << (pdata.isLepton(id)?"Yes":"No");
+		osmd << std::setw(7)  << (pdata.isQuark(id)?"Yes":"No");
+		osmd << std::setw(7)  << (pdata.isGluon(id)?"Yes":"No");
+		osmd << std::setw(8)  << (pdata.isDiquark(id)?"Yes":"No");
+		osmd << std::setw(7)  << (pdata.isParton(id)?"Yes":"No");
+		osmd << std::setw(7)  << (pdata.isHadron(id)?"Yes":"No");
+		osmd << std::setw(7)  << (pdata.isMeson(id)?"Yes":"No");
+		osmd << std::setw(7)  << (pdata.isBaryon(id)?"Yes":"No");
+
 		osmd << std::endl;
 	}
 	fout_maydecay.close();
 	std::cout << "Particles: " << pcount << std::endl;
 	std::cout << "mayDecays: " << mdcount << std::endl;
+
+	//pdata.list(90);
 
 	return 0;
 }
