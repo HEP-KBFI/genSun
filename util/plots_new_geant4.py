@@ -22,7 +22,7 @@ lepNames = {"el": "Electron", "mu": "Muon", "tau": "Tau"}
 lepPretty={"el":"#nu_{e}", "mu":"#nu_{#mu}", "tau":"#nu_{#tau}"}
 flavour_names = {"nuel": r"$ \nu_e $", "numu": r"$ \nu_\mu $", "nutau": r"$ \nu_\tau $"}
 
-decay_channel_names_Mathematica = {
+decay_channel_names_files = {
     1: "q",
     2: "q",
     3: "q",
@@ -49,6 +49,14 @@ decay_channel_names_Mathematica = {
     24: "W",
     25: "h"
 }
+
+decay_channel_names_Mathematica = dict(decay_channel_names_files)
+decay_channel_names_Mathematica[13] = "\\[Mu]"
+decay_channel_names_Mathematica[15] = "\\[Tau]"
+decay_channel_names_Mathematica[12] = "\\[Nu]e"
+decay_channel_names_Mathematica[14] = "\\[Nu]\\[Mu]"
+decay_channel_names_Mathematica[16] = "\\[Nu]\\[Tau]"
+decay_channel_names_Mathematica[22] = "\\[Gamma]"
 
 fstate_names_Mathematica = {
     #"deuterium": "d",
@@ -266,7 +274,7 @@ if __name__=="__main__":
                     energy_distributions_part[partId].append(energy_distributions[name])
                     
                     chan_name = decay_channel_names_Mathematica[partId]
-                    fn = "DM%s.nb" % chan_name
+                    fn = "DM%s.nb" % decay_channel_names_files[partId]
                     ofn = os.path.join(ofd, fn)
                     ofi = open(ofn, "a")
                     ofi.write(energy_distributions[name].printArray() + "\n")
