@@ -9,6 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('pid', type=int)
 parser.add_argument('mass', type=str)
 parser.add_argument('-n', '--jobs', type=int, default=1)
+parser.add_argument('-m', '--material', type=str, default='SUN')
 parser.add_argument('-r', '--runs', type=int, default=1)
 parser.add_argument('-p', '--partition', type=str, default='main')
 parser.add_argument('--dry', action='store_const', const=True, default=False)
@@ -25,6 +26,7 @@ sbatch = 'sbatch'
 args_slurm = ['-p{0}'.format(args.partition)]
 script = '../batch.sh'
 args_script  = ['-r{0}'.format(args.runs)]
+args_script += ['-m{0}'.format(args.material)]
 args_script += [str(args.pid), args.mass]
 
 if args.sbatch:

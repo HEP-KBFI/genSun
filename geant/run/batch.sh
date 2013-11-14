@@ -2,9 +2,10 @@
 #SBATCH -J "solnuG4" -x comp-c-[002,004,006,009-012,014,016,020,022,024,025,028,031,032,034,036,037],comp-d-[001,083,098,111,117]
 
 # Parse arguments
-GETOPT=$(getopt -n "batch" -o r:p:u:c: -l trk: -- "$@")
+GETOPT=$(getopt -n "batch" -o r:p:u:c:m: -l trk: -- "$@")
 runs=1 # default number of runs
-physics="FULL" # default physics
+physics="QGSP_BERT" # default physics
+material="SUN"
 units="G" # default GeV units
 creator="PYTHIA8"
 creator_suffix=""
@@ -18,6 +19,10 @@ while true; do
 		;;
 		-p)
 			physics=$2
+			shift 2; continue
+		;;
+		-m)
+			material=$2
 			shift 2; continue
 		;;
 		-u)
@@ -65,6 +70,7 @@ echo "particle="$particle
 echo "energy="$energy
 echo "prefix="$prefix
 echo "creator="$creator
+echo "material="$material
 
 seed=$(($(($(date +%s) + $RANDOM)) + ${SLURM_JOB_ID}))
 echo "seed="$seed
@@ -76,7 +82,7 @@ echo "Run ${SLURM_PROCID} start:" `date`
 echo "arguments=$@"
 
 echo "Starting SolNuGeant (Geant4) simulation.."
-time ./../solnugeant -q --ofile=${ofname} --seed=$seed -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator} ${trk_arg} $@
+time ./../solnugeant -q --ofile=${ofname} --seed=$seed -n${runs} ${particle} ${energy} -u${units} -p${physics} -c${creator} -m${material}  ${trk_arg} $@
 echo "Geant simulation finished!"
 
 echo "Batch job" ${SLURM_JOB_ID} "done!"
