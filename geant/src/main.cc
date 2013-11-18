@@ -435,6 +435,14 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 		case 2112: case 2212:
 			if(!p_quiet){G4cout << "Particle: neutron/proton" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
 		
+		// Mesons metastable in Geant4
+		case 321: case -321:
+			if(!p_quiet){G4cout << "Particle: K +/- meson" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+		case 211: case -211:
+			if(!p_quiet){G4cout << "Particle: pi +/- meson" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+		case 130:
+			if(!p_quiet){G4cout << "Particle: K_0L meson" << G4endl;} mode = m_2p; pythia_possible=false; break;
+
 		default:
 			G4cout << "Bad channel: " << channel << G4endl;
 			break;
