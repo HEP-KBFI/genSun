@@ -57,7 +57,7 @@ link_directories(${ROOT_LIBRARY_DIR})
 set(source_files
 	SunDetectorConstruction.cc
 	DMPhysicsList.cc
-	DMPrimaryGeneratorAction.cc
+	Geant4PGA.cc
 	NeutrinoStackingAction.cc
 	NeutrinoHistogram.cc
 	DMPythiaPGA.cc
@@ -68,7 +68,7 @@ set(source_files
 set(include_files
 	SunDetectorConstruction.hh
 	DMPhysicsList.hh
-	DMPrimaryGeneratorAction.hh
+	Geant4PGA.hh
 	NeutrinoStackingAction.hh
 	NeutrinoHistogram.hh
 	DMPythiaPGA.hh

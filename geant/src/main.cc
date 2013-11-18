@@ -12,7 +12,7 @@
 #include "SunDetectorConstruction.hh"
 #include "SunSteppingAction.hh"
 #include "DMPhysicsList.hh"
-#include "DMPrimaryGeneratorAction.hh"
+#include "Geant4PGA.hh"
 #include "DMPythiaPGA.hh"
 #include "NeutrinoStackingAction.hh"
 #include "NeutrinoHistogram.hh"
@@ -69,7 +69,7 @@ const argp_option argp_options[] = {
 		" the default list is 'QGSP_BERT'", 2},
 	{"creator", 'c', "CREATOR", 0,
 		"specify how the particles are created; possible values are"
-		" 'PYTHIA8' (default) or 'GEANT4'", 2},
+		" 'PYTHIA8' (default), 'G4' or 'G4single'", 2},
 
 	{"radius",        PC_RAD,       "R", 0,
 		"set the radius of the world in meters; the default is 1000 meters;"
@@ -97,7 +97,7 @@ bool p_vis  = false; // go to visual mode (i.e. open the GUI instead)
 bool p_quiet = false; // maximally reduce verbosity if true
 G4String p_phys = "QGSP_BERT"; // physics list
 enum {MAT_VAC, MAT_SUN, MAT_SUNFULL} p_mat = MAT_SUN; // material of the world
-bool p_useG4 = false; // use G4 particle generation if possbile
+enum {CRE_PYTHIA8, CRE_GEANT4, CRE_GEANT4SINGLE} p_cre = CRE_PYTHIA8; // particle creator
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
 bool p_bar = false; // use the antiparticle (negative PDG code)
@@ -179,9 +179,11 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 			break;
 		case 'c':
 			if(strcmp(arg, "PYTHIA8") == 0) {
-				p_useG4 = false;
-			} else if(strcmp(arg, "GEANT4") == 0) {
-				p_useG4 = true;
+				p_cre = CRE_PYTHIA8;
+			} else if(strcmp(arg, "G4") == 0) {
+				p_cre = CRE_GEANT4;
+			} else if(strcmp(arg, "G4single") == 0) {
+				p_cre = CRE_GEANT4SINGLE;
 			} else {
 				G4cout << "Bad creator: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
@@ -406,81 +408,81 @@ int main(int argc, char * argv[]) {
 	return 0;
 }
 
-enum generator_mode {m_pythia, m_ppbar, m_2p};
 PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int seedvalue) {
-	generator_mode mode; bool pythia_possible = true;
+	bool pythia_only = false;
 	switch(channel) {
 		// Quarks and gluons
 		case 1: case -1: case 2: case -2:
 		case 3: case -3: case 4: case -4:
 		case 5: case -5: case 6: case -6:
-			if(!p_quiet){G4cout << "Particle: quark/antiquark" << G4endl;} mode = m_pythia; break;
+			if(!p_quiet){G4cout << "Particle: quark/antiquark" << G4endl;} pythia_only = true; break;
 		
 		// Gamma
 		case 22:
-			if(!p_quiet){G4cout << "Particle: gamma" << G4endl;} mode = m_2p; break;
+			if(!p_quiet){G4cout << "Particle: gamma" << G4endl;} break;
 		
 		// W, Z and H bosons
 		case 23:
-			if(!p_quiet){G4cout << "Particle: Z boson" << G4endl;} mode = m_pythia; break;
+			if(!p_quiet){G4cout << "Particle: Z boson" << G4endl;} pythia_only = true; break;
 		case 24: case -24:
-			if(!p_quiet){G4cout << "Particle: W +/- boson" << G4endl;} mode = m_pythia; break;
+			if(!p_quiet){G4cout << "Particle: W +/- boson" << G4endl;} pythia_only = true; break;
 		case 25:
-			if(!p_quiet){G4cout << "Particle: H boson" << G4endl;} mode = m_pythia; break;
+			if(!p_quiet){G4cout << "Particle: H boson" << G4endl;} pythia_only = true; break;
 		
 		// Leptons
 		case 11: case -11:
-			if(!p_quiet){G4cout << "Particle: electron/positron" << G4endl;} mode = m_ppbar; break;
+			if(!p_quiet){G4cout << "Particle: electron/positron" << G4endl;} break;
 		case 13: case -13:
-			if(!p_quiet){G4cout << "Particle: muon/antimuon" << G4endl;} mode = m_ppbar; break;
+			if(!p_quiet){G4cout << "Particle: muon/antimuon" << G4endl;} break;
 		case 15: case -15:
-			if(!p_quiet){G4cout << "Particle: tau/antitau" << G4endl;} mode = m_pythia; break;
+			if(!p_quiet){G4cout << "Particle: tau/antitau" << G4endl;} break;
 		
 		// Neutrinos
 		case 12: case -12: case 14: case -14: case 16: case -16:
-			if(!p_quiet){G4cout << "Particle: neutrino" << G4endl;} mode = m_ppbar; break;
+			if(!p_quiet){G4cout << "Particle: neutrino" << G4endl;} break;
 		
 		case 2112: case 2212:
-			if(!p_quiet){G4cout << "Particle: neutron/proton" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+			if(!p_quiet){G4cout << "Particle: neutron/proton" << G4endl;} break;
 		
 		// Mesons metastable in Geant4
 		case 321: case -321:
-			if(!p_quiet){G4cout << "Particle: K +/- meson" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+			if(!p_quiet){G4cout << "Particle: K +/- meson" << G4endl;} break;
 		case 211: case -211:
-			if(!p_quiet){G4cout << "Particle: pi +/- meson" << G4endl;} mode = m_ppbar; pythia_possible=false; break;
+			if(!p_quiet){G4cout << "Particle: pi +/- meson" << G4endl;} break;
 		case 130:
-			if(!p_quiet){G4cout << "Particle: K_0L meson" << G4endl;} mode = m_2p; pythia_possible=false; break;
+			if(!p_quiet){G4cout << "Particle: K_0L meson" << G4endl;} break;
 
 		default:
-			G4cout << "Bad channel: " << channel << G4endl;
+			G4cout << "Unknown channel: " << channel << G4endl;
+			exit(1);
 			break;
 	}
 	
-	if(!p_useG4 && pythia_possible) {
-		mode = m_pythia;
-	} else if(mode == m_pythia) {
-		G4cout << "Unable to use Geant4 for this particle! Using PYTHIA8." << G4endl;
+	if(pythia_only && p_cre!=CRE_PYTHIA8) {
+		G4cout << "ERROR: Unable to use Geant4 for this particle!" << G4endl;
+		exit(1);
 	}
 	
 	PGAInterface* generatorAction = NULL;
-	switch(mode) {
-		case m_pythia:
-			if(!p_quiet){G4cout << "Going for Pythia8!" << G4endl;}
+	switch(p_cre) {
+		case CRE_PYTHIA8:
+			if(!p_quiet){G4cout << "Standard particle generation using Pythia8" << G4endl;}
 			generatorAction = new DMPythiaPGA(channel, dm_mass, seedvalue);
 			break;
-		
-		case m_ppbar:
-			if(!p_quiet){G4cout << "Standard particle generation (particle+antiparticle)" << G4endl;}
-			generatorAction = new DMPrimaryGeneratorAction(channel, -channel, dm_mass);
+
+		case CRE_GEANT4:
+			if(!p_quiet){G4cout << "Geant4 particle generation (particle+antiparticle)" << G4endl;}
+			generatorAction = new Geant4PGA(channel, -channel, dm_mass);
 			break;
-		
-		case m_2p:
-			if(!p_quiet){G4cout << "Standard particle generation (two identical particles)" << G4endl;}
-			generatorAction = new DMPrimaryGeneratorAction(channel, channel, dm_mass);
+
+		case CRE_GEANT4SINGLE:
+		if(!p_quiet){G4cout << "Geant4 particle generation (single particle)" << G4endl;}
+			generatorAction = new Geant4SinglePGA(channel, dm_mass);
 			break;
-		
+
 		default:
-			G4cout << "Bad generator mode! (" << mode << ")" << G4endl;
+			G4cout << "ERROR: bad creator (p_cre) value" << G4endl;
+			exit(1);
 			break;
 	}
 	return generatorAction;
