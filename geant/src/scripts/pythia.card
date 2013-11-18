@@ -51,6 +51,13 @@ PDF:lepton = off                   ! no radiation off ficititious e+e-
 999999:addChannel = 1 0.1 101 22 24  !  -> gamma W+
 999999:addChannel = 1 0.1 101 22 -24  !  -> gamma W-
 999999:addChannel = 1 0.1 101 22 25  !  -> gamma h0
+! These baryons should be created only with the Geant creator, but for
+! the sake of completeness they can be generated with Pythia also.
+999999:addChannel = 1 0.1 101 2112 2112  ! -> neutron neutron
+999999:addChannel = 1 0.1 101 2212 -2212 ! -> proton antiproton
+999999:addChannel = 1 0.1 101 321 -321   ! -> K+ K-
+999999:addChannel = 1 0.1 101 211 -211   ! -> pi+ pi-
+999999:addChannel = 1 0.1 101 130 130    ! -> K_0L K_0L
 
 ! 4) Tell that also long-lived should decay.
 !13:mayDecay   = true                 ! mu+-
