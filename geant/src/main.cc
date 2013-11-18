@@ -40,6 +40,7 @@ const char* argp_program_version = "solnugeant";
 #define PC_TRV  1003
 #define PC_SEED 1004
 #define PC_RAD  1005
+#define PC_BAR  1006
 
 // Program's arguments - an array of option specifiers
 // name, short name, arg. name, flags, doc, group
@@ -57,6 +58,9 @@ const argp_option argp_options[] = {
 	{"unit",     'u', "UNIT", 0,
 		"explicitly specify the unit of the <DM mass>; supported options"
 		" are 'G' for GeV and 'M' for MeV; GeV is the default", 0},
+	{"bar",  PC_BAR,      0, 0,
+		"use the antiparticle instead (i.e. the negative PDG code);"
+		" useful for single particle runs", 0},
 
 	{0, 0, 0, 0, "Options for tweaking the physics:", 2},
 	{"physics", 'p', "PHYSICS", 0, "specify the physics list;"
@@ -96,6 +100,7 @@ enum {MAT_VAC, MAT_SUN, MAT_SUNFULL} p_mat = MAT_SUN; // material of the world
 bool p_useG4 = false; // use G4 particle generation if possbile
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
+bool p_bar = false; // use the antiparticle (negative PDG code)
 bool p_trv = false; // if true, print G4 tracks
 int p_seed = 0; // seed value; p_seed==0 => seed=time(0)
 G4double p_radius = 1000.0; // world radius in meters
@@ -192,6 +197,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				return ARGP_ERR_UNKNOWN;
 			}
 			break;
+		case PC_BAR:
+			p_bar = true;
+			break;
 		case PC_NDC:
 			if(strcmp(arg, "on") == 0) {
 				p_ndc = NDC_SHORT;
@@ -267,7 +275,7 @@ int main(int argc, char * argv[]) {
 		}
 		return 0;
 	}
-	G4int channel = atoi(argv[argp_index+0]);
+	G4int channel = atoi(argv[argp_index+0]) * (p_bar ? -1 : 1);
 	G4double dm_mass = atof(argv[argp_index+1]) * p_unit;
 	
 	// start of the simulation
