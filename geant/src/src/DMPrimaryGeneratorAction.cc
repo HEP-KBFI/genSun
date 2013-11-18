@@ -14,14 +14,17 @@ DMPrimaryGeneratorAction::DMPrimaryGeneratorAction(
 	fPGun1 = new G4ParticleGun(nofParticles);
 	fPGun2 = new G4ParticleGun(nofParticles);
 
+	double kin_energy_p1 = dm_mass - G4ParticleTable::GetParticleTable()->FindParticle(p1id)->GetPDGMass();
+	double kin_energy_p2 = dm_mass - G4ParticleTable::GetParticleTable()->FindParticle(p2id)->GetPDGMass();
+
 	// default particle kinematic
 	fPGun1->SetParticleDefinition( G4ParticleTable::GetParticleTable()->FindParticle(p1id) );
-	fPGun1->SetParticleEnergy(dm_mass);
+	fPGun1->SetParticleEnergy(kin_energy_p1);
 	fPGun1->SetParticlePosition(position);
 	fPGun1->SetParticleMomentumDirection(momentumDirection);
 	
 	fPGun2->SetParticleDefinition( G4ParticleTable::GetParticleTable()->FindParticle(p2id) );
-	fPGun2->SetParticleEnergy(dm_mass);
+	fPGun2->SetParticleEnergy(kin_energy_p2);
 	fPGun2->SetParticlePosition(position);
 	fPGun2->SetParticleMomentumDirection(-momentumDirection);
 }
