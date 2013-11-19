@@ -51,7 +51,7 @@ PDF:lepton = off                   ! no radiation off ficititious e+e-
 999999:addChannel = 1 0.1 101 22 24  !  -> gamma W+
 999999:addChannel = 1 0.1 101 22 -24  !  -> gamma W-
 999999:addChannel = 1 0.1 101 22 25  !  -> gamma h0
-! These baryons should be created only with the Geant creator, but for
+! These hadrons should be created only with the Geant creator, but for
 ! the sake of completeness they can be generated with Pythia also.
 999999:addChannel = 1 0.1 101 2112 2112  ! -> neutron neutron
 999999:addChannel = 1 0.1 101 2212 -2212 ! -> proton antiproton
