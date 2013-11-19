@@ -18,7 +18,7 @@ class Geant4PGA : public PGAInterface {
 	public:
 		Geant4PGA(
 			G4int p1id, G4int p2id,
-			G4double dm_mass = 1.*CLHEP::MeV,
+			G4double dm_mass,
 			G4ThreeVector position= G4ThreeVector(0,0,0),
 			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
 		);
@@ -37,7 +37,7 @@ class Geant4SinglePGA : public PGAInterface {
 	public:
 		Geant4SinglePGA(
 			G4int pid,
-			G4double dm_mass = 1.*CLHEP::MeV,
+			G4double dm_mass,
 			G4ThreeVector position= G4ThreeVector(0,0,0),
 			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
 		);

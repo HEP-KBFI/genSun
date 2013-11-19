@@ -38,8 +38,8 @@ class Pythia8Interface {
 class DMPythiaPGA : public PGAInterface {
 	public:
 		DMPythiaPGA(
-			int channel=25,
-			G4double dm_mass = 1.*TeV,
+			int channel,
+			G4double dm_mass,
 			int seedvalue = 0,
 			G4ThreeVector position= G4ThreeVector(0,0,0),
 			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
