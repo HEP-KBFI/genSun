@@ -69,7 +69,7 @@ const argp_option argp_options[] = {
 		" the default list is 'QGSP_BERT'", 2},
 	{"creator", 'c', "CREATOR", 0,
 		"specify how the particles are created; possible values are"
-		" 'PYTHIA8' (default), 'G4' or 'G4single'", 2},
+		" 'PYTHIA8' (default), 'P8single', 'G4' or 'G4single'", 2},
 
 	{"radius",        PC_RAD,       "R", 0,
 		"set the radius of the world in meters; the default is 1000 meters;"
@@ -97,7 +97,7 @@ bool p_vis  = false; // go to visual mode (i.e. open the GUI instead)
 bool p_quiet = false; // maximally reduce verbosity if true
 G4String p_phys = "QGSP_BERT"; // physics list
 enum {MAT_VAC, MAT_SUN, MAT_SUNFULL} p_mat = MAT_SUN; // material of the world
-enum {CRE_PYTHIA8, CRE_GEANT4, CRE_GEANT4SINGLE} p_cre = CRE_PYTHIA8; // particle creator
+enum {CRE_PYTHIA8, CRE_PYTHIA8SINGLE, CRE_GEANT4, CRE_GEANT4SINGLE} p_cre = CRE_PYTHIA8; // particle creator
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
 bool p_bar = false; // use the antiparticle (negative PDG code)
@@ -180,6 +180,8 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case 'c':
 			if(strcmp(arg, "PYTHIA8") == 0) {
 				p_cre = CRE_PYTHIA8;
+			} else if(strcmp(arg, "P8single") == 0) {
+				p_cre = CRE_PYTHIA8SINGLE;
 			} else if(strcmp(arg, "G4") == 0) {
 				p_cre = CRE_GEANT4;
 			} else if(strcmp(arg, "G4single") == 0) {
@@ -458,7 +460,7 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 			break;
 	}
 	
-	if(pythia_only && p_cre!=CRE_PYTHIA8) {
+	if(pythia_only && (p_cre!=CRE_PYTHIA8 && p_cre!=CRE_PYTHIA8SINGLE)) {
 		G4cout << "ERROR: Unable to use Geant4 for this particle!" << G4endl;
 		exit(1);
 	}
@@ -468,6 +470,11 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 		case CRE_PYTHIA8:
 			if(!p_quiet){G4cout << "Standard particle generation using Pythia8" << G4endl;}
 			generatorAction = new DMPythiaPGA(channel, dm_mass, seedvalue);
+			break;
+
+		case CRE_PYTHIA8SINGLE:
+			if(!p_quiet){G4cout << "Standard particle generation using Pythia8 (single particle)" << G4endl;}
+			generatorAction = new DMPythiaPGA(channel, dm_mass, seedvalue, true);
 			break;
 
 		case CRE_GEANT4:
