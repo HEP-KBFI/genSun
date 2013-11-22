@@ -419,6 +419,9 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 		case 5: case -5: case 6: case -6:
 			if(!p_quiet){G4cout << "Particle: quark/antiquark" << G4endl;} pythia_only = true; break;
 		
+		case 21:
+			if(!p_quiet){G4cout << "Particle: gluon" << G4endl;} pythia_only = true; break;
+		
 		// Gamma
 		case 22:
 			if(!p_quiet){G4cout << "Particle: gamma" << G4endl;} break;
