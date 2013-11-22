@@ -75,6 +75,11 @@ Pythia8Interface::Pythia8Interface(
 
 	if(!single) {
 		// The standard mode - decay of a resonance to two particles.
+		if(dm_mass < 5*GeV) {
+			G4cout << "ERROR: PYTHIA cannot handle eCM < 10 GeV!" << G4endl;
+			exit(1);
+		}
+
 		pythia->readFile("pythia.card");
 		sprintf(ch,"Beams:eCM = %1.2f", 2*dm_mass/GeV); pythia->readString(ch);
 
