@@ -275,7 +275,7 @@ int main(int argc, char * argv[]) {
 	// parse the arguments
 	int argp_index;
 	argp_parse(&argp_argp, argc, argv, 0, &argp_index, 0);
-	
+
 	// the two positional arguments have to be handled manually
 	if(argp_index+2 != argc) {
 		G4cerr << "Too many or too few arguments!" << G4endl;
@@ -288,7 +288,7 @@ int main(int argc, char * argv[]) {
 	}
 	G4int channel = atoi(argv[argp_index+0]) * (p_bar ? -1 : 1);
 	G4double dm_mass = atof(argv[argp_index+1]) * p_unit;
-	
+
 	// start of the simulation
 	G4cout << "--- Geant4 simulation of solar neutrinos ---" << G4endl;
 	PRINTVAR("channel", channel);
@@ -297,16 +297,16 @@ int main(int argc, char * argv[]) {
 	PRINTVAR("material", p_mat_str());
 	PRINTVAR("physics", p_phys);
 	PRINTVAR("unit", p_unit/eV);
-	
+
 	// Decide the random seed
 	int seedvalue = (p_seed==0)? std::time(0) : p_seed;
 	if(!p_quiet){G4cout << "Seed: " << seedvalue << G4endl;}
-	
+
 	// Start setting up Geant4
 	// Start constructing the run manager
 	G4RunManager* runManager = new G4RunManager;
 	runManager->SetVerboseLevel( p_quiet ? 0 : 1 );
-	
+
 	// detector
 	G4double final_radius = p_vacuum() ? p_radius*1e6*m : p_radius*m;
 	PRINTVARINFO("radius", final_radius/m, "m");
@@ -314,7 +314,7 @@ int main(int argc, char * argv[]) {
 		final_radius,
 		p_mat_fractions()
 	));
-	
+
 	// set the physics list; for translation a custom list is used,
 	// otherwise a Geant4 reference physics list is used
 	G4VUserPhysicsList * physlist;
@@ -330,7 +330,7 @@ int main(int argc, char * argv[]) {
 		physlist->SetVerboseLevel(p_quiet ? 0 : 1);
 	}
 	runManager->SetUserInitialization(physlist); // physics
-	
+
 	PGAInterface* primaryGeneratorAction = get_primary_generator_action(channel, dm_mass, seedvalue);
 	if(primaryGeneratorAction == NULL) {
 		G4cerr << "No generator!" << G4endl;
@@ -338,7 +338,7 @@ int main(int argc, char * argv[]) {
 	} else {
 		runManager->SetUserAction(primaryGeneratorAction);
 	}
-	
+
 	// stacking action for energy cutoff
 	bool b_track_killing = p_trk==TRK_ON || (p_trk==TRK_UNDEF && !p_vacuum());
 	if(b_track_killing) {
@@ -348,7 +348,7 @@ int main(int argc, char * argv[]) {
 	} else {
 		G4cout << "Track killing: disabled!" << G4endl;
 	}
-	
+
 	// create the physics string
 	char str_physics[50];
 	sprintf(str_physics, "%s_%s_trk%s_%s",
@@ -359,17 +359,17 @@ int main(int argc, char * argv[]) {
 	);
 	//if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
 	G4cout << "PHYS_STR=\"" << str_physics << "\"" << G4endl;
-	
+
 	if(p_kinetic) {
 		dm_mass += G4ParticleTable::GetParticleTable()->FindParticle(channel)->GetPDGMass();
 	}
-	
+
 	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);
 	runManager->SetUserAction((G4UserSteppingAction*)sun_stepping_action);
-	
+
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel
 	if(!p_quiet){G4cout << "===========================    END   INIT   ===========================" << G4endl;}
@@ -381,7 +381,7 @@ int main(int argc, char * argv[]) {
 		G4Neutron::Neutron()->SetPDGLifeTime(1e-6*s);
 		G4AntiNeutron::AntiNeutron()->SetPDGLifeTime(1e-6*s);
 	}
-	
+
 	if(!p_quiet){
 		G4cout << "Neutron: "
 		       << "T=" << G4Neutron::Neutron()->GetPDGLifeTime()/s << " [s]"
@@ -394,7 +394,7 @@ int main(int argc, char * argv[]) {
 		       << G4endl;
 		G4AntiNeutron::AntiNeutron()->GetDecayTable()->DumpInfo();
 	}
-	
+
 	// Information about Geant4 randomness
 	CLHEP::HepRandom::setTheSeed(seedvalue);
 	if(!p_quiet) {CLHEP::HepRandom::showEngineStatus();}
@@ -405,13 +405,13 @@ int main(int argc, char * argv[]) {
 	} else {
 		G4cout << "Starting simulation: runs = " << p_runs << G4endl;
 		runManager->BeamOn(p_runs);
-		
+
 		hgr->countEvent(p_runs);
 		hgr->save(p_ofile);
-	
+
 		if(!p_quiet){sun_stepping_action->statistics();}
 	}
-	
+
 	// job termination
 	if(!p_quiet){G4cout << "Deconstructing..." << G4endl;}
 	delete runManager;
@@ -429,14 +429,14 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 		case 3: case -3: case 4: case -4:
 		case 5: case -5: case 6: case -6:
 			if(!p_quiet){G4cout << "Particle: quark/antiquark" << G4endl;} pythia_only = true; break;
-		
+
 		case 21:
 			if(!p_quiet){G4cout << "Particle: gluon" << G4endl;} pythia_only = true; break;
-		
+
 		// Gamma
 		case 22:
 			if(!p_quiet){G4cout << "Particle: gamma" << G4endl;} break;
-		
+
 		// W, Z and H bosons
 		case 23:
 			if(!p_quiet){G4cout << "Particle: Z boson" << G4endl;} pythia_only = true; break;
@@ -444,7 +444,7 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 			if(!p_quiet){G4cout << "Particle: W +/- boson" << G4endl;} pythia_only = true; break;
 		case 25:
 			if(!p_quiet){G4cout << "Particle: H boson" << G4endl;} pythia_only = true; break;
-		
+
 		// Leptons
 		case 11: case -11:
 			if(!p_quiet){G4cout << "Particle: electron/positron" << G4endl;} break;
@@ -452,14 +452,14 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 			if(!p_quiet){G4cout << "Particle: muon/antimuon" << G4endl;} break;
 		case 15: case -15:
 			if(!p_quiet){G4cout << "Particle: tau/antitau" << G4endl;} break;
-		
+
 		// Neutrinos
 		case 12: case -12: case 14: case -14: case 16: case -16:
 			if(!p_quiet){G4cout << "Particle: neutrino" << G4endl;} break;
-		
+
 		case 2112: case 2212:
 			if(!p_quiet){G4cout << "Particle: neutron/proton" << G4endl;} break;
-		
+
 		// Mesons metastable in Geant4
 		case 321: case -321:
 			if(!p_quiet){G4cout << "Particle: K +/- meson" << G4endl;} break;
@@ -473,12 +473,12 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 			exit(1);
 			break;
 	}
-	
+
 	if(pythia_only && (p_cre!=CRE_PYTHIA8 && p_cre!=CRE_PYTHIA8SINGLE)) {
 		G4cout << "ERROR: Unable to use Geant4 for this particle!" << G4endl;
 		exit(1);
 	}
-	
+
 	PGAInterface* generatorAction = NULL;
 	switch(p_cre) {
 		case CRE_PYTHIA8:
@@ -533,7 +533,7 @@ void go_visual(int argc, char* argv[]) {
 	// interactive mode : define UI session
 	G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 
-	UI->ApplyCommand("/control/execute vis.mac"); 
+	UI->ApplyCommand("/control/execute vis.mac");
 
 	ui->SessionStart();
 	delete ui;
