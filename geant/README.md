@@ -32,6 +32,10 @@ The program takes a number of command line arguments.
 	be stored to a ROOT file.
 
 	 General options:
+		  --bar                  use the antiparticle instead (i.e. the negative
+								 PDG code); useful for single particle runs
+		  --kinetic              use the provided energy as kinetic (particle gun
+								 only).
 	  -n, --runs=N               run the simulation N times
 	  -o, --ofile=OFILE          write spectra to OFILE; default is output.root
 	  -q, --quiet                reduce verbosity as much as possible
@@ -44,7 +48,8 @@ The program takes a number of command line arguments.
 
 	 Options for tweaking the physics:
 	  -c, --creator=CREATOR      specify how the particles are created; possible
-								 values are 'PYTHIA8' (default) or 'GEANT4'
+								 values are 'PYTHIA8' (default), 'P8single', 'G4'
+								 or 'G4single'
 	  -m, --material=MAT         specify the material of the world; possible values
 								 are 'SUN' (default), 'SUNFULL' and 'VAC'
 	  -p, --physics=PHYSICS      specify the physics list; 'TRANS' refers to the
