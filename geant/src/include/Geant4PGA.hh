@@ -38,6 +38,7 @@ class Geant4SinglePGA : public PGAInterface {
 		Geant4SinglePGA(
 			G4int pid,
 			G4double dm_mass,
+			bool kineticEnergy=false,
 			G4ThreeVector position= G4ThreeVector(0,0,0),
 			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
 		);

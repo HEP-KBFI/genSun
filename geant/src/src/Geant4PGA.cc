@@ -43,13 +43,14 @@ void Geant4PGA::GeneratePrimaries(G4Event* anEvent) {
 Geant4SinglePGA::Geant4SinglePGA(
 	G4int pid,
 	G4double dm_mass,
+	bool kineticEnergy,
 	G4ThreeVector position,
 	G4ThreeVector momentumDirection
 ) : PGAInterface() {
 	G4int nofParticles = 1;
 	fPGun = new G4ParticleGun(nofParticles);
 
-	double kin_energy_p1 = dm_mass - G4ParticleTable::GetParticleTable()->FindParticle(pid)->GetPDGMass();
+	double kin_energy_p1 = kineticEnergy ? dm_mass : dm_mass - G4ParticleTable::GetParticleTable()->FindParticle(pid)->GetPDGMass();
 
 	// default particle kinematic
 	fPGun->SetParticleDefinition( G4ParticleTable::GetParticleTable()->FindParticle(pid) );

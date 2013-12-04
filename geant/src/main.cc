@@ -41,6 +41,7 @@ const char* argp_program_version = "solnugeant";
 #define PC_SEED 1004
 #define PC_RAD  1005
 #define PC_BAR  1006
+#define PC_KINE 1007
 
 // Program's arguments - an array of option specifiers
 // name, short name, arg. name, flags, doc, group
@@ -58,6 +59,8 @@ const argp_option argp_options[] = {
 	{"unit",     'u', "UNIT", 0,
 		"explicitly specify the unit of the <DM mass>; supported options"
 		" are 'G' for GeV and 'M' for MeV; GeV is the default", 0},
+	{"kinetic", PC_KINE, 0, 0,
+		"use the provided energy as kinetic (particle gun only).", 0},
 	{"bar",  PC_BAR,      0, 0,
 		"use the antiparticle instead (i.e. the negative PDG code);"
 		" useful for single particle runs", 0},
@@ -101,6 +104,7 @@ enum {CRE_PYTHIA8, CRE_PYTHIA8SINGLE, CRE_GEANT4, CRE_GEANT4SINGLE} p_cre = CRE_
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
 bool p_bar = false; // use the antiparticle (negative PDG code)
+bool p_kinetic = false; // use provided energy as kinetic
 bool p_trv = false; // if true, print G4 tracks
 int p_seed = 0; // seed value; p_seed==0 => seed=time(0)
 G4double p_radius = 1000.0; // world radius in meters
@@ -233,6 +237,9 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 		case PC_RAD:
 			p_radius = std::atof(arg);
 			break;
+		case PC_KINE:
+			p_kinetic = true;
+			break;
 		default:
 			//G4cout << "Unknonwn key: " << key << G4endl;
 			return ARGP_ERR_UNKNOWN;
@@ -353,6 +360,10 @@ int main(int argc, char * argv[]) {
 	//if(!p_quiet){G4cout << "Full physics string: " << str_physics << G4endl;}
 	G4cout << "PHYS_STR=\"" << str_physics << "\"" << G4endl;
 	
+	if(p_kinetic) {
+		dm_mass += G4ParticleTable::GetParticleTable()->FindParticle(channel)->GetPDGMass();
+	}
+	
 	DMRootHistogrammer* hgr = new DMRootHistogrammer(channel, dm_mass, str_physics);
 	SunSteppingAction* sun_stepping_action = new SunSteppingAction(hgr);
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
@@ -472,22 +483,34 @@ PGAInterface* get_primary_generator_action(G4int channel, G4double dm_mass, int 
 	switch(p_cre) {
 		case CRE_PYTHIA8:
 			if(!p_quiet){G4cout << "Standard particle generation using Pythia8" << G4endl;}
+			if(p_kinetic) {
+				G4cout << "ERROR: can't specify energy as kinetic for this generator!" << G4endl;
+				exit(1);
+			}
 			generatorAction = new DMPythiaPGA(channel, dm_mass, seedvalue);
 			break;
 
 		case CRE_PYTHIA8SINGLE:
 			if(!p_quiet){G4cout << "Standard particle generation using Pythia8 (single particle)" << G4endl;}
+			if(p_kinetic) {
+				G4cout << "ERROR: kinetic not implemented for this generator!" << G4endl;
+				exit(1);
+			}
 			generatorAction = new DMPythiaPGA(channel, dm_mass, seedvalue, true);
 			break;
 
 		case CRE_GEANT4:
 			if(!p_quiet){G4cout << "Geant4 particle generation (particle+antiparticle)" << G4endl;}
+			if(p_kinetic) {
+				G4cout << "ERROR: can't specify energy as kinetic for this generator!" << G4endl;
+				exit(1);
+			}
 			generatorAction = new Geant4PGA(channel, -channel, dm_mass);
 			break;
 
 		case CRE_GEANT4SINGLE:
 		if(!p_quiet){G4cout << "Geant4 particle generation (single particle)" << G4endl;}
-			generatorAction = new Geant4SinglePGA(channel, dm_mass);
+			generatorAction = new Geant4SinglePGA(channel, dm_mass, p_kinetic);
 			break;
 
 		default:
