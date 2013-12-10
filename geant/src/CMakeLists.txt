@@ -118,6 +118,9 @@ target_link_libraries(test_histogrammer ${LIBRARIES})
 add_executable(test_pythiaps test/pythiaps.cc src/DMPythiaPGA.cc)
 target_link_libraries(test_pythiaps ${LIBRARIES})
 
+add_executable(test_nugrammer test/nugrammer.cc src/Nugrammer.cc)
+target_link_libraries(test_nugrammer ${LIBRARIES})
+
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build B1. This is so that we can run the executable directly because it
