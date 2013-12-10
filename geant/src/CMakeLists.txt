@@ -64,6 +64,8 @@ set(source_files
 	SunSteppingAction.cc
 	DMRootHistogrammer.cc
 	G4UserActionManager.cc
+	Nugrammer.cc
+	ParentTrackingAction.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
@@ -76,6 +78,8 @@ set(include_files
 	DMRootHistogrammer.hh
 	G4UserActionManager.hh
 	PGAInterface.hh
+	Nugrammer.hh
+	ParentTrackingAction.hh
 )
 
 message(" > Sources...")
@@ -112,7 +116,7 @@ target_link_libraries(test_dmpythia ${LIBRARIES})
 add_executable(test_root test/root.cc)
 target_link_libraries(test_root ${LIBRARIES})
 
-add_executable(test_histogrammer test/histogrammer.cc src/DMRootHistogrammer.cc)
+add_executable(test_histogrammer test/histogrammer.cc src/DMRootHistogrammer.cc  src/Nugrammer.cc)
 target_link_libraries(test_histogrammer ${LIBRARIES})
 
 add_executable(test_pythiaps test/pythiaps.cc src/DMPythiaPGA.cc)

@@ -18,6 +18,7 @@
 #include "NeutrinoHistogram.hh"
 #include "G4UserActionManager.hh"
 #include "DMRootHistogrammer.hh"
+#include "ParentTrackingAction.hh"
 
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
@@ -369,6 +370,7 @@ int main(int argc, char * argv[]) {
 	G4UserActionManager* actionManager = new G4UserActionManager(runManager);
 	actionManager->addUserAction((G4UserRunAction*)sun_stepping_action);
 	runManager->SetUserAction((G4UserSteppingAction*)sun_stepping_action);
+	runManager->SetUserAction(new ParentTrackingAction);
 
 	if(!p_quiet){G4cout << "===========================   BEGIN  INIT   ===========================" << G4endl;}
 	runManager->Initialize(); // initialize G4 kernel
