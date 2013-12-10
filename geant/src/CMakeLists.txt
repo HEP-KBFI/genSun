@@ -106,16 +106,16 @@ set(LIBRARIES
 add_executable(solnugeant main.cc ${sources} ${headers})
 target_link_libraries(solnugeant ${LIBRARIES})
 
-add_executable(test_dmpythia test/dmpythia.cc ${sources} ${headers})
+add_executable(test_dmpythia test/dmpythia.cc src/DMPythiaPGA.cc)
 target_link_libraries(test_dmpythia ${LIBRARIES})
 
-add_executable(test_root test/root.cc ${sources} ${headers})
+add_executable(test_root test/root.cc)
 target_link_libraries(test_root ${LIBRARIES})
 
-add_executable(test_histogrammer test/histogrammer.cc ${sources} ${headers})
+add_executable(test_histogrammer test/histogrammer.cc src/DMRootHistogrammer.cc)
 target_link_libraries(test_histogrammer ${LIBRARIES})
 
-add_executable(test_pythiaps test/pythiaps.cc ${sources} ${headers})
+add_executable(test_pythiaps test/pythiaps.cc src/DMPythiaPGA.cc)
 target_link_libraries(test_pythiaps ${LIBRARIES})
 
 #----------------------------------------------------------------------------

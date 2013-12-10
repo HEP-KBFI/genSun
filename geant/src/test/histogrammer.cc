@@ -7,6 +7,7 @@
 #include "DMRootHistogrammer.hh"
 
 bool p_quiet = false;
+bool p_trv = true;
 
 int main() {
 	DMRootHistogrammer* hg = new DMRootHistogrammer(21,200*MeV,"WHAT");
