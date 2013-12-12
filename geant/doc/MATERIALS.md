@@ -88,3 +88,28 @@ are taken from [The Sun's Vital Statistics](http://solar-center.stanford.edu/vit
 		      --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
 		      --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
 		       ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+* `IRONCORE` - the density, temperature and pressure of the Sun's center
+               but consists of only iron atoms (for testing purposes)
+
+		Material: IronCore    density: 160.000 g/cm3   RadL: 864.906 um
+		Nucl.Int.Length:   8.346 mm   Imean: 286.000 eV   temperature: 15000000.00 K  pressure: 1000000000.00 atm
+		   --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+				 --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+				 --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+				 --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+				 --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+				  ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+* `HIGHTEMP` - hydrogen and helium composition but with the temperature 1000 times higher
+
+		Material:      Sun    density: 160.000 g/cm3   RadL:   4.301 mm
+		Nucl.Int.Length:   2.429 mm   Imean:  21.502 eV   temperature: 15000000000.00 K  pressure: 1000000000.00 atm
+		   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+				 --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+				 --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+				  ElmMassFraction:  74.72 %  ElmAbundance  92.15 % 
+
+		   --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
+				 --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
+				 --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %

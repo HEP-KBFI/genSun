@@ -51,7 +51,8 @@ The program takes a number of command line arguments.
 								 values are 'PYTHIA8' (default), 'P8single', 'G4'
 								 or 'G4single'
 	  -m, --material=MAT         specify the material of the world; possible values
-								 are 'SUN' (default), 'SUNFULL' and 'VAC'
+								 are 'SUN' (default), 'SUNFULL', 'VAC', 'HIGHTEMP',
+								 'IRONCORE'
 	  -p, --physics=PHYSICS      specify the physics list; 'TRANS' refers to the
 								 custom translation-only physics list; otherwise
 								 the specified Geant4 reference physics list is
@@ -70,6 +71,7 @@ The program takes a number of command line arguments.
 
 	Mandatory or optional arguments to long options are also mandatory or optional
 	for any corresponding short options.
+
 
 The option `-p` or `--physics` specifies the exact physics configuration
 for the simulation. The values for `PHYSICS` can be either `TRANS`, which
