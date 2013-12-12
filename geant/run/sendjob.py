@@ -3,7 +3,7 @@ import os
 import os.path
 import subprocess
 import argparse
-import slur
+import slurpy as slur
 
 parser = argparse.ArgumentParser()
 parser.add_argument('pid', type=int)
