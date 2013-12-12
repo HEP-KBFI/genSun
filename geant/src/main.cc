@@ -80,7 +80,7 @@ const argp_option argp_options[] = {
 		" in vacuum the value is multiplied by factor of 1 million", 2},
 	{"material",         'm',     "MAT", 0,
 		"specify the material of the world; possible values are 'SUN'"
-		" (default), 'SUNFULL' and 'VAC'", 2},
+		" (default), 'SUNFULL', 'VAC', 'HIGHTEMP', 'IRONCORE'", 2},
 	{"short-neutron", PC_NDC,  "on/off", 0,
 		"enable/disable short-lived neutrons", 2},
 	{"track-kill",    PC_TRK,  "on/off", 0,
@@ -100,7 +100,7 @@ int  p_runs = 1; // number of runs
 bool p_vis  = false; // go to visual mode (i.e. open the GUI instead)
 bool p_quiet = false; // maximally reduce verbosity if true
 G4String p_phys = "QGSP_BERT"; // physics list
-enum {MAT_VAC, MAT_SUN, MAT_SUNFULL} p_mat = MAT_SUN; // material of the world
+enum {MAT_VAC, MAT_SUN, MAT_SUNFULL, MAT_HIGHTEMP, MAT_IRONCORE} p_mat = MAT_SUN; // material of the world
 enum {CRE_PYTHIA8, CRE_PYTHIA8SINGLE, CRE_GEANT4, CRE_GEANT4SINGLE} p_cre = CRE_PYTHIA8; // particle creator
 enum {NDC_UNDEF, NDC_SHORT, NDC_LONG} p_ndc = NDC_UNDEF; // neutron lifetime flag
 enum {TRK_UNDEF, TRK_ON, TRK_OFF} p_trk = TRK_UNDEF; // killing low energy tracks
@@ -125,6 +125,12 @@ inline const char * p_mat_str() {
 		case MAT_SUNFULL:
 			return "SUNFULL";
 			break;
+		case MAT_HIGHTEMP:
+			return "HIGHTEMP";
+			break;
+		case MAT_IRONCORE:
+			return "IRONCORE";
+			break;
 	}
 	G4cerr << "ERROR (material_string): bad material ID (`" << (int)m << "`)" << G4endl;
 	return "ERROR";
@@ -135,21 +141,28 @@ inline bool p_vacuum() {
 	return p_mat == MAT_VAC;
 }
 
-inline unsigned int p_mat_fractions() {
+inline G4Material * p_g4material() {
 	// return the number of fraction corresponding to `p_mat`
 	switch(p_mat) {
 		case MAT_VAC:
-			return 0;
+			return SunDetectorConstruction::getVacuumMaterial();
 			break;
 		case MAT_SUN:
-			return 2;
+			return SunDetectorConstruction::getSunMaterial();
 			break;
 		case MAT_SUNFULL:
-			return 10;
+			return SunDetectorConstruction::getSunMaterial(10);
+			break;
+		case MAT_HIGHTEMP:
+			return SunDetectorConstruction::getGeneralSunMaterial(2, 15e9*kelvin);
+			break;
+		case MAT_IRONCORE:
+			return SunDetectorConstruction::getIroncoreMaterial();
 			break;
 	}
+	
 	G4cerr << "ERROR (material_string): bad material ID (`" << (int)m << "`)" << G4endl;
-	return 0;
+	return NULL;
 }
 
 // Argument parser callback called by argp
@@ -177,6 +190,10 @@ error_t argp_parser(int key, char *arg, struct argp_state *state) {
 				p_mat = MAT_VAC;
 			} else if(strcmp(arg, "SUNFULL") == 0) {
 				p_mat = MAT_SUNFULL;
+			} else if(strcmp(arg, "HIGHTEMP") == 0) {
+				p_mat = MAT_HIGHTEMP;
+			} else if(strcmp(arg, "IRONCORE") == 0) {
+				p_mat = MAT_IRONCORE;
 			} else {
 				G4cout << "Bad material: " << arg << G4endl;
 				return ARGP_ERR_UNKNOWN;
@@ -313,7 +330,7 @@ int main(int argc, char * argv[]) {
 	PRINTVARINFO("radius", final_radius/m, "m");
 	runManager->SetUserInitialization(new SunDetectorConstruction(
 		final_radius,
-		p_mat_fractions()
+		p_g4material()
 	));
 
 	// set the physics list; for translation a custom list is used,

@@ -28,13 +28,12 @@ ElementFraction sun_fractions[] = {
 	{"G4_Mg", 0.05}
 };
 
-SunDetectorConstruction::SunDetectorConstruction(G4double radius, unsigned int fractions)
-	: G4VUserDetectorConstruction(),fRadius(radius),fractions(fractions) {}
+SunDetectorConstruction::SunDetectorConstruction(G4double radius, G4Material * material)
+	: G4VUserDetectorConstruction(),fRadius(radius),material(material) {}
 
 SunDetectorConstruction::~SunDetectorConstruction() {}
 
 G4VPhysicalVolume* SunDetectorConstruction::Construct() {
-	G4Material* material = fractions==0 ? getVacuumMaterial() : getSunMaterial(fractions);
 	if(!p_quiet) {
 		G4cout << "==================  Material  ==================" << G4endl;
 		G4cout << (*material) << G4endl;
@@ -59,7 +58,7 @@ G4VPhysicalVolume* SunDetectorConstruction::Construct() {
 	return pWorld; // always return the root volume
 }
 
-G4Material * SunDetectorConstruction::getSunMaterial(unsigned int Nfractions) {
+G4Material * SunDetectorConstruction::getGeneralSunMaterial(unsigned int Nfractions, G4double temperature) {
 	// Define materials via NIST manager
 	G4NistManager* nm = G4NistManager::Instance();
 	//nm->SetVerbose(1);
@@ -74,7 +73,7 @@ G4Material * SunDetectorConstruction::getSunMaterial(unsigned int Nfractions) {
 	G4Material* solarmaterial = new G4Material(
 		"Sun", sun_density, // name, density
 		Nfractions, kStateGas, // ncomponents, state
-		sun_temperature, sun_pressure // temperature, pressure
+		temperature, sun_pressure // temperature, pressure
 	);
 	for(size_t i=0; i < Nfractions; i++) {
 		solarmaterial->AddMaterial(
@@ -88,6 +87,10 @@ G4Material * SunDetectorConstruction::getSunMaterial(unsigned int Nfractions) {
 	return solarmaterial;
 }
 
+G4Material * SunDetectorConstruction::getSunMaterial(unsigned int Nfractions) {
+	return SunDetectorConstruction::getGeneralSunMaterial(Nfractions, sun_temperature);
+}
+
 G4Material * SunDetectorConstruction::getVacuumMaterial() {
 	G4double vac_density     = universe_mean_density; //from PhysicalConstants.h
 	G4double vac_pressure    = 1.e-19*pascal;
@@ -95,4 +98,15 @@ G4Material * SunDetectorConstruction::getVacuumMaterial() {
 	return new G4Material("Vacuum", 1., 1.01*g/mole,
 	                       vac_density, kStateGas, vac_temperature,
 	                       vac_pressure);
+}
+
+G4Material * SunDetectorConstruction::getIroncoreMaterial() {
+	G4NistManager* nm = G4NistManager::Instance();
+	G4Material* solarmaterial = new G4Material(
+		"IronCore", sun_density, // name, density
+		1, kStateGas, // ncomponents, state
+		sun_temperature, sun_pressure // temperature, pressure
+	);
+	solarmaterial->AddMaterial(nm->FindOrBuildMaterial("G4_Fe"), 1);
+	return solarmaterial;
 }
