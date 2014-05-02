@@ -57,18 +57,20 @@ link_directories(${ROOT_LIBRARY_DIR})
 set(source_files
 	SunDetectorConstruction.cc
 	DMPhysicsList.cc
-	DMPrimaryGeneratorAction.cc
+	Geant4PGA.cc
 	NeutrinoStackingAction.cc
 	NeutrinoHistogram.cc
 	DMPythiaPGA.cc
 	SunSteppingAction.cc
 	DMRootHistogrammer.cc
 	G4UserActionManager.cc
+	Nugrammer.cc
+	ParentTrackingAction.cc
 )
 set(include_files
 	SunDetectorConstruction.hh
 	DMPhysicsList.hh
-	DMPrimaryGeneratorAction.hh
+	Geant4PGA.hh
 	NeutrinoStackingAction.hh
 	NeutrinoHistogram.hh
 	DMPythiaPGA.hh
@@ -76,6 +78,8 @@ set(include_files
 	DMRootHistogrammer.hh
 	G4UserActionManager.hh
 	PGAInterface.hh
+	Nugrammer.hh
+	ParentTrackingAction.hh
 )
 
 message(" > Sources...")
@@ -106,14 +110,20 @@ set(LIBRARIES
 add_executable(solnugeant main.cc ${sources} ${headers})
 target_link_libraries(solnugeant ${LIBRARIES})
 
-add_executable(test_dmpythia test/dmpythia.cc ${sources} ${headers})
+add_executable(test_dmpythia test/dmpythia.cc src/DMPythiaPGA.cc)
 target_link_libraries(test_dmpythia ${LIBRARIES})
 
-add_executable(test_root test/root.cc ${sources} ${headers})
+add_executable(test_root test/root.cc)
 target_link_libraries(test_root ${LIBRARIES})
 
-add_executable(test_histogrammer test/histogrammer.cc ${sources} ${headers})
+add_executable(test_histogrammer test/histogrammer.cc src/DMRootHistogrammer.cc  src/Nugrammer.cc)
 target_link_libraries(test_histogrammer ${LIBRARIES})
+
+add_executable(test_pythiaps test/pythiaps.cc src/DMPythiaPGA.cc)
+target_link_libraries(test_pythiaps ${LIBRARIES})
+
+add_executable(test_nugrammer test/nugrammer.cc src/Nugrammer.cc)
+target_link_libraries(test_nugrammer ${LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

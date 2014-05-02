@@ -10,6 +10,7 @@ parser.add_argument('-l', '--low', type=float, default=0)
 parser.add_argument('-u', '--high', type=float, default=1e5)
 parser.add_argument('-e', '--events', type=float, default=1e5)
 parser.add_argument('-t', '--job-time', type=float, default=30, help='run time of a job in minutes')
+parser.add_argument('channels', nargs='*', type=int, default=o.keys(), help='list of channels')
 args = parser.parse_args()
 print 'Arguments:', args
 
@@ -24,10 +25,13 @@ def findOptRuns(T):
 	return fs[0] if len(fs)>0 else optruns[-1]
 
 # filter bad masses
+o[5]  = dict(filter(lambda (k,v): k >    5.0,  o[5].items()))
 o[6]  = dict(filter(lambda (k,v): k >= 175.0,  o[6].items()))
 o[23] = dict(filter(lambda (k,v): k >=  92.0, o[23].items()))
 o[24] = dict(filter(lambda (k,v): k >=  81.0, o[24].items()))
 o[25] = dict(filter(lambda (k,v): k >= 127.0, o[25].items()))
+
+o = dict(filter(lambda (k,v): k in args.channels, o.items()))
 
 def filter_fn((m,o)):
 	return m > args.low and m <= args.high

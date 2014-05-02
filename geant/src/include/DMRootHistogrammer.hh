@@ -4,6 +4,8 @@
 #include <vector>
 #include "globals.hh"
 
+#include "Nugrammer.hh"
+
 class G4Track;
 class TH1F;
 
@@ -30,7 +32,7 @@ class DMRootHistogrammer {
 		void save(const char* fname);
 	
 	private:
-		//std::vector<TH1F*> hists;
+		Nugrammer ngr;
 		TH1F * h_evstatus, * h_pcounter;
 		
 		G4int channel;

@@ -9,14 +9,18 @@
 
 extern bool p_quiet;
 
+// ---------------------------------------------------------------------
+//                        class DMPythiaPGA
+// ---------------------------------------------------------------------
+
 DMPythiaPGA::DMPythiaPGA(      
-	//const G4String& channel, 
 	int channel,
 	G4double dm_mass,
 	int seedvalue,
+	bool single,
 	G4ThreeVector position, 
 	G4ThreeVector momentumDirection
-) : PGAInterface(), pythia(channel, dm_mass, seedvalue),
+) : PGAInterface(), pythia(channel, dm_mass, single, seedvalue),
     init_position(position), init_momentum(momentumDirection) {}
 
 DMPythiaPGA::~DMPythiaPGA() {}
@@ -58,32 +62,67 @@ class Sigma1GenRes : public Pythia8::Sigma1Process {
 Pythia8Interface::Pythia8Interface(
 	int pid,
 	G4double dm_mass,
+	bool single,
 	int seed
-) {
-	if(!p_quiet){G4cout << "Initializing PYTHIA: " << pid << " at " << dm_mass/GeV << " GeV" << G4endl;}
-	
+) : gunparticle(NULL) {
+	if(!p_quiet){
+		G4cout << "Initializing PYTHIA: " << pid << " at " << dm_mass/GeV << " GeV"
+		       << (single ? " (single particle mode)" : "(standard DM resonance)")
+		       << G4endl;
+	}
 	char ch[1000];
-	
 	this->pythia = new Pythia8::Pythia();
-	pythia->readFile("pythia.card");
-	sprintf(ch,"Beams:eCM = %1.2f", 2*dm_mass/GeV); pythia->readString(ch);
-	
-	pythia->readString("999999:onMode = off");
-	int apid = (pid==23||pid==25) ? pid : -pid;
-	if (pid != 1) sprintf(ch,"999999:onIfAll %d %d", pid, apid); //turn on (id -id)
-	else sprintf(ch,"999999:onIfAny 1 2 3"); //Turn on light quarks
-	pythia->readString(ch);
-	
-	// A class to generate the fictitious resonance initial state.
-	Pythia8::SigmaProcess* sigma1GenRes = new Sigma1GenRes();
-	pythia->setSigmaPtr( sigma1GenRes);
-	
+
+	if(!single) {
+		// The standard mode - decay of a resonance to two particles.
+		if(dm_mass < 5*GeV) {
+			G4cout << "ERROR: PYTHIA cannot handle eCM < 10 GeV!" << G4endl;
+			exit(1);
+		}
+
+		pythia->readFile("pythia.card");
+		sprintf(ch,"Beams:eCM = %1.2f", 2*dm_mass/GeV); pythia->readString(ch);
+
+		pythia->readString("999999:onMode = off");
+		int apid = (pid==23||pid==25) ? pid : -pid;
+		if (pid != 1) sprintf(ch,"999999:onIfAll %d %d", pid, apid); //turn on (id -id)
+		else sprintf(ch,"999999:onIfAny 1 2 3"); //Turn on light quarks
+		pythia->readString(ch);
+
+		// A class to generate the fictitious resonance initial state.
+		Pythia8::SigmaProcess* sigma1GenRes = new Sigma1GenRes();
+		pythia->setSigmaPtr( sigma1GenRes);
+	} else {
+		// The "particle gun" type mode, creating a single particle with energy dm_mass
+		pythia->readFile("pythia.card");
+		pythia->readString("ProcessLevel:all = off");
+		pythia->readString("Standalone:allowResDec = on");
+
+		double pp, mm, ee;
+		mm = pythia->particleData.mass(pid)*GeV;
+		if(dm_mass < mm) {
+			G4cout << "NOTICE: dm_mass below particle mass - assuming particle at rest" << G4endl;
+			ee = mm; pp = 0;
+		} else {
+			ee = dm_mass;
+			pp = Pythia8::sqrtpos(ee*ee - mm*mm);
+		}
+
+		G4cout << "Adding single particle:" << G4endl;
+		G4cout << "  mm = " << mm/MeV << " MeV" << G4endl;
+		G4cout << "  pp = " << pp/GeV << " GeV" << G4endl;
+		G4cout << "  ee = " << ee/GeV << " GeV" << G4endl;
+
+		gunparticle = new Pythia8::Particle(pid, 2);
+		gunparticle->p(pp/GeV, 0.0, 0.0, ee/GeV);
+		gunparticle->m(mm/GeV);
+	}
+
 	if(!p_quiet){G4cout << "Init PYTHIA seed to: " << seed << G4endl;}
 	pythia->readString("Random:setSeed = on");
 	sprintf(ch, "Random:seed = %d", seed); pythia->readString(ch);
 	if(!p_quiet){G4cout << "PYTHIA conf: " << ch << G4endl;}
-	
-	//pythia->init(25, 25, 1000/GeV);
+
 	pythia->init();
 	pythia->rndm.init(seed);
 }
@@ -93,13 +132,21 @@ Pythia8Interface::~Pythia8Interface() {
 }
 
 PhysicalParticleList Pythia8Interface::generate() {
-	if(!pythia->next()) {
-		G4cerr << "No next() !" << G4endl;
+	PhysicalParticleList ps;
+
+	if(gunparticle) {
+		pythia->event.reset();
+		pythia->event.append(*gunparticle);
 	}
+
+	if(!pythia->next()) {
+		G4cout << "ERROR: No pythia->next() !" << G4endl;
+		return ps;
+	}
+
 	Pythia8::Event ev = pythia->event;
 	if(!p_quiet){G4cout << "pythia->next() called: " << ev.size() << " events." << G4endl;}
 	
-	PhysicalParticleList ps;
 	for(int i=0; i<ev.size(); i++) {
 		if(!p_quiet) {
 			G4cout << " > [" << (ev[i].isFinal()?'x':' ') << "] "

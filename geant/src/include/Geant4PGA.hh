@@ -1,5 +1,5 @@
-#ifndef DMPrimaryGeneratorAction_h
-#define DMPrimaryGeneratorAction_h
+#ifndef Geant4PGA_h
+#define Geant4PGA_h
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
@@ -14,15 +14,15 @@ class G4Event;
 
 /// The primary generator class with particle gun
 
-class DMPrimaryGeneratorAction : public PGAInterface {
+class Geant4PGA : public PGAInterface {
 	public:
-		DMPrimaryGeneratorAction(
+		Geant4PGA(
 			G4int p1id, G4int p2id,
-			G4double dm_mass = 1.*CLHEP::MeV,
+			G4double dm_mass,
 			G4ThreeVector position= G4ThreeVector(0,0,0),
 			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
-		);    
-		~DMPrimaryGeneratorAction();
+		);
+		~Geant4PGA();
 
 		// methods
 		virtual void GeneratePrimaries(G4Event*);
@@ -31,6 +31,26 @@ class DMPrimaryGeneratorAction : public PGAInterface {
 	private:
 		// data members
 		G4ParticleGun *fPGun1, *fPGun2; //pointer a to G4 service class
+};
+
+class Geant4SinglePGA : public PGAInterface {
+	public:
+		Geant4SinglePGA(
+			G4int pid,
+			G4double dm_mass,
+			bool kineticEnergy=false,
+			G4ThreeVector position= G4ThreeVector(0,0,0),
+			G4ThreeVector momentumDirection = G4ThreeVector(0,0,1)
+		);
+		~Geant4SinglePGA();
+
+		// methods
+		virtual void GeneratePrimaries(G4Event*);
+		const char* getName() {return "G4single";}
+
+	private:
+		// data members
+		G4ParticleGun * fPGun; //pointer a to G4 service class
 };
 
 #endif

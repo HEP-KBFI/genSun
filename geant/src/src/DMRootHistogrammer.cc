@@ -4,14 +4,27 @@
 
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4VProcess.hh"
 
 #include "TDirectory.h"
 #include "TFile.h"
 #include "TH1F.h"
 
+#include "ParentTrackingAction.hh"
+
 #include "DMRootHistogrammer.hh"
 
-extern bool p_quiet;
+extern bool p_quiet, p_trv;
+
+enum processGroups {
+	gOther = 0,
+	gPythia,
+	gMuMinusCaptureAtRest = 10,
+	gDecayOther = 100,
+	gDecayMuMinus, gDecayMuPlus,
+	gDecayPiPlus, gDecayPiMinus,
+	gDecayKPlus, gDecayKMinus
+};
 
 struct pinfo {
 	const char * name;
@@ -48,7 +61,7 @@ std::map<G4int, pinfo, pdgid_compare> particles = {
 };
 
 DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const char * physics, HistParams energyhist, HistParams statushist)
-: channel(channel_id), dm_mass(dm_mass), physics(physics) {
+: ngr(dm_mass, energyhist.nbins, energyhist.xmin, energyhist.xmax), channel(channel_id), dm_mass(dm_mass), physics(physics) {
 	char hname[50], binname[50];
 	
 	// create histograms for all particles
@@ -93,6 +106,23 @@ DMRootHistogrammer::DMRootHistogrammer(G4int channel_id, G4double dm_mass, const
 	);
 	if(!p_quiet){G4cout << "Histogram `" << hname << "` for ev.status" << G4endl;}
 	//hists.push_back(h_evstatus);
+	
+	ngr.addParticle( 12, "nuel");
+	ngr.addParticle(-12, "anuel");
+	ngr.addParticle( 14, "numu");
+	ngr.addParticle(-14, "anumu");
+	ngr.addParticle( 16, "nutau");
+	ngr.addParticle(-16, "anutau");
+	
+	ngr.addGroup(gPythia, "pythia");
+	ngr.addGroup(gMuMinusCaptureAtRest, "muMinusCaptureAtRest");
+	ngr.addGroup(gDecayOther, "decay");
+	ngr.addGroup(gDecayMuMinus, "decay_muminus");
+	ngr.addGroup(gDecayMuPlus, "decay_muplus");
+	ngr.addGroup(gDecayPiPlus, "decay_piplus");
+	ngr.addGroup(gDecayPiMinus, "decay_piminus");
+	ngr.addGroup(gDecayKPlus, "decay_Kplus");
+	ngr.addGroup(gDecayKMinus, "decay_Kminus");
 }
 
 DMRootHistogrammer::~DMRootHistogrammer() {}
@@ -103,8 +133,24 @@ void DMRootHistogrammer::addParticle(const G4Track* tr) {
 	const G4ParticleDefinition* pdef = tr->GetParticleDefinition();
 	G4int pdgid = pdef->GetPDGEncoding();
 	G4String pname = pdef->GetParticleName();
+	ParentTrackInformation* parentInfo = (ParentTrackInformation*)tr->GetUserInformation();
 	
-	if(!p_quiet){G4cout << " > Adding particle: " << energy/MeV << "[MeV] (" << pdgid << ", " << pname << ") -- logE = " << logE << G4endl;}
+	if(!p_quiet) {G4cout << " > Adding particle: " << energy/MeV << "[MeV] (" << pdgid << ", " << pname << ") -- logE = " << logE << G4endl;}
+	if(!p_quiet && p_trv){
+		if(tr->GetCreatorProcess() == NULL) {
+			G4cout << " + No creator!" << G4endl;
+		} else {
+			G4cout << " + ProcessName      : " << tr->GetCreatorProcess()->GetProcessName() << G4endl;
+			G4cout << " + ProcessType      : " << G4VProcess::GetProcessTypeName(tr->GetCreatorProcess()->GetProcessType()) << G4endl;
+			G4cout << " + GetProcessSubType: " << tr->GetCreatorProcess()->GetProcessSubType() << G4endl;
+		}
+		
+		if(parentInfo) {
+			G4cout << " + Parent PDG ID    : " << parentInfo->parentID << G4endl;
+		} else {
+			G4cout << " + Parent PDG ID    : <no user track info>" << G4endl;
+		}
+	}
 	
 	try {
 		pinfo p = particles.at(pdgid);
@@ -114,6 +160,24 @@ void DMRootHistogrammer::addParticle(const G4Track* tr) {
 		h_pcounter->Fill(0.5);
 		if(!p_quiet){G4cout << " > Bad particle - not listed!" << G4endl;}
 	}
+	
+	int gid = 0;
+	if(tr->GetCreatorProcess() == NULL) {
+		gid = gPythia;
+	} else if(tr->GetCreatorProcess()->GetProcessName() == "muMinusCaptureAtRest") {
+		gid = gMuMinusCaptureAtRest;
+	} else if(tr->GetCreatorProcess()->GetProcessType() == fDecay) {
+		switch(parentInfo->parentID) {
+			case   13: gid = gDecayMuMinus; break;
+			case  -13: gid = gDecayMuPlus; break;
+			case  211: gid = gDecayPiPlus; break;
+			case -211: gid = gDecayPiMinus; break;
+			case  321: gid = gDecayKPlus; break;
+			case -321: gid = gDecayKMinus; break;
+			default: gid = gDecayOther; break;
+		};
+	}
+	ngr.fill(energy, pdgid, gid);
 }
 
 void DMRootHistogrammer::countEvent(const G4int n) {
@@ -152,6 +216,9 @@ void DMRootHistogrammer::save(const char* name) {
 			dir_o->WriteTObject(it->second.h);
 		}
 	}
+	
+	TDirectory * compdir = dir->mkdir("cs");
+	ngr.save(compdir);
 	
 	tfile.Close();
 }
